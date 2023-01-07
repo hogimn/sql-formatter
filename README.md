@@ -1,4 +1,4 @@
-# sql-formatter
+# SqlFormatter
 
 C# port of great SQL formatter <https://github.com/vertical-blank/sql-formatter>.
 

@@ -95,22 +95,22 @@ namespace VerticalBlank.SqlFormatter
 
             public string Format<T>(string query, string Indent, List<T> Parameters)
             {
-                return Format(query, FormatConfig.Builder().Indent(Indent).Parameters(Parameters).Build());
+                return Format(query, FormatConfig.Builder().Indent(Indent).Params(Parameters).Build());
             }
 
             public string Format<T>(string query, List<T> Parameters)
             {
-                return Format(query, FormatConfig.Builder().Parameters(Parameters).Build());
+                return Format(query, FormatConfig.Builder().Params(Parameters).Build());
             }
 
             public string Format<T>(string query, string Indent, Dictionary<string, T> Parameters)
             {
-                return Format(query, FormatConfig.Builder().Indent(Indent).Parameters(Parameters).Build());
+                return Format(query, FormatConfig.Builder().Indent(Indent).Params(Parameters).Build());
             }
 
             public string Format<T>(string query, Dictionary<string, T> Parameters)
             {
-                return Format(query, FormatConfig.Builder().Parameters(Parameters).Build());
+                return Format(query, FormatConfig.Builder().Params(Parameters).Build());
             }
 
             public string Format(string query, string Indent)

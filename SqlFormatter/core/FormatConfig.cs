@@ -78,7 +78,7 @@ namespace VerticalBlank.SqlFormatter.core
              * @param params Collection of params for placeholder replacement
              * @return This
              */
-            public FormatConfigBuilder Parameters(Params parameters)
+            public FormatConfigBuilder Params(Params parameters)
             {
                 this.parameters = parameters;
                 return this;
@@ -88,18 +88,18 @@ namespace VerticalBlank.SqlFormatter.core
              * @param params Collection of params for placeholder replacement
              * @return This
             s */
-            public FormatConfigBuilder Parameters<T>(Dictionary<string, T> parameters)
+            public FormatConfigBuilder Params<T>(Dictionary<string, T> parameters)
             {
-                return Parameters(Params.Of(parameters));
+                return Params(core.Params.Of(parameters));
             }
 
             /**
              * @param params Collection of params for placeholder replacement
              * @return This
             s */
-            public FormatConfigBuilder Parameters<T>(List<T> parameters)
+            public FormatConfigBuilder Params<T>(List<T> parameters)
             {
-                return Parameters(Params.Of(parameters));
+                return Params(core.Params.Of(parameters));
             }
 
             /**

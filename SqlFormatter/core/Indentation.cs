@@ -42,10 +42,8 @@ namespace VerticalBlank.SqlFormatter.core
         public string GetIndent()
         {
             StringBuilder stringBuilder = new StringBuilder();
-            for (int i = 0; i < indentTypes.Count; i++)
-            {
-                stringBuilder.Append(indent);
-            }
+            Enumerable.Range(0, indentTypes.Count)
+                .Select(_ => stringBuilder.Append(indent));
             return stringBuilder.ToString();
         }
 

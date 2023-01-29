@@ -23,12 +23,9 @@ namespace VerticalBlank.SqlFormatter.core.util
 
         public JSLikeList<R> Map<R>(Func<T, R> mapper)
         {
-            List<R> list = new List<R>();
-            foreach (T t in tList)
-            {
-                list.Add(mapper.Invoke(t));
-            }
-            return new JSLikeList<R>(list);
+            return new JSLikeList<R>(
+                tList.Select(mapper.Invoke)
+                .ToList());
         }
 
         public string Join(string delimiter)

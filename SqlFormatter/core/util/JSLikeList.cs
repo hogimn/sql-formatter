@@ -35,10 +35,9 @@ namespace VerticalBlank.SqlFormatter.core.util
 
         public JSLikeList<T> With(List<T> other)
         { 
-            List<T> list = new List<T>();
-            list.AddRange(ToList());
-            list.AddRange(other);
-            return new JSLikeList<T>(list);
+            return new JSLikeList<T>(
+                tList.Concat(other)
+                .ToList());
         }
 
         public string Join()

@@ -37,13 +37,9 @@ namespace SQL.Formatter.core
          *
          * @return {String}
          */
-        public string GetIndent()
-        {
-            StringBuilder stringBuilder = new StringBuilder();
-            Enumerable.Range(0, indentTypes.Count)
-                .Select(_ => stringBuilder.Append(indent));
-            return stringBuilder.ToString();
-        }
+        public string GetIndent() =>
+            string.Concat(Enumerable.Range(0, indentTypes.Count)
+                .Select(_ => indent));
 
         /** Increases indentation by one top-level indent. */
         public void IncreaseTopLevel()

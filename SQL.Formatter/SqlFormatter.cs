@@ -49,9 +49,9 @@ namespace SQL.Formatter
             return Standard().Format(query);
         }
 
-        public static Formatter Extend(Func<DialectConfig, DialectConfig> oper)
+        public static Formatter Extend(Func<DialectConfig, DialectConfig> sqlOperator)
         {
-            return Standard().Extend(oper);
+            return Standard().Extend(sqlOperator);
         }
 
         public static Formatter Standard()
@@ -119,13 +119,13 @@ namespace SQL.Formatter
                 return Format(query, FormatConfig.Builder().Build());
             }
 
-            public Formatter Extend(Func<DialectConfig, DialectConfig> oper)
+            public Formatter Extend(Func<DialectConfig, DialectConfig> sqlOperator)
             {
                 AbstractFormatter func(FormatConfig config)
                 {
                     AbstractFormatter abstractFormatter = new AbstractFormatter(config)
                     {
-                        DoDialectConfigFunc = () => oper.Invoke(underlying.Invoke(config).DoDialectConfig())
+                        DoDialectConfigFunc = () => sqlOperator.Invoke(underlying.Invoke(config).DoDialectConfig())
                     };
                     return abstractFormatter;
                 }

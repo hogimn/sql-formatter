@@ -8,9 +8,9 @@ namespace SQL.Formatter.core.util
     public class RegexUtil
     {
         private static readonly string ESCAPE_REGEX =
-            (new List<string> { "^", "$", "\\", ".", "*", "+", "*", "?", "(", ")", "[", "]", "{", "}", "|" })
-            .Select(spChr => "(\\" + spChr + ")")
-            .Aggregate((x, y) => x + "|" + y);
+            string.Join("|",
+                new List<string> { "^", "$", "\\", ".", "*", "+", "*", "?", "(", ")", "[", "]", "{", "}", "|" }
+                .Select(spChr => "(\\" + spChr + ")"));
 
         public static readonly Regex ESCAPE_REGEX_PATTERN = new Regex(ESCAPE_REGEX);
 
@@ -22,15 +22,13 @@ namespace SQL.Formatter.core.util
         public static string CreateOperatorRegex(JSLikeList<string> multiLetterOperators)
         {
             return string.Format("^({0}|.)",
-                Util.SortByLengthDesc(multiLetterOperators).Map(EscapeRegExp).ToList()
-                .Aggregate((x, y) => x + "|" + y));
+                string.Join("|", Util.SortByLengthDesc(multiLetterOperators).Map(EscapeRegExp).ToList()));
         }
 
         public static string CreateLineCommentRegex(JSLikeList<string> lineCommentTypes)
         {
             return string.Format("^((?:{0}).*?)(?:\r\n|\r|\n|$)",
-                lineCommentTypes.Map(EscapeRegExp).ToList()
-                .Aggregate((x, y) => x + "|" + y));
+                string.Join("|", lineCommentTypes.Map(EscapeRegExp).ToList()));
         }
 
         public static string CreateReservedWordRegex(JSLikeList<string> reservedWords)
@@ -39,8 +37,7 @@ namespace SQL.Formatter.core.util
                 return "^\b$";
 
             string reservedWordsPattern =
-                Util.SortByLengthDesc(reservedWords).ToList()
-                .Aggregate((x, y) => x + "|" + y).Replace(" ", "\\s+");
+                string.Join("|", Util.SortByLengthDesc(reservedWords).ToList()).Replace(" ", "\\s+");
 
             return "(?i)" + "^(" + reservedWordsPattern + ")\\b";
         }
@@ -65,14 +62,12 @@ namespace SQL.Formatter.core.util
         // 5. national character quoted string using N'' or N\' to escape
         public static string CreateStringPattern(JSLikeList<string> stringTypes)
         {
-            return stringTypes.Map(StringLiteral.Get).ToList()
-                .Aggregate((x, y) => (x + "|" + y));
+            return string.Join("|", stringTypes.Map(StringLiteral.Get).ToList());
         }
 
         public static string CreateParenRegex(JSLikeList<string> parens)
         {
-            return "(?i)^(" + parens.Map(EscapeParen).ToList()
-                .Aggregate((x, y) => x + "|" + y) + ")";
+            return "(?i)^(" + string.Join("|", parens.Map(EscapeParen).ToList()) + ")";
         }
 
         public static string EscapeParen(string paren)
@@ -91,8 +86,7 @@ namespace SQL.Formatter.core.util
             if (types.IsEmpty())
                 return null;
 
-            string typesRegex = types.Map(EscapeRegExp).ToList()
-                .Aggregate((x, y) => x + "|" + y);
+            string typesRegex = string.Join("|", types.Map(EscapeRegExp).ToList());
 
             return new Regex(string.Format("^((?:{0})(?:{1}))", typesRegex, pattern));
         }

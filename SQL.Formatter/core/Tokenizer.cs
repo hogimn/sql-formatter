@@ -1,6 +1,7 @@
 ﻿using SQL.Formatter.core.util;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace SQL.Formatter.core
@@ -123,16 +124,8 @@ namespace SQL.Formatter.core
 
         private string[] FindBeforeWhitespace(string input)
         {
-            int index = 0;
-            char[] chars = input.ToCharArray();
-            int beforeLength = chars.Length;
-            while (index != beforeLength && char.IsWhiteSpace(chars[index]))
-            {
-                index++;
-            }
-            return new string[] {
-                new string(chars, 0, index), new string(chars, index, beforeLength - index)
-            };
+            int index = input.TakeWhile(char.IsWhiteSpace).Count();
+            return new[] { input.Substring(0, index), input.Substring(index) };
         }
 
         // private String GetWhitespace(String input) {

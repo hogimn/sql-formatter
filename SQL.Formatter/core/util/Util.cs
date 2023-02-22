@@ -12,15 +12,9 @@ namespace SQL.Formatter.core.util
             return list ?? new List<T>();
         }
 
-        public static R FirstNotnull<R>(params Func<R>[] suppliers)
+        public static R FirstNotnull<R>(params Func<R>[] suppliers) where R : class
         {
-            foreach (Func<R> supplier in suppliers)
-            {
-                R ret = supplier.Invoke();
-                if (ret != null)
-                    return ret;
-            }
-            return default;
+            return suppliers.FirstOrDefault(supplier => supplier() != null)?.Invoke() ?? default;
         }
 
         public static string Repeat(string s, int n)

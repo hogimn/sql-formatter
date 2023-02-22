@@ -25,7 +25,7 @@ namespace SQL.Formatter.core.util
 
         public static string Repeat(string s, int n)
         {
-            return Enumerable.Repeat(s, n).Aggregate((x, y) => x + y);
+            return string.Concat(Enumerable.Repeat(s, n));
         }
 
         public static List<T> Concat<T>(List<T> l1, List<T> l2)

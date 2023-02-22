@@ -150,7 +150,8 @@ namespace SQL.Formatter.core
         private Token GetCommentToken(string input)
         {
             return Util.FirstNotnull(
-                () => GetLineCommentToken(input), () => GetBlockCommentToken(input));
+                () => GetLineCommentToken(input),
+                () => GetBlockCommentToken(input));
         }
 
         private Token GetLineCommentToken(string input)

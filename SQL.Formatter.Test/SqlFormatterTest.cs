@@ -1,20 +1,19 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SQL.Formatter.languages;
+﻿using SQL.Formatter.languages;
 using System;
 using System.Collections.Generic;
+using Xunit;
 
 namespace SQL.Formatter.Test
 {
-    [TestClass]
     public class SqlFormatterTest
     {
-        [TestMethod]
+        [Fact]
         public void Simple()
         {
             string format = SqlFormatter.Format(
                 "SELECT foo, bar, CASE baz WHEN 'one' THEN 1 WHEN 'two' THEN 2 ELSE 3 END FROM table");
 
-            Assert.AreEqual(
+            Assert.Equal(
                 "SELECT\n"
                     + "  foo,\n"
                     + "  bar,\n"
@@ -29,13 +28,13 @@ namespace SQL.Formatter.Test
                 format);
         }
 
-        [TestMethod]
+        [Fact]
         public void WithIndent()
         {
             string format = SqlFormatter.Format(
                 "SELECT foo, bar, CASE baz WHEN 'one' THEN 1 WHEN 'two' THEN 2 ELSE 3 END FROM table",
                 "    ");
-            Assert.AreEqual(
+            Assert.Equal(
                 "SELECT\n"
                     + "    foo,\n"
                     + "    bar,\n"
@@ -50,7 +49,7 @@ namespace SQL.Formatter.Test
                 format);
         }
 
-        [TestMethod]
+        [Fact]
         public void WithNamedParams()
         {
             Dictionary<string, string> namedParams = new Dictionary<string, string>();
@@ -58,24 +57,24 @@ namespace SQL.Formatter.Test
 
             string format =
                 SqlFormatter.Of(Dialect.TSql).Format("SELECT * FROM tbl WHERE foo = @foo", namedParams);
-            Assert.AreEqual("SELECT\n" + "  *\n" + "FROM\n" + "  tbl\n" + "WHERE\n" + "  foo = 'bar'", format);
+            Assert.Equal("SELECT\n" + "  *\n" + "FROM\n" + "  tbl\n" + "WHERE\n" + "  foo = 'bar'", format);
         }
 
-        [TestMethod]
+        [Fact]
         public void WithFatArrow()
         {
             string format =
                 SqlFormatter.Extend(config => config.PlusOperators("=>"))
                 .Format("SELECT * FROM tbl WHERE foo => '123'");
-            Assert.AreEqual("SELECT\n" + "  *\n" + "FROM\n" + "  tbl\n" + "WHERE\n" + "  foo => '123'",
+            Assert.Equal("SELECT\n" + "  *\n" + "FROM\n" + "  tbl\n" + "WHERE\n" + "  foo => '123'",
                 format);
         }
 
-        [TestMethod]
+        [Fact]
         public void WithIndexedParams()
         {
             String format = SqlFormatter.Format("SELECT * FROM tbl WHERE foo = ?", new List<string> { "'bar'" });
-            Assert.AreEqual("SELECT\n" + "  *\n" + "FROM\n" + "  tbl\n" + "WHERE\n" + "  foo = 'bar'", format);
+            Assert.Equal("SELECT\n" + "  *\n" + "FROM\n" + "  tbl\n" + "WHERE\n" + "  foo = 'bar'", format);
         }
     }
 }

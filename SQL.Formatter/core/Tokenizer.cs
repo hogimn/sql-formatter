@@ -207,15 +207,10 @@ namespace SQL.Formatter.core
                 input, INDEXED_PLACEHOLDER_PATTERN, v => v.Substring(1));
         }
 
-        private Token GetPlaceholderTokenWithKey(
-            string input, Regex regex, Func<string, string> parseKey)
+        private Token GetPlaceholderTokenWithKey(string input, Regex regex, Func<string, string> parseKey)
         {
             Token token = GetTokenOnFirstMatch(input, TokenTypes.PLACEHOLDER, regex);
-            if (token != null)
-            {
-                return token.WithKey(parseKey.Invoke(token.value));
-            }
-            return token;
+            return (token == null) ? default : token.WithKey(parseKey.Invoke(token.value));
         }
 
         private string GetEscapedPlaceholderKey(string key, string quoteChar)
@@ -280,34 +275,13 @@ namespace SQL.Formatter.core
 
         private static string GetFirstMatch(string input, Regex regex)
         {
-            if (regex == null)
-            {
-                return null;
-            }
-
-            Match matcher = regex.Match(input);
-            if (matcher.Success)
-            {
-                return matcher.Value;
-            }
-            else
-            {
-                return null;
-            }
+            return regex?.Match(input).Value ?? string.Empty;
         }
 
         private Token GetTokenOnFirstMatch(string input, TokenTypes type, Regex regex)
         {
-            string firstMatch = GetFirstMatch(input, regex);
-
-            if (firstMatch != null)
-            {
-                return new Token(type, firstMatch);
-            }
-            else
-            {
-                return null;
-            }
+            string match = GetFirstMatch(input, regex);
+            return match.Equals(string.Empty) ? default : new Token(type, match);
         }
     }
 }

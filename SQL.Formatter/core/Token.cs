@@ -61,48 +61,41 @@ namespace SQL.Formatter.core
 
         private static Func<Token, bool> IsToken(TokenTypes type, Regex regex)
         {
-            return token => token.type == type && regex.IsMatch(token.value);
+            return token => token?.type == type && regex.IsMatch(token?.value);
         }
 
         public static bool IsAnd(Token token)
         {
-            if (token == null) return false;
             return IsToken(TokenTypes.RESERVED_NEWLINE, AND).Invoke(token);
         }
 
         public static bool IsBetween(Token token)
         {
-            if (token == null) return false;
             return IsToken(TokenTypes.RESERVED, BETWEEN).Invoke(token);
         }
 
         public static bool IsLimit(Token token)
         {
-            if (token == null) return false;
             return IsToken(TokenTypes.RESERVED_TOP_LEVEL, LIMIT).Invoke(token);
         }
 
         public static bool IsSet(Token token)
         {
-            if (token == null) return false;
             return IsToken(TokenTypes.RESERVED_TOP_LEVEL, SET).Invoke(token);
         }
 
         public static bool IsBy(Token token)
         {
-            if (token == null) return false;
             return IsToken(TokenTypes.RESERVED, BY).Invoke(token);
         }
 
         public static bool IsWindow(Token token)
         {
-            if (token == null) return false;
             return IsToken(TokenTypes.RESERVED_TOP_LEVEL, WINDOW).Invoke(token);
         }
 
         public static bool IsEnd(Token token)
         {
-            if (token == null) return false;
             return IsToken(TokenTypes.CLOSE_PAREN, END).Invoke(token);
         }
     }

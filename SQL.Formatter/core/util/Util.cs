@@ -9,11 +9,7 @@ namespace SQL.Formatter.core.util
 
         public static List<T> NullToEmpty<T>(List<T> list)
         {
-            if (list == null)
-            {
-                return new List<T>();
-            }
-            return list;
+            return list ?? new List<T>();
         }
 
         public static string TrimSpacesEnd(string s)

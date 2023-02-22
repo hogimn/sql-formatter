@@ -12,18 +12,6 @@ namespace SQL.Formatter.core.util
             return list ?? new List<T>();
         }
 
-        public static string TrimSpacesEnd(string s)
-        {
-            int endIndex = s.Length;
-            char[] chars = s.ToCharArray();
-            while (endIndex > 0 && (chars[endIndex - 1] == ' ' || chars[endIndex - 1] == '\t'))
-            {
-                endIndex--;
-            }
-            return new string(chars, 0, endIndex);
-            // return s.replaceAll("[ \t]+$", "");
-        }
-
         public static R FirstNotnull<R>(params Func<R>[] suppliers)
         {
             foreach (Func<R> supplier in suppliers)

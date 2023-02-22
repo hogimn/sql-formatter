@@ -199,7 +199,7 @@ namespace SQL.Formatter.core
             if (string.IsNullOrEmpty(token.whitespaceBefore)
                 && (TokenLookBehind() == default && !preserveWhitespaceFor.Contains(TokenLookBehind().type)))
             {
-                query = Util.TrimSpacesEnd(query);
+                query = query.TrimEnd();
             }
             query += Show(token);
 
@@ -236,7 +236,7 @@ namespace SQL.Formatter.core
         // Commas start a new line (unless within inline parentheses or SQL "LIMIT" clause)
         private string FormatComma(Token token, string query)
         {
-            query = Util.TrimSpacesEnd(query) + Show(token) + " ";
+            query = query.TrimEnd() + Show(token) + " ";
 
             if (inlineBlock.IsActive())
             {
@@ -254,12 +254,12 @@ namespace SQL.Formatter.core
 
         private string FormatWithSpaceAfter(Token token, string query)
         {
-            return Util.TrimSpacesEnd(query) + Show(token) + " ";
+            return query.TrimEnd() + Show(token) + " ";
         }
 
         private string FormatWithoutSpaces(Token token, string query)
         {
-            return Util.TrimSpacesEnd(query) + Show(token);
+            return query.TrimEnd() + Show(token);
         }
 
         private string FormatWithSpaces(Token token, string query)
@@ -270,7 +270,7 @@ namespace SQL.Formatter.core
         private string FormatQuerySeparator(Token token, string query)
         {
             indentation.ResetIndentation();
-            return Util.TrimSpacesEnd(query)
+            return query.TrimEnd()
                 + Show(token)
                 + Util.Repeat("\n", cfg.linesBetweenQueries == default ? 1 : cfg.linesBetweenQueries);
         }
@@ -296,7 +296,7 @@ namespace SQL.Formatter.core
 
         private string AddNewline(string query)
         {
-            query = Util.TrimSpacesEnd(query);
+            query = query.TrimEnd();
             if (!query.EndsWith("\n"))
             {
                 query += "\n";

@@ -1,7 +1,7 @@
-﻿using System;
+﻿using SQL.Formatter.core.util;
+using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using SQL.Formatter.core.util;
 
 namespace SQL.Formatter.core
 {
@@ -48,7 +48,7 @@ namespace SQL.Formatter.core
 
             OPERATOR_PATTERN = new Regex(
                 RegexUtil.CreateOperatorRegex(
-                    new JSLikeList<string>(new List<string>{ "<>", "<=", ">=" }).With(cfg.operators)));
+                    new JSLikeList<string>(new List<string> { "<>", "<=", ">=" }).With(cfg.operators)));
 
             //        this.BLOCK_COMMENT_REGEX = /^(\/\*[^]*?(?:\*\/|$))/;
             BLOCK_COMMENT_PATTERN = new Regex("^(/\\*(?s).*?(?:\\*/|$))");

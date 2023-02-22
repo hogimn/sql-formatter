@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using SQL.Formatter.core;
+﻿using SQL.Formatter.core;
+using System.Collections.Generic;
 
 namespace SQL.Formatter.languages
 {

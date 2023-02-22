@@ -1,7 +1,7 @@
-﻿using System;
+﻿using SQL.Formatter.core.util;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using SQL.Formatter.core.util;
 
 namespace SQL.Formatter.core
 {
@@ -239,7 +239,7 @@ namespace SQL.Formatter.core
         }
 
         public DialectConfig PlusOperators(params string[] operators)
-        { 
+        {
             return PlusOperators(operators.ToList());
         }
 

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace SQL.Formatter.core
 {
@@ -61,7 +60,7 @@ namespace SQL.Formatter.core
         {
             if (indentTypes.Count != 0 &&
                 indentTypes.Peek() == IndentTypes.INDENT_TYPE_TOP_LEVEL)
-            { 
+            {
                 indentTypes.Pop();
             }
         }
@@ -83,7 +82,7 @@ namespace SQL.Formatter.core
         }
 
         public void ResetIndentation()
-        { 
+        {
             indentTypes.Clear();
         }
     }

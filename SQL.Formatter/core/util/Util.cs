@@ -20,7 +20,8 @@ namespace SQL.Formatter.core.util
         {
             int endIndex = s.Length;
             char[] chars = s.ToCharArray();
-            while (endIndex > 0 && (chars[endIndex - 1] == ' ' || chars[endIndex - 1] == '\t')) {
+            while (endIndex > 0 && (chars[endIndex - 1] == ' ' || chars[endIndex - 1] == '\t'))
+            {
                 endIndex--;
             }
             return new string(chars, 0, endIndex);
@@ -28,8 +29,8 @@ namespace SQL.Formatter.core.util
         }
 
         public static R FirstNotnull<R>(params Func<R>[] suppliers)
-        { 
-            foreach (Func<R>supplier in suppliers)
+        {
+            foreach (Func<R> supplier in suppliers)
             {
                 R ret = supplier.Invoke();
                 if (ret != null)

@@ -103,7 +103,7 @@ namespace SQL.Formatter.core
              * @return This
              */
             public FormatConfigBuilder Uppercase(bool uppercase)
-            { 
+            {
                 this.uppercase = uppercase;
                 return this;
             }

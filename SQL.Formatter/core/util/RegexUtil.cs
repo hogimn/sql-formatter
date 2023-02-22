@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using SQL.Formatter.languages;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using SQL.Formatter.languages;
 
 namespace SQL.Formatter.core.util
 {
     public class RegexUtil
     {
         private static readonly string ESCAPE_REGEX =
-            (new List<string>{ "^", "$", "\\", ".", "*", "+", "*", "?", "(", ")", "[", "]", "{", "}", "|" })
+            (new List<string> { "^", "$", "\\", ".", "*", "+", "*", "?", "(", ")", "[", "]", "{", "}", "|" })
             .Select(spChr => "(\\" + spChr + ")")
             .Aggregate((x, y) => x + "|" + y);
 
@@ -34,7 +34,7 @@ namespace SQL.Formatter.core.util
         }
 
         public static string CreateReservedWordRegex(JSLikeList<string> reservedWords)
-        { 
+        {
             if (reservedWords.IsEmpty())
                 return "^\b$";
 
@@ -53,7 +53,7 @@ namespace SQL.Formatter.core.util
         }
 
         public static string CreateStringRegex(JSLikeList<string> stringTypes)
-        { 
+        {
             return "^(" + CreateStringPattern(stringTypes) + ")";
         }
 
@@ -70,7 +70,7 @@ namespace SQL.Formatter.core.util
         }
 
         public static string CreateParenRegex(JSLikeList<string> parens)
-        { 
+        {
             return "(?i)^(" + parens.Map(EscapeParen).ToList()
                 .Aggregate((x, y) => x + "|" + y) + ")";
         }

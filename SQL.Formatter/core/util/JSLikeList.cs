@@ -32,7 +32,7 @@ namespace SQL.Formatter.core.util
         }
 
         public JSLikeList<T> With(List<T> other)
-        { 
+        {
             return new JSLikeList<T>(
                 tList.Concat(other)
                 .ToList());
@@ -44,7 +44,7 @@ namespace SQL.Formatter.core.util
         }
 
         public bool IsEmpty()
-        { 
+        {
             return tList == null || tList.Count == 0;
         }
 

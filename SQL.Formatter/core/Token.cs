@@ -24,7 +24,7 @@ namespace SQL.Formatter.core
             : this(type, value, regex, whitespaceBefore, null) { }
 
         public Token(TokenTypes type, string value, string regex)
-            : this(type, value ,regex, null) { }
+            : this(type, value, regex, null) { }
 
         public Token(TokenTypes type, string value)
             : this(type, value, null) { }
@@ -60,7 +60,7 @@ namespace SQL.Formatter.core
             new Regex("^END$", RegexOptions.IgnoreCase);
 
         private static Func<Token, bool> IsToken(TokenTypes type, Regex regex)
-        { 
+        {
             return token => token.type == type && regex.IsMatch(token.value);
         }
 

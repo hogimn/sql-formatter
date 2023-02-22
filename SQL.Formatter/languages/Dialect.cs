@@ -1,7 +1,7 @@
-﻿using System;
+﻿using SQL.Formatter.core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using SQL.Formatter.core;
 
 namespace SQL.Formatter.languages
 {

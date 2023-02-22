@@ -68,7 +68,8 @@ namespace SQL.Formatter.core
             int length = 0;
             int level = 0;
 
-            for (int i = index; i < tokens.Size(); i++) {
+            for (int i = index; i < tokens.Size(); i++)
+            {
                 Token token = tokens.Get(i);
                 length += token.value.Length;
 

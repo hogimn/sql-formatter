@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SQL.Formatter.languages;
+using System;
+using System.Collections.Generic;
 
 namespace SQL.Formatter.Test
 {
@@ -74,7 +74,7 @@ namespace SQL.Formatter.Test
         [TestMethod]
         public void WithIndexedParams()
         {
-            String format = SqlFormatter.Format("SELECT * FROM tbl WHERE foo = ?", new List<string>{"'bar'"});
+            String format = SqlFormatter.Format("SELECT * FROM tbl WHERE foo = ?", new List<string> { "'bar'" });
             Assert.AreEqual("SELECT\n" + "  *\n" + "FROM\n" + "  tbl\n" + "WHERE\n" + "  foo = 'bar'", format);
         }
     }

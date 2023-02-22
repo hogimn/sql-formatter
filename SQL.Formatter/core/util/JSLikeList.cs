@@ -50,10 +50,7 @@ namespace SQL.Formatter.core.util
 
         public T Get(int index)
         {
-            if (index < 0)
-                return default;
-
-            if (tList.Count <= index)
+            if (index < 0 || tList.Count <= index)
                 return default;
 
             return tList.ElementAt(index);

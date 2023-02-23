@@ -14,17 +14,17 @@ namespace SQL.Formatter.Test
                 "SELECT foo, bar, CASE baz WHEN 'one' THEN 1 WHEN 'two' THEN 2 ELSE 3 END FROM table");
 
             Assert.Equal(
-                "SELECT\n"
-                    + "  foo,\n"
-                    + "  bar,\n"
-                    + "  CASE\n"
-                    + "    baz\n"
-                    + "    WHEN 'one' THEN 1\n"
-                    + "    WHEN 'two' THEN 2\n"
-                    + "    ELSE 3\n"
-                    + "  END\n"
-                    + "FROM\n"
-                    + "  table",
+                  "SELECT\n"
+                + "  foo,\n"
+                + "  bar,\n"
+                + "  CASE\n"
+                + "    baz\n"
+                + "    WHEN 'one' THEN 1\n"
+                + "    WHEN 'two' THEN 2\n"
+                + "    ELSE 3\n"
+                + "  END\n"
+                + "FROM\n"
+                + "  table",
                 format);
         }
 
@@ -35,17 +35,17 @@ namespace SQL.Formatter.Test
                 "SELECT foo, bar, CASE baz WHEN 'one' THEN 1 WHEN 'two' THEN 2 ELSE 3 END FROM table",
                 "    ");
             Assert.Equal(
-                "SELECT\n"
-                    + "    foo,\n"
-                    + "    bar,\n"
-                    + "    CASE\n"
-                    + "        baz\n"
-                    + "        WHEN 'one' THEN 1\n"
-                    + "        WHEN 'two' THEN 2\n"
-                    + "        ELSE 3\n"
-                    + "    END\n"
-                    + "FROM\n"
-                    + "    table",
+                  "SELECT\n"
+                + "    foo,\n"
+                + "    bar,\n"
+                + "    CASE\n"
+                + "        baz\n"
+                + "        WHEN 'one' THEN 1\n"
+                + "        WHEN 'two' THEN 2\n"
+                + "        ELSE 3\n"
+                + "    END\n"
+                + "FROM\n"
+                + "    table",
                 format);
         }
 
@@ -57,7 +57,14 @@ namespace SQL.Formatter.Test
 
             string format =
                 SqlFormatter.Of(Dialect.TSql).Format("SELECT * FROM tbl WHERE foo = @foo", namedParams);
-            Assert.Equal("SELECT\n" + "  *\n" + "FROM\n" + "  tbl\n" + "WHERE\n" + "  foo = 'bar'", format);
+            Assert.Equal(
+                  "SELECT\n"
+                + "  *\n"
+                + "FROM\n"
+                + "  tbl\n"
+                + "WHERE\n"
+                + "  foo = 'bar'",
+                format);
         }
 
         [Fact]
@@ -66,7 +73,13 @@ namespace SQL.Formatter.Test
             string format =
                 SqlFormatter.Extend(config => config.PlusOperators("=>"))
                 .Format("SELECT * FROM tbl WHERE foo => '123'");
-            Assert.Equal("SELECT\n" + "  *\n" + "FROM\n" + "  tbl\n" + "WHERE\n" + "  foo => '123'",
+            Assert.Equal(
+                  "SELECT\n"
+                + "  *\n"
+                + "FROM\n"
+                + "  tbl\n"
+                + "WHERE\n"
+                + "  foo => '123'",
                 format);
         }
 
@@ -74,7 +87,14 @@ namespace SQL.Formatter.Test
         public void WithIndexedParams()
         {
             String format = SqlFormatter.Format("SELECT * FROM tbl WHERE foo = ?", new List<string> { "'bar'" });
-            Assert.Equal("SELECT\n" + "  *\n" + "FROM\n" + "  tbl\n" + "WHERE\n" + "  foo = 'bar'", format);
+            Assert.Equal(
+                  "SELECT\n"
+                + "  *\n"
+                + "FROM\n"
+                + "  tbl\n"
+                + "WHERE\n"
+                + "  foo = 'bar'",
+                format);
         }
     }
 }

@@ -276,10 +276,8 @@ namespace SQL.Formatter.core
             {
                 return token.value.ToUpper();
             }
-            else
-            {
-                return token.value;
-            }
+
+            return token.value;
         }
 
         private string AddNewline(string query)

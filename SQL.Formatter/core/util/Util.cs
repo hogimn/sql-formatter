@@ -14,7 +14,7 @@ namespace SQL.Formatter.core.util
 
         public static R FirstNotnull<R>(params Func<R>[] suppliers) where R : class
         {
-            return suppliers.FirstOrDefault(supplier => supplier() != null)?.Invoke() ?? default;
+            return suppliers.FirstOrDefault(supplier => supplier() != null)?.Invoke();
         }
 
         public static string Repeat(string s, int n)

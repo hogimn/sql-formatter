@@ -237,19 +237,7 @@ namespace SQL.Formatter.core
         private string FormatComma(Token token, string query)
         {
             query = query.TrimEnd() + Show(token) + " ";
-
-            if (inlineBlock.IsActive())
-            {
-                return query;
-            }
-            else if (Token.IsLimit(previousReservedToken))
-            {
-                return query;
-            }
-            else
-            {
-                return AddNewline(query);
-            }
+            return inlineBlock.IsActive() || Token.IsLimit(previousReservedToken) ? query : AddNewline(query);
         }
 
         private string FormatWithSpaceAfter(Token token, string query)

@@ -44,19 +44,19 @@ namespace SQL.Formatter.core
             return "type: " + type + ", value: [" + value + "], regex: /" + regex + "/, key:" + key;
         }
 
-        private static readonly Regex AND =
+        private static readonly Regex And =
             new Regex("^AND$", RegexOptions.IgnoreCase);
-        private static readonly Regex BETWEEN =
+        private static readonly Regex Between =
             new Regex("^BETWEEN$", RegexOptions.IgnoreCase);
-        private static readonly Regex LIMIT =
+        private static readonly Regex Limit =
             new Regex("^LIMIT$", RegexOptions.IgnoreCase);
-        private static readonly Regex SET =
+        private static readonly Regex Set =
             new Regex("^SET$", RegexOptions.IgnoreCase);
-        private static readonly Regex BY =
+        private static readonly Regex By =
             new Regex("^BY$", RegexOptions.IgnoreCase);
-        private static readonly Regex WINDOW =
+        private static readonly Regex Window =
             new Regex("^WINDOW$", RegexOptions.IgnoreCase);
-        private static readonly Regex END =
+        private static readonly Regex End =
             new Regex("^END$", RegexOptions.IgnoreCase);
 
         private static Func<Token, bool> IsToken(TokenTypes type, Regex regex)
@@ -66,37 +66,37 @@ namespace SQL.Formatter.core
 
         public static bool IsAnd(Token token)
         {
-            return IsToken(TokenTypes.RESERVED_NEWLINE, AND).Invoke(token);
+            return IsToken(TokenTypes.RESERVED_NEWLINE, And).Invoke(token);
         }
 
         public static bool IsBetween(Token token)
         {
-            return IsToken(TokenTypes.RESERVED, BETWEEN).Invoke(token);
+            return IsToken(TokenTypes.RESERVED, Between).Invoke(token);
         }
 
         public static bool IsLimit(Token token)
         {
-            return IsToken(TokenTypes.RESERVED_TOP_LEVEL, LIMIT).Invoke(token);
+            return IsToken(TokenTypes.RESERVED_TOP_LEVEL, Limit).Invoke(token);
         }
 
         public static bool IsSet(Token token)
         {
-            return IsToken(TokenTypes.RESERVED_TOP_LEVEL, SET).Invoke(token);
+            return IsToken(TokenTypes.RESERVED_TOP_LEVEL, Set).Invoke(token);
         }
 
         public static bool IsBy(Token token)
         {
-            return IsToken(TokenTypes.RESERVED, BY).Invoke(token);
+            return IsToken(TokenTypes.RESERVED, By).Invoke(token);
         }
 
         public static bool IsWindow(Token token)
         {
-            return IsToken(TokenTypes.RESERVED_TOP_LEVEL, WINDOW).Invoke(token);
+            return IsToken(TokenTypes.RESERVED_TOP_LEVEL, Window).Invoke(token);
         }
 
         public static bool IsEnd(Token token)
         {
-            return IsToken(TokenTypes.CLOSE_PAREN, END).Invoke(token);
+            return IsToken(TokenTypes.CLOSE_PAREN, End).Invoke(token);
         }
     }
 }

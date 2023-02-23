@@ -5,65 +5,65 @@ namespace SQL.Formatter.languages
 {
     public class StringLiteral
     {
-        public static readonly string BACK_QUOTE = "``";
-        public static readonly string DOUBLE_QUOTE = "\"\"";
-        public static readonly string U_DOUBLE_QUOTE = "U&\"\"";
-        public static readonly string U_SINGLE_QUOTE = "U&''";
-        public static readonly string E_SINGLE_QUOTE = "E''";
-        public static readonly string N_SINGLE_QUOTE = "N''";
-        public static readonly string Q_SINGLE_QUOTE = "Q''";
-        public static readonly string SINGLE_QUOTE = "''";
-        public static readonly string BRACE = "{}";
-        public static readonly string DOLLAR = "$$";
-        public static readonly string BRACKET = "[]";
+        public static readonly string BackQuote = "``";
+        public static readonly string DoubleQuote = "\"\"";
+        public static readonly string UDoubleQuote = "U&\"\"";
+        public static readonly string USingleQuote = "U&''";
+        public static readonly string ESingleQuote = "E''";
+        public static readonly string NSingleQuote = "N''";
+        public static readonly string QSingleQuote = "Q''";
+        public static readonly string SingleQuote = "''";
+        public static readonly string Brace = "{}";
+        public static readonly string Dollar = "$$";
+        public static readonly string Bracket = "[]";
 
-        private static readonly Dictionary<string, string> literals;
+        private static readonly Dictionary<string, string> Literals;
 
         static StringLiteral()
         {
-            literals = Preset.Presets.ToList()
+            Literals = Preset.Presets.ToList()
                 .ToDictionary(preset => preset.GetKey(), preset => preset.GetRegex());
         }
 
-        public static string Get(string key) => literals[key];
+        public static string Get(string key) => Literals[key];
 
         private class Preset
         {
             /** `` */
-            public static readonly Preset BACK_QUOTE = new Preset(
-                StringLiteral.BACK_QUOTE,
+            public static readonly Preset BackQuote = new Preset(
+                StringLiteral.BackQuote,
                 "((`[^`]*($|`))+)"
                 );
             /** "" */
-            public static readonly Preset DOUBLE_QUOTE = new Preset(
-                StringLiteral.DOUBLE_QUOTE,
+            public static readonly Preset DoubleQuote = new Preset(
+                StringLiteral.DoubleQuote,
                 "((\"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*(\"|$))+)"
                 // "((^\"((?:\"\"|[^\"])*)\")+)")
                 );
             /** [] */
-            public static readonly Preset BRACKET = new Preset(
-                StringLiteral.BRACKET,
+            public static readonly Preset Bracket = new Preset(
+                StringLiteral.Bracket,
                 "((\\[[^\\]]*($|\\]))(\\][^\\]]*($|\\]))*)"
                 );
             /** {} */
-            public static readonly Preset BRACE = new Preset(
-                StringLiteral.BRACE,
+            public static readonly Preset Brace = new Preset(
+                StringLiteral.Brace,
                 "((\\{[^\\}]*($|\\}))+)"
                 );
             /** '' */
-            public static readonly Preset SINGLE_QUOTE = new Preset(
-                StringLiteral.SINGLE_QUOTE,
+            public static readonly Preset SingleQuote = new Preset(
+                StringLiteral.SingleQuote,
                 "(('[^'\\\\]*(?:\\\\.[^'\\\\]*)*('|$))+)"
                 // "((^'((?:''|[^'])*)')+)")
                 );
             /** N'' */
-            public static readonly Preset N_SINGLE_QUOTE = new Preset(
-                StringLiteral.N_SINGLE_QUOTE,
+            public static readonly Preset NSingleQuote = new Preset(
+                StringLiteral.NSingleQuote,
                 "((N'[^'\\\\]*(?:\\\\.[^'\\\\]*)*('|$))+)"
                 );
             /** q'' */
-            public static readonly Preset Q_SINGLE_QUOTE = new Preset(
-                StringLiteral.Q_SINGLE_QUOTE,
+            public static readonly Preset QSingleQuote = new Preset(
+                StringLiteral.QSingleQuote,
                 "(?i)" +
                 string.Join(
                     "|",
@@ -72,23 +72,23 @@ namespace SQL.Formatter.languages
                     "((n?q'<(?:(?!>'|\\\\).)*>')+)",
                     "((n?q'\\((?:(?!\\)'|\\\\).)*\\)')+)"));
             // single_quote("((^'((?:''|[^'])*)')+)")
-            public static readonly Preset E_SINGLE_QUOTE = new Preset(
-                StringLiteral.E_SINGLE_QUOTE,
+            public static readonly Preset ESingleQuote = new Preset(
+                StringLiteral.ESingleQuote,
                 "((E'[^'\\\\]*(?:\\\\.[^'\\\\]*)*('|$))+)"
                 );
             /** U&amp;'' */
-            public static readonly Preset U_SINGLE_QUOTE = new Preset(
-                StringLiteral.U_SINGLE_QUOTE,
+            public static readonly Preset USingleQUote = new Preset(
+                StringLiteral.USingleQuote,
                 "((U&'[^'\\\\]*(?:\\\\.[^'\\\\]*)*('|$))+)"
                 );
             /** U&amp;"" */
-            public static readonly Preset U_DOUBLE_QUOTE = new Preset(
-                StringLiteral.U_DOUBLE_QUOTE,
+            public static readonly Preset UDoubleQuote = new Preset(
+                StringLiteral.UDoubleQuote,
                 "((U&\"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*(\"|$))+)"
                 );
             /** $$ */
-            public static readonly Preset DOLLAR = new Preset(
-                StringLiteral.DOLLAR,
+            public static readonly Preset Dollar = new Preset(
+                StringLiteral.Dollar,
                 "((?<tag>\\$\\w*\\$)[\\s\\S]*?(?:\\k<tag>|$))"
                 );
 
@@ -96,17 +96,17 @@ namespace SQL.Formatter.languages
             {
                 get
                 {
-                    yield return BACK_QUOTE;
-                    yield return DOUBLE_QUOTE;
-                    yield return BRACKET;
-                    yield return BRACE;
-                    yield return SINGLE_QUOTE;
-                    yield return N_SINGLE_QUOTE;
-                    yield return Q_SINGLE_QUOTE;
-                    yield return E_SINGLE_QUOTE;
-                    yield return U_SINGLE_QUOTE;
-                    yield return U_DOUBLE_QUOTE;
-                    yield return DOLLAR;
+                    yield return BackQuote;
+                    yield return DoubleQuote;
+                    yield return Bracket;
+                    yield return Brace;
+                    yield return SingleQuote;
+                    yield return NSingleQuote;
+                    yield return QSingleQuote;
+                    yield return ESingleQuote;
+                    yield return USingleQUote;
+                    yield return UDoubleQuote;
+                    yield return Dollar;
 
                 }
             }

@@ -5,8 +5,8 @@ namespace SQL.Formatter.core
     /** Configurations for formatting. */
     public class FormatConfig
     {
-        public static readonly string DEFAULT_INDENT = "  ";
-        public static readonly int DEFAULT_COLUMN_MAX_LENGTH = 50;
+        public static readonly string DefaultIndent = "  ";
+        public static readonly int DefaultColumnMaxLength = 50;
 
         public readonly string indent;
         public readonly int maxColumnLength;
@@ -23,7 +23,7 @@ namespace SQL.Formatter.core
         {
             this.indent = indent;
             this.maxColumnLength = maxColumnLength;
-            this.parameters = parameters == null ? Params.EMPTY : parameters;
+            this.parameters = parameters == null ? Params.Empty : parameters;
             this.uppercase = uppercase;
             this.linesBetweenQueries = linesBetweenQueries;
         }
@@ -42,8 +42,8 @@ namespace SQL.Formatter.core
         /** FormatConfigBuilder */
         public class FormatConfigBuilder
         {
-            private string indent = DEFAULT_INDENT;
-            private int maxColumnLength = DEFAULT_COLUMN_MAX_LENGTH;
+            private string indent = DefaultIndent;
+            private int maxColumnLength = DefaultColumnMaxLength;
             private Params parameters;
             private bool uppercase;
             private int linesBetweenQueries;

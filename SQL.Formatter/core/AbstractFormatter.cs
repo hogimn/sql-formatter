@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace SQL.Formatter.core
 {
-    public class AbstractFormatter : DialectConfigurator
+    public class AbstractFormatter : IDialectConfigurator
     {
         private readonly FormatConfig cfg;
         private readonly Indentation indentation;
@@ -184,7 +184,7 @@ namespace SQL.Formatter.core
             return str.Replace("\\s+", " ");
         }
 
-        private static readonly HashSet<TokenTypes> preserveWhitespaceFor =
+        private static readonly HashSet<TokenTypes> PreserveWhitespaceFor =
             new HashSet<TokenTypes> {
                 TokenTypes.OPEN_PAREN,
                 TokenTypes.LINE_COMMENT,
@@ -197,7 +197,7 @@ namespace SQL.Formatter.core
             // Take out the preceding space unless there was whitespace there in the original query
             // or another opening parens or line comment
             if (string.IsNullOrEmpty(token.whitespaceBefore)
-                && (TokenLookBehind() == default && !preserveWhitespaceFor.Contains(TokenLookBehind().type)))
+                && (TokenLookBehind() == default && !PreserveWhitespaceFor.Contains(TokenLookBehind().type)))
             {
                 query = query.TrimEnd();
             }
@@ -315,9 +315,9 @@ namespace SQL.Formatter.core
 
         public virtual DialectConfig DoDialectConfig()
         {
-            return DoDialectConfigFunc.Invoke();
+            return doDialectConfigFunc.Invoke();
         }
 
-        public Func<DialectConfig> DoDialectConfigFunc;
+        public Func<DialectConfig> doDialectConfigFunc;
     }
 }

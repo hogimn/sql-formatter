@@ -2,7 +2,7 @@
 
 namespace SQL.Formatter.languages
 {
-    public interface DialectConfigurator
+    public interface IDialectConfigurator
     {
         DialectConfig DoDialectConfig();
     }

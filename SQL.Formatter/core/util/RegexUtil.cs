@@ -7,16 +7,16 @@ namespace SQL.Formatter.core.util
 {
     public class RegexUtil
     {
-        private static readonly string ESCAPE_REGEX =
+        private static readonly string EscapeRegex =
             string.Join("|",
                 new List<string> { "^", "$", "\\", ".", "*", "+", "*", "?", "(", ")", "[", "]", "{", "}", "|" }
                 .Select(spChr => "(\\" + spChr + ")"));
 
-        public static readonly Regex ESCAPE_REGEX_PATTERN = new Regex(ESCAPE_REGEX);
+        public static readonly Regex EscapeRegexPattern = new Regex(EscapeRegex);
 
         public static string EscapeRegExp(string s)
         {
-            return ESCAPE_REGEX_PATTERN.Replace(s, @"\$0");
+            return EscapeRegexPattern.Replace(s, @"\$0");
         }
 
         public static string CreateOperatorRegex(JSLikeList<string> multiLetterOperators)

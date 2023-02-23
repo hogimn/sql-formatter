@@ -5,7 +5,7 @@ namespace SQL.Formatter.languages
 {
     public class TSqlFormatter : AbstractFormatter
     {
-        private static readonly List<string> reservedWords = new List<string>{
+        private static readonly List<string> ReservedWords = new List<string>{
         "ADD",
         "EXTERNAL",
         "PROCEDURE",
@@ -192,7 +192,7 @@ namespace SQL.Formatter.languages
         "EXIT",
         "PROC"};
 
-        private static readonly List<string> reservedTopLevelWords =
+        private static readonly List<string> ReservedTopLevelWords =
             new List<string>{
                 "ADD",
                 "ALTER COLUMN",
@@ -216,10 +216,10 @@ namespace SQL.Formatter.languages
                 "VALUES",
                 "WHERE"};
 
-        private static readonly List<string> reservedTopLevelWordsNoIndent =
+        private static readonly List<string> ReservedTopLevelWordsNoIndent =
             new List<string> { "INTERSECT", "INTERSECT ALL", "MINUS", "UNION", "UNION ALL" };
 
-        private static readonly List<string> reservedNewlineWords =
+        private static readonly List<string> ReservedNewlineWords =
             new List<string>{
                 "AND",
                 "ELSE",
@@ -239,17 +239,17 @@ namespace SQL.Formatter.languages
         public override DialectConfig DoDialectConfig()
         {
             return DialectConfig.Builder()
-                .ReservedWords(reservedWords)
-                .ReservedTopLevelWords(reservedTopLevelWords)
-                .ReservedTopLevelWordsNoIndent(reservedTopLevelWordsNoIndent)
-                .ReservedNewlineWords(reservedNewlineWords)
+                .ReservedWords(ReservedWords)
+                .ReservedTopLevelWords(ReservedTopLevelWords)
+                .ReservedTopLevelWordsNoIndent(ReservedTopLevelWordsNoIndent)
+                .ReservedNewlineWords(ReservedNewlineWords)
                 .StringTypes(
                     new List<string>{
-                        StringLiteral.DOUBLE_QUOTE,
-                        StringLiteral.N_SINGLE_QUOTE,
-                        StringLiteral.SINGLE_QUOTE,
-                        StringLiteral.BACK_QUOTE,
-                        StringLiteral.BRACKET})
+                        StringLiteral.DoubleQuote,
+                        StringLiteral.NSingleQuote,
+                        StringLiteral.SingleQuote,
+                        StringLiteral.BackQuote,
+                        StringLiteral.Bracket})
                 .OpenParens(new List<string> { "(", "CASE" })
                 .CloseParens(new List<string> { ")", "END" })
                 .IndexedPlaceholderTypes(new List<string>())

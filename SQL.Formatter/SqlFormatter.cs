@@ -19,29 +19,29 @@ namespace SQL.Formatter
             return Standard().Format(query, cfg);
         }
 
-        public static string Format<T>(string query, string Indent, List<T> Parameters)
+        public static string Format<T>(string query, string indent, List<T> parameters)
         {
-            return Standard().Format(query, Indent, Parameters);
+            return Standard().Format(query, indent, parameters);
         }
 
-        public static string Format<T>(string query, List<T> Parameters)
+        public static string Format<T>(string query, List<T> parameters)
         {
-            return Standard().Format(query, Parameters);
+            return Standard().Format(query, parameters);
         }
 
-        public static string Format<T>(string query, string Indent, Dictionary<string, T> Parameters)
+        public static string Format<T>(string query, string indent, Dictionary<string, T> parameters)
         {
-            return Standard().Format(query, Indent, Parameters);
+            return Standard().Format(query, indent, parameters);
         }
 
-        public static string Format<T>(string query, Dictionary<string, T> Parameters)
+        public static string Format<T>(string query, Dictionary<string, T> parameters)
         {
-            return Standard().Format(query, Parameters);
+            return Standard().Format(query, parameters);
         }
 
-        public static string Format(string query, string Indent)
+        public static string Format(string query, string indent)
         {
-            return Standard().Format(query, Indent);
+            return Standard().Format(query, indent);
         }
 
         public static string Format(string query)
@@ -89,29 +89,29 @@ namespace SQL.Formatter
                 return underlying.Invoke(cfg).Format(query);
             }
 
-            public string Format<T>(string query, string Indent, List<T> Parameters)
+            public string Format<T>(string query, string indent, List<T> parameters)
             {
-                return Format(query, FormatConfig.Builder().Indent(Indent).Params(Parameters).Build());
+                return Format(query, FormatConfig.Builder().Indent(indent).Params(parameters).Build());
             }
 
-            public string Format<T>(string query, List<T> Parameters)
+            public string Format<T>(string query, List<T> parameters)
             {
-                return Format(query, FormatConfig.Builder().Params(Parameters).Build());
+                return Format(query, FormatConfig.Builder().Params(parameters).Build());
             }
 
-            public string Format<T>(string query, string Indent, Dictionary<string, T> Parameters)
+            public string Format<T>(string query, string indent, Dictionary<string, T> parameters)
             {
-                return Format(query, FormatConfig.Builder().Indent(Indent).Params(Parameters).Build());
+                return Format(query, FormatConfig.Builder().Indent(indent).Params(parameters).Build());
             }
 
-            public string Format<T>(string query, Dictionary<string, T> Parameters)
+            public string Format<T>(string query, Dictionary<string, T> parameters)
             {
-                return Format(query, FormatConfig.Builder().Params(Parameters).Build());
+                return Format(query, FormatConfig.Builder().Params(parameters).Build());
             }
 
-            public string Format(string query, string Indent)
+            public string Format(string query, string indent)
             {
-                return Format(query, FormatConfig.Builder().Indent(Indent).Build());
+                return Format(query, FormatConfig.Builder().Indent(indent).Build());
             }
 
             public string Format(string query)
@@ -121,16 +121,16 @@ namespace SQL.Formatter
 
             public Formatter Extend(Func<DialectConfig, DialectConfig> sqlOperator)
             {
-                AbstractFormatter func(FormatConfig config)
+                AbstractFormatter Func(FormatConfig config)
                 {
                     AbstractFormatter abstractFormatter = new AbstractFormatter(config)
                     {
-                        DoDialectConfigFunc = () => sqlOperator.Invoke(underlying.Invoke(config).DoDialectConfig())
+                        doDialectConfigFunc = () => sqlOperator.Invoke(underlying.Invoke(config).DoDialectConfig())
                     };
                     return abstractFormatter;
                 }
 
-                return new Formatter(func);
+                return new Formatter(Func);
             }
         }
     }

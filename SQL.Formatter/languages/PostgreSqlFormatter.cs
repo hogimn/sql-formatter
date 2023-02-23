@@ -5,7 +5,7 @@ namespace SQL.Formatter.languages
 {
     public class PostgreSqlFormatter : AbstractFormatter
     {
-        private static readonly List<string> reservedWords = new List<string>{
+        private static readonly List<string> ReservedWords = new List<string>{
         "ABORT",
         "ABSOLUTE",
         "ACCESS",
@@ -457,7 +457,7 @@ namespace SQL.Formatter.languages
         "YES",
         "ZONE"};
 
-        private static readonly List<string> reservedTopLevelWords =
+        private static readonly List<string> ReservedTopLevelWords =
             new List<string>{
                 "ADD",
                 "AFTER",
@@ -483,10 +483,10 @@ namespace SQL.Formatter.languages
                 "VALUES",
                 "WHERE"};
 
-        private static readonly List<string> reservedTopLevelWordsNoIndent =
+        private static readonly List<string> ReservedTopLevelWordsNoIndent =
             new List<string> { "INTERSECT", "INTERSECT ALL", "UNION", "UNION ALL" };
 
-        private static readonly List<string> reservedNewlineWords =
+        private static readonly List<string> ReservedNewlineWords =
             new List<string>{
                 "AND",
                 "ELSE",
@@ -507,17 +507,17 @@ namespace SQL.Formatter.languages
         public override DialectConfig DoDialectConfig()
         {
             return DialectConfig.Builder()
-                .ReservedWords(reservedWords)
-                .ReservedTopLevelWords(reservedTopLevelWords)
-                .ReservedTopLevelWordsNoIndent(reservedTopLevelWordsNoIndent)
-                .ReservedNewlineWords(reservedNewlineWords)
+                .ReservedWords(ReservedWords)
+                .ReservedTopLevelWords(ReservedTopLevelWords)
+                .ReservedTopLevelWordsNoIndent(ReservedTopLevelWordsNoIndent)
+                .ReservedNewlineWords(ReservedNewlineWords)
                 .StringTypes(
                     new List<string>{
-                        StringLiteral.DOUBLE_QUOTE,
-                        StringLiteral.SINGLE_QUOTE,
-                        StringLiteral.U_DOUBLE_QUOTE,
-                        StringLiteral.U_SINGLE_QUOTE,
-                        StringLiteral.DOLLAR})
+                        StringLiteral.DoubleQuote,
+                        StringLiteral.SingleQuote,
+                        StringLiteral.UDoubleQuote,
+                        StringLiteral.USingleQuote,
+                        StringLiteral.Dollar})
                 .OpenParens(new List<string> { "(", "CASE" })
                 .CloseParens(new List<string> { ")", "END" })
                 .IndexedPlaceholderTypes(new List<string> { "$" })

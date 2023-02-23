@@ -5,7 +5,7 @@ namespace SQL.Formatter.core
     /** Handles placeholder replacement with given params. */
     public abstract class Params
     {
-        public static readonly Params EMPTY = new Empty();
+        public static readonly Params Empty = new Empty();
 
         public abstract bool IsEmpty();
 

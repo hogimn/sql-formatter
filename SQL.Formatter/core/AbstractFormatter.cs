@@ -197,7 +197,7 @@ namespace SQL.Formatter.core
             // Take out the preceding space unless there was whitespace there in the original query
             // or another opening parens or line comment
             if (string.IsNullOrEmpty(token.whitespaceBefore)
-                && (TokenLookBehind() == default && !PreserveWhitespaceFor.Contains(TokenLookBehind().type)))
+                && (TokenLookBehind() == default || !PreserveWhitespaceFor.Contains(TokenLookBehind().type)))
             {
                 query = query.TrimEnd();
             }

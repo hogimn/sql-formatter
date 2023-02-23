@@ -2,6 +2,7 @@
 using SQL.Formatter.languages;
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace SQL.Formatter.core
 {
@@ -181,7 +182,7 @@ namespace SQL.Formatter.core
         // Replace any sequence of whitespace characters with single space
         private string EqualizeWhitespace(string str)
         {
-            return str.Replace("\\s+", " ");
+            return Regex.Replace(str, @"\s+", " ");
         }
 
         private static readonly HashSet<TokenTypes> PreserveWhitespaceFor =

@@ -61,7 +61,7 @@ namespace SQL.Formatter.core
 
         private static Func<Token, bool> IsToken(TokenTypes type, Regex regex)
         {
-            return token => token?.type == type && regex.IsMatch(token?.value);
+            return token => token?.type == type && regex.IsMatch(token.value);
         }
 
         public static bool IsAnd(Token token)

@@ -112,8 +112,6 @@ namespace SQL.Formatter.core
 
     class Empty : Params
     {
-        public Empty() { }
-
         public override bool IsEmpty()
         {
             return true;

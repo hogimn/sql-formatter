@@ -211,7 +211,7 @@ namespace SQL.Formatter.core
         private Token GetPlaceholderTokenWithKey(string input, Regex regex, Func<string, string> parseKey)
         {
             Token token = GetTokenOnFirstMatch(input, TokenTypes.PLACEHOLDER, regex);
-            return (token == null) ? default : token.WithKey(parseKey.Invoke(token.value));
+            return token?.WithKey(parseKey.Invoke(token.value));
         }
 
         private string GetEscapedPlaceholderKey(string key, string quoteChar)
@@ -235,7 +235,7 @@ namespace SQL.Formatter.core
         {
             // A reserved word cannot be preceded by a "."
             // this makes it so in "mytable.from", "from" is not considered a reserved word
-            if (previousToken != null && previousToken.value != null && previousToken.value.Equals("."))
+            if (previousToken?.value != null && previousToken.value.Equals("."))
             {
                 return null;
             }

@@ -1,6 +1,6 @@
-﻿using SQL.Formatter.languages;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using SQL.Formatter.Language;
 using Xunit;
 
 namespace SQL.Formatter.Test

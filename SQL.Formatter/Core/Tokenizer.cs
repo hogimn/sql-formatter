@@ -1,10 +1,10 @@
-﻿using SQL.Formatter.core.util;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using SQL.Formatter.Core.Util;
 
-namespace SQL.Formatter.core
+namespace SQL.Formatter.Core
 {
     public class Tokenizer
     {
@@ -135,7 +135,7 @@ namespace SQL.Formatter.core
 
         private Token GetNextToken(string input, Token previousToken)
         {
-            return Util.FirstNotnull(
+            return Utils.FirstNotnull(
                 () => GetCommentToken(input),
                 () => GetStringToken(input),
                 () => GetOpenParenToken(input),
@@ -149,7 +149,7 @@ namespace SQL.Formatter.core
 
         private Token GetCommentToken(string input)
         {
-            return Util.FirstNotnull(
+            return Utils.FirstNotnull(
                 () => GetLineCommentToken(input),
                 () => GetBlockCommentToken(input));
         }
@@ -181,7 +181,7 @@ namespace SQL.Formatter.core
 
         private Token GetPlaceholderToken(string input)
         {
-            return Util.FirstNotnull(
+            return Utils.FirstNotnull(
                 () => GetIdentNamedPlaceholderToken(input),
                 () => GetStringNamedPlaceholderToken(input),
                 () => GetIndexedPlaceholderToken(input));
@@ -239,7 +239,7 @@ namespace SQL.Formatter.core
             {
                 return null;
             }
-            return Util.FirstNotnull(
+            return Utils.FirstNotnull(
                 () => GetToplevelReservedToken(input),
                 () => GetNewlineReservedToken(input),
                 () => GetTopLevelReservedTokenNoIndent(input),

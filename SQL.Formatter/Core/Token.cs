@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 
-namespace SQL.Formatter.core
+namespace SQL.Formatter.Core
 {
     public class Token
     {

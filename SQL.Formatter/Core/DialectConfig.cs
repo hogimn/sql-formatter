@@ -1,9 +1,9 @@
-﻿using SQL.Formatter.core.util;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using SQL.Formatter.Core.Util;
 
-namespace SQL.Formatter.core
+namespace SQL.Formatter.Core
 {
     public class DialectConfig
     {
@@ -34,18 +34,18 @@ namespace SQL.Formatter.core
             List<string> namedPlaceholderTypes,
             List<string> operators)
         {
-            this.lineCommentTypes = Util.NullToEmpty(lineCommentTypes);
-            this.reservedTopLevelWords = Util.NullToEmpty(reservedTopLevelWords);
-            this.reservedTopLevelWordsNoIndent = Util.NullToEmpty(reservedTopLevelWordsNoIndent);
-            this.reservedNewlineWords = Util.NullToEmpty(reservedNewlineWords);
-            this.reservedWords = Util.NullToEmpty(reservedWords);
-            this.specialWordChars = Util.NullToEmpty(specialWordChars);
-            this.stringTypes = Util.NullToEmpty(stringTypes);
-            this.openParens = Util.NullToEmpty(openParens);
-            this.closeParens = Util.NullToEmpty(closeParens);
-            this.indexedPlaceholderTypes = Util.NullToEmpty(indexedPlaceholderTypes);
-            this.namedPlaceholderTypes = Util.NullToEmpty(namedPlaceholderTypes);
-            this.operators = Util.NullToEmpty(operators);
+            this.lineCommentTypes = Utils.NullToEmpty(lineCommentTypes);
+            this.reservedTopLevelWords = Utils.NullToEmpty(reservedTopLevelWords);
+            this.reservedTopLevelWordsNoIndent = Utils.NullToEmpty(reservedTopLevelWordsNoIndent);
+            this.reservedNewlineWords = Utils.NullToEmpty(reservedNewlineWords);
+            this.reservedWords = Utils.NullToEmpty(reservedWords);
+            this.specialWordChars = Utils.NullToEmpty(specialWordChars);
+            this.stringTypes = Utils.NullToEmpty(stringTypes);
+            this.openParens = Utils.NullToEmpty(openParens);
+            this.closeParens = Utils.NullToEmpty(closeParens);
+            this.indexedPlaceholderTypes = Utils.NullToEmpty(indexedPlaceholderTypes);
+            this.namedPlaceholderTypes = Utils.NullToEmpty(namedPlaceholderTypes);
+            this.operators = Utils.NullToEmpty(operators);
         }
         public DialectConfig WithLineCommentTypes(List<string> lineCommentTypes)
         {
@@ -60,7 +60,7 @@ namespace SQL.Formatter.core
         public DialectConfig PlusLineCommentTypes(List<string> lineCommentTypes)
         {
             return ToBuilder()
-                .LineCommentTypes(Util.Concat(this.lineCommentTypes, lineCommentTypes))
+                .LineCommentTypes(Utils.Concat(this.lineCommentTypes, lineCommentTypes))
                 .Build();
         }
 
@@ -77,7 +77,7 @@ namespace SQL.Formatter.core
         public DialectConfig PlusReservedTopLevelWords(List<string> reservedTopLevelWords)
         {
             return ToBuilder()
-                .ReservedTopLevelWords(Util.Concat(this.reservedTopLevelWords, reservedTopLevelWords))
+                .ReservedTopLevelWords(Utils.Concat(this.reservedTopLevelWords, reservedTopLevelWords))
                 .Build();
         }
 
@@ -94,7 +94,7 @@ namespace SQL.Formatter.core
         public DialectConfig PlusReservedNewlineWords(List<string> reservedNewlineWords)
         {
             return ToBuilder()
-                .ReservedNewlineWords(Util.Concat(this.reservedNewlineWords, reservedNewlineWords))
+                .ReservedNewlineWords(Utils.Concat(this.reservedNewlineWords, reservedNewlineWords))
                 .Build();
         }
 
@@ -111,7 +111,7 @@ namespace SQL.Formatter.core
         public DialectConfig PlusReservedTopLevelWordsNoIndent(List<string> reservedTopLevelWordsNoIndent)
         {
             return ToBuilder()
-                .ReservedTopLevelWordsNoIndent(Util.Concat(this.reservedTopLevelWordsNoIndent, reservedTopLevelWordsNoIndent))
+                .ReservedTopLevelWordsNoIndent(Utils.Concat(this.reservedTopLevelWordsNoIndent, reservedTopLevelWordsNoIndent))
                 .Build();
         }
 
@@ -127,7 +127,7 @@ namespace SQL.Formatter.core
 
         public DialectConfig PlusReservedWords(List<string> reservedWords)
         {
-            return ToBuilder().ReservedWords(Util.Concat(this.reservedWords, reservedWords))
+            return ToBuilder().ReservedWords(Utils.Concat(this.reservedWords, reservedWords))
                 .Build();
         }
 
@@ -144,7 +144,7 @@ namespace SQL.Formatter.core
         public DialectConfig PlusSpecialWordChars(List<string> specialWordChars)
         {
             return ToBuilder()
-                .SpecialWordChars(Util.Concat(this.specialWordChars, specialWordChars))
+                .SpecialWordChars(Utils.Concat(this.specialWordChars, specialWordChars))
                 .Build();
         }
 
@@ -161,7 +161,7 @@ namespace SQL.Formatter.core
         public DialectConfig PlusStringTypes(List<string> stringTypes)
         {
             return ToBuilder()
-                .StringTypes(Util.Concat(this.stringTypes, stringTypes))
+                .StringTypes(Utils.Concat(this.stringTypes, stringTypes))
                 .Build();
         }
 
@@ -178,7 +178,7 @@ namespace SQL.Formatter.core
         public DialectConfig PlusOpenParens(List<string> openParens)
         {
             return ToBuilder()
-                .OpenParens(Util.Concat(this.openParens, openParens))
+                .OpenParens(Utils.Concat(this.openParens, openParens))
                 .Build();
         }
 
@@ -195,7 +195,7 @@ namespace SQL.Formatter.core
         public DialectConfig PlusCloseParens(List<string> closeParens)
         {
             return ToBuilder()
-                .CloseParens(Util.Concat(this.closeParens, closeParens))
+                .CloseParens(Utils.Concat(this.closeParens, closeParens))
                 .Build();
         }
 
@@ -212,7 +212,7 @@ namespace SQL.Formatter.core
         public DialectConfig PlusIndexedPlaceholderTypes(List<string> indexedPlaceholderTypes)
         {
             return ToBuilder()
-                .IndexedPlaceholderTypes(Util.Concat(this.indexedPlaceholderTypes, indexedPlaceholderTypes))
+                .IndexedPlaceholderTypes(Utils.Concat(this.indexedPlaceholderTypes, indexedPlaceholderTypes))
                 .Build();
         }
 
@@ -229,7 +229,7 @@ namespace SQL.Formatter.core
         public DialectConfig PlusNamedPlaceholderTypes(List<string> namedPlaceholderTypes)
         {
             return ToBuilder()
-                .NamedPlaceholderTypes(Util.Concat(this.namedPlaceholderTypes, namedPlaceholderTypes))
+                .NamedPlaceholderTypes(Utils.Concat(this.namedPlaceholderTypes, namedPlaceholderTypes))
                 .Build();
         }
 
@@ -246,7 +246,7 @@ namespace SQL.Formatter.core
         public DialectConfig PlusOperators(List<string> operators)
         {
             return ToBuilder()
-                .Operators(Util.Concat(this.operators, operators))
+                .Operators(Utils.Concat(this.operators, operators))
                 .Build();
         }
 

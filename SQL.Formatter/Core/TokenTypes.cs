@@ -1,4 +1,4 @@
-﻿namespace SQL.Formatter.core
+﻿namespace SQL.Formatter.Core
 {
     public enum TokenTypes
     {

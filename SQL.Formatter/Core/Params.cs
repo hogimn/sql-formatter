@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SQL.Formatter.core
+namespace SQL.Formatter.Core
 {
     /** Handles placeholder replacement with given params. */
     public abstract class Params

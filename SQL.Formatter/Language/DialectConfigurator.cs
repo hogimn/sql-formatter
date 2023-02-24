@@ -1,6 +1,6 @@
-﻿using SQL.Formatter.core;
+﻿using SQL.Formatter.Core;
 
-namespace SQL.Formatter.languages
+namespace SQL.Formatter.Language
 {
     public interface IDialectConfigurator
     {

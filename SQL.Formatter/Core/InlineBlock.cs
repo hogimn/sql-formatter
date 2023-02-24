@@ -1,6 +1,6 @@
-﻿using SQL.Formatter.core.util;
+﻿using SQL.Formatter.Core.Util;
 
-namespace SQL.Formatter.core
+namespace SQL.Formatter.Core
 {
 
 

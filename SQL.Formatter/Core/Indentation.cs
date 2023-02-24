@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace SQL.Formatter.core
+namespace SQL.Formatter.Core
 {
     /**
      * Manages indentation levels.

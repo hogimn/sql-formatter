@@ -1,7 +1,7 @@
-﻿using SQL.Formatter.core;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using SQL.Formatter.Core;
 
-namespace SQL.Formatter.languages
+namespace SQL.Formatter.Language
 {
     public class TSqlFormatter : AbstractFormatter
     {

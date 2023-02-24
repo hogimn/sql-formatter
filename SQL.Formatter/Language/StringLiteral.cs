@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace SQL.Formatter.languages
+namespace SQL.Formatter.Language
 {
     public class StringLiteral
     {

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SQL.Formatter.core.util
+namespace SQL.Formatter.Core.Util
 {
     public class JSLikeList<T> : IEnumerable
     {

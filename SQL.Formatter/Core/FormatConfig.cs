@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SQL.Formatter.core
+namespace SQL.Formatter.Core
 {
     /** Configurations for formatting. */
     public class FormatConfig
@@ -86,7 +86,7 @@ namespace SQL.Formatter.core
             s */
             public FormatConfigBuilder Params<T>(Dictionary<string, T> parameters)
             {
-                return Params(core.Params.Of(parameters));
+                return Params(Core.Params.Of(parameters));
             }
 
             /**
@@ -95,7 +95,7 @@ namespace SQL.Formatter.core
             s */
             public FormatConfigBuilder Params<T>(List<T> parameters)
             {
-                return Params(core.Params.Of(parameters));
+                return Params(Core.Params.Of(parameters));
             }
 
             /**

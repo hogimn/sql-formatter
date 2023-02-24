@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using SQL.Formatter.languages;
+using SQL.Formatter.Language;
 using SQL.Formatter.Test.Behavior;
 using SQL.Formatter.Test.Feature;
 using Xunit;

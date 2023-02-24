@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SQL.Formatter.core.util
+namespace SQL.Formatter.Core.Util
 {
-    public class Util
+    public class Utils
     {
 
         public static List<T> NullToEmpty<T>(List<T> list)

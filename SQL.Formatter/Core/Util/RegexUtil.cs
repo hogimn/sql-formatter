@@ -1,9 +1,9 @@
-﻿using SQL.Formatter.languages;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using SQL.Formatter.Language;
 
-namespace SQL.Formatter.core.util
+namespace SQL.Formatter.Core.Util
 {
     public class RegexUtil
     {
@@ -22,7 +22,7 @@ namespace SQL.Formatter.core.util
         public static string CreateOperatorRegex(JSLikeList<string> multiLetterOperators)
         {
             return string.Format("^({0}|.)",
-                string.Join("|", Util.SortByLengthDesc(multiLetterOperators).Map(EscapeRegExp).ToList()));
+                string.Join("|", Utils.SortByLengthDesc(multiLetterOperators).Map(EscapeRegExp).ToList()));
         }
 
         public static string CreateLineCommentRegex(JSLikeList<string> lineCommentTypes)
@@ -37,7 +37,7 @@ namespace SQL.Formatter.core.util
                 return "^\b$";
 
             string reservedWordsPattern =
-                string.Join("|", Util.SortByLengthDesc(reservedWords).ToList()).Replace(" ", "\\s+");
+                string.Join("|", Utils.SortByLengthDesc(reservedWords).ToList()).Replace(" ", "\\s+");
 
             return "(?i)" + "^(" + reservedWordsPattern + ")\\b";
         }

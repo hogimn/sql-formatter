@@ -1,4 +1,4 @@
-﻿using SQL.Formatter.languages;
+﻿using SQL.Formatter.Language;
 using Xunit;
 
 namespace SQL.Formatter.Test

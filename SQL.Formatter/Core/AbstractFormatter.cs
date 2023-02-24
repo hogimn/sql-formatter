@@ -1,10 +1,10 @@
-﻿using SQL.Formatter.core.util;
-using SQL.Formatter.languages;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using SQL.Formatter.Core.Util;
+using SQL.Formatter.Language;
 
-namespace SQL.Formatter.core
+namespace SQL.Formatter.Core
 {
     public class AbstractFormatter : IDialectConfigurator
     {
@@ -261,7 +261,7 @@ namespace SQL.Formatter.core
             indentation.ResetIndentation();
             return query.TrimEnd()
                 + Show(token)
-                + Util.Repeat("\n", cfg.linesBetweenQueries == default ? 1 : cfg.linesBetweenQueries);
+                + Utils.Repeat("\n", cfg.linesBetweenQueries == default ? 1 : cfg.linesBetweenQueries);
         }
 
         // Converts token to string (uppercasing it if needed)

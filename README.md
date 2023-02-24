@@ -1,6 +1,8 @@
 # SqlFormatter
 
-C# port of great SQL formatter <https://github.com/vertical-blank/sql-formatter>.
+This repository contains the C# port of the popular Java SQL formatter <https://github.com/vertical-blank/sql-formatter>,
+<br />
+which is again the Java port of the popular Typescript SQL formatter https://github.com/sql-formatter-org/sql-formatter
 
 This does not support:
 
@@ -9,7 +11,7 @@ This does not support:
 
 ## Examples
 
-You can easily use `VerticalBlank.SqlFormatter.SqlFormatter` :
+You can easily use `SQL.Formatter.SqlFormatter` :
 
 ```c#
 SqlFormatter.Format("SELECT * FROM table1")
@@ -33,14 +35,14 @@ SqlFormatter.Format("SELECT * FROM tbl",
     .Uppercase(true) // Defaults to false (not safe to use when SQL dialect has case-sensitive identifiers)
     .LinesBetweenQueries(2) // Defaults to 1
     .MaxColumnLength(100) // Defaults to 50
-    .Params(new List<string>{"a", "b", "c"}) // Map or List. See Placeholders replacement.
+    .Params(new List<string>{"a", "b", "c"}) // Dictionary or List. See Placeholders replacement.
     .Build());
 );
 ```
 
 ### Dialect
 
-You can pass dialect `com.github.vertical_blank.sqlformatter.languages.Dialect` or `String` to `SqlFormatter.of` :
+You can pass dialect `SQL.Formatter.Language.Dialect` or `String` to `SqlFormatter.Of` :
 
 ```c#
 SqlFormatter
@@ -95,7 +97,7 @@ namedParams.Add("foo", "'bar'");
 SqlFormatter.Of(Dialect.TSql).Format("SELECT * FROM tbl WHERE foo = @foo", namedParams);
 
 // Indexed placeholders
-SqlFormatter.Format("SELECT * FROM tbl WHERE foo = ?", new List<string>{"'bar'"});
+SqlFormatter.Format("SELECT * FROM tbl WHERE foo = ?", new List<string> {"'bar'"});
 ```
 
 Both result in:

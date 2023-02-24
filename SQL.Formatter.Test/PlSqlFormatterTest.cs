@@ -1,0 +1,261 @@
+﻿using System.Collections.Generic;
+using SQL.Formatter.languages;
+using SQL.Formatter.Test.Behavior;
+using SQL.Formatter.Test.Feature;
+using Xunit;
+
+namespace SQL.Formatter.Test
+{
+    public class PlSqlFormatterTest
+    {
+        [Fact]
+        public void Test()
+        {
+            var formatter = SqlFormatter.Of(Dialect.PlSql);
+            BehavesLikeSqlFormatter.Test(formatter);
+            Case.Test(formatter);
+            CreateTable.Test(formatter);
+            AlterTable.Test(formatter);
+            AlterTableModify.Test(formatter);
+            Strings.Test(formatter, new List<string>
+            {
+                StringLiteral.DoubleQuote,
+                StringLiteral.SingleQuote,
+                StringLiteral.BackQuote,
+                StringLiteral.QSingleQuote
+            });
+            Between.Test(formatter);
+            Schema.Test(formatter);
+            Operators.Test(formatter, new List<string>
+            {
+                "||",
+                "**",
+                "!=",
+                ":="
+            });
+            
+            Assert.Equal(
+                "SELECT\n"
+                + "  col1\n"
+                + "FROM\n"
+                + "  tbl\n"
+                + "ORDER BY\n"
+                + "  col2 DESC\n"
+                + "FETCH FIRST\n"
+                + "  20 ROWS ONLY;",
+                formatter.Format(
+                    "SELECT col1 FROM tbl ORDER BY col2 DESC FETCH FIRST 20 ROWS ONLY;"));
+            
+            Assert.Equal(
+                "SELECT\n"
+                + "  col\n"
+                + "FROM\n"
+                + "  -- This is a comment\n"
+                + "  MyTable;",
+                formatter.Format(
+                    "SELECT col FROM\n-- This is a comment\nMyTable;\n"));
+            
+            Assert.Equal(
+                "SELECT\n"
+                + "  my_col$1#,\n"
+                + "  col.2@\n"
+                + "FROM\n"
+                + "  tbl",
+                formatter.Format(
+                    "SELECT my_col$1#, col.2@ FROM tbl\n"));
+            
+            Assert.Equal(
+                "INSERT\n"
+                + "  Customers (ID, MoneyBalance, Address, City)\n"
+                + "VALUES\n"
+                + "  (12, -123.4, 'Skagen 2111', 'Stv');",
+                formatter.Format(
+                    "INSERT Customers (ID, MoneyBalance, Address, City) VALUES (12,-123.4, 'Skagen 2111','Stv');"));
+            
+            Assert.Equal(
+                "SELECT\n"
+                + "  ?1,\n"
+                + "  ?25,\n"
+                + "  ?;",
+                formatter.Format(
+                    "SELECT ?1, ?25, ?;"));
+            
+            Assert.Equal(
+                "SELECT\n"
+                + "  second,\n"
+                + "  third,\n"
+                + "  first;",
+                formatter.Format(
+                    "SELECT ?1, ?2, ?0;", new Dictionary<string, string>
+                    {
+                        { "0", "first" },
+                        { "1", "second" },
+                        { "2", "third" }
+                    }));
+            
+            Assert.Equal(
+                "SELECT\n"
+                + "  first,\n"
+                + "  second,\n"
+                + "  third;",
+                formatter.Format(
+                    "SELECT ?, ?, ?;", new List<string>
+                    {
+                        "first",
+                        "second",
+                        "third"
+                    }));
+            
+            Assert.Equal(
+                "SELECT\n"
+                + "  a,\n"
+                + "  b\n"
+                + "FROM\n"
+                + "  t\n"
+                + "  CROSS APPLY fn(t.id)",
+                formatter.Format(
+                    "SELECT a, b FROM t CROSS APPLY fn(t.id)"));
+
+            Assert.Equal(
+                "SELECT\n"
+                + "  N,\n"
+                + "  M\n"
+                + "FROM\n"
+                + "  t",
+                formatter.Format(
+                    "SELECT N, M FROM t"));
+
+            Assert.Equal(
+                "SELECT\n"
+                + "  N'value'",
+                formatter.Format(
+                    "SELECT N'value'"));
+
+            Assert.Equal(
+                "SELECT\n"
+                + "  a,\n"
+                + "  b\n"
+                + "FROM\n"
+                + "  t\n"
+                + "  OUTER APPLY fn(t.id)",
+                formatter.Format(
+                    "SELECT a, b FROM t OUTER APPLY fn(t.id)"));
+
+            Assert.Equal(
+                "WITH t1(id, parent_id) AS (\n"
+                + "  -- Anchor member.\n"
+                + "  SELECT\n"
+                + "    id,\n"
+                + "    parent_id\n"
+                + "  FROM\n"
+                + "    tab1\n"
+                + "  WHERE\n"
+                + "    parent_id IS NULL\n"
+                + "  MINUS\n"
+                + "  -- Recursive member.\n"
+                + "  SELECT\n"
+                + "    t2.id,\n"
+                + "    t2.parent_id\n"
+                + "  FROM\n"
+                + "    tab1 t2,\n"
+                + "    t1\n"
+                + "  WHERE\n"
+                + "    t2.parent_id = t1.id\n"
+                + ") SEARCH BREADTH FIRST BY id SET order1,\n"
+                + "another AS (\n"
+                + "  SELECT\n"
+                + "    *\n"
+                + "  FROM\n"
+                + "    dual\n"
+                + ")\n"
+                + "SELECT\n"
+                + "  id,\n"
+                + "  parent_id\n"
+                + "FROM\n"
+                + "  t1\n"
+                + "ORDER BY\n"
+                + "  order1;",
+                formatter.Format(
+                    "WITH t1(id, parent_id) AS (\n"
+                    + "  -- Anchor member.\n"
+                    + "  SELECT\n"
+                    + "    id,\n"
+                    + "    parent_id\n"
+                    + "  FROM\n"
+                    + "    tab1\n"
+                    + "  WHERE\n"
+                    + "    parent_id IS NULL\n"
+                    + "  MINUS\n"
+                    + "    -- Recursive member.\n"
+                    + "  SELECT\n"
+                    + "    t2.id,\n"
+                    + "    t2.parent_id\n"
+                    + "  FROM\n"
+                    + "    tab1 t2,\n"
+                    + "    t1\n"
+                    + "  WHERE\n"
+                    + "    t2.parent_id = t1.id\n"
+                    + ") SEARCH BREADTH FIRST BY id SET order1,\n"
+                    + "another AS (SELECT * FROM dual)\n"
+                    + "SELECT id, parent_id FROM t1 ORDER BY order1;\n"));
+            
+            Assert.Equal(
+                "WITH t1(id, parent_id) AS (\n"
+                + "  -- Anchor member.\n"
+                + "  SELECT\n"
+                + "    id,\n"
+                + "    parent_id\n"
+                + "  FROM\n"
+                + "    tab1\n"
+                + "  WHERE\n"
+                + "    parent_id IS NULL\n"
+                + "  MINUS\n"
+                + "  -- Recursive member.\n"
+                + "  SELECT\n"
+                + "    t2.id,\n"
+                + "    t2.parent_id\n"
+                + "  FROM\n"
+                + "    tab1 t2,\n"
+                + "    t1\n"
+                + "  WHERE\n"
+                + "    t2.parent_id = t1.id\n"
+                + ") SEARCH BREADTH FIRST by id SET order1,\n"
+                + "another AS (\n"
+                + "  SELECT\n"
+                + "    *\n"
+                + "  FROM\n"
+                + "    dual\n"
+                + ")\n"
+                + "SELECT\n"
+                + "  id,\n"
+                + "  parent_id\n"
+                + "FROM\n"
+                + "  t1\n"
+                + "ORDER BY\n"
+                + "  order1;",
+                formatter.Format(
+                    "WITH t1(id, parent_id) AS (\n"
+                    + "  -- Anchor member.\n"
+                    + "  SELECT\n"
+                    + "    id,\n"
+                    + "    parent_id\n"
+                    + "  FROM\n"
+                    + "    tab1\n"
+                    + "  WHERE\n"
+                    + "    parent_id IS NULL\n"
+                    + "  MINUS\n"
+                    + "    -- Recursive member.\n"
+                    + "  SELECT\n"
+                    + "    t2.id,\n"
+                    + "    t2.parent_id\n"
+                    + "  FROM\n"
+                    + "    tab1 t2,\n"
+                    + "    t1\n"
+                    + "  WHERE\n"
+                    + "    t2.parent_id = t1.id\n"
+                    + ") SEARCH BREADTH FIRST by id SET order1,\n"
+                    + "another AS (SELECT * FROM dual)\n"
+                    + "SELECT id, parent_id FROM t1 ORDER BY order1;\n"));
+        }
+    }
+}

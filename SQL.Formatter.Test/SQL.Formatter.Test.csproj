@@ -149,8 +149,31 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Behavior\BehavesLikeMariaDbFormatter.cs" />
+    <Compile Include="Behavior\BehavesLikeSqlFormatter.cs" />
+    <Compile Include="Db2FormatterTest.cs" />
+    <Compile Include="DialectTest.cs" />
+    <Compile Include="Feature\AlterTable.cs" />
+    <Compile Include="Feature\AlterTableModify.cs" />
+    <Compile Include="Feature\Between.cs" />
+    <Compile Include="Feature\Case.cs" />
+    <Compile Include="Feature\CreateTable.cs" />
+    <Compile Include="Feature\Join.cs" />
+    <Compile Include="Feature\Operaters.cs" />
+    <Compile Include="Feature\Schema.cs" />
+    <Compile Include="Feature\Strings.cs" />
+    <Compile Include="MariaDbFormatterTest.cs" />
+    <Compile Include="ModifiedFormatterTest.cs" />
+    <Compile Include="MySqlFormatterTest.cs" />
+    <Compile Include="N1qlFormatterTest.cs" />
+    <Compile Include="PlSqlFormatterTest.cs" />
+    <Compile Include="PostgreSqlFormatterTest.cs" />
+    <Compile Include="RedShiftFormatterTest.cs" />
+    <Compile Include="SparkSqlFormatter.cs" />
     <Compile Include="SqlFormatterTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StandardSqlFormatterTest.cs" />
+    <Compile Include="TSqlFormatterTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

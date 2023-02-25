@@ -88,7 +88,7 @@ WHERE
 
 ### Placeholders replacement
 
-You can pass `List` or `Dictionary` to `format` :
+You can pass `List` or `Dictionary` to `Format` :
 
 ```c#
 // Named placeholders

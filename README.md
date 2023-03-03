@@ -53,7 +53,7 @@ SqlFormatter
 
 SQL formatter supports the following dialects:
 
-- **sql** - [Standard SQL][]
+- **sql** - [Standard SQL][] (**Default**)
 - **mariadb** - [MariaDB][]
 - **mysql** - [MySQL][]
 - **postgresql** - [PostgreSQL][]

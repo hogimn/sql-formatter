@@ -1,4 +1,4 @@
-# SqlFormatter
+# SQL Formatter
 
 This repository contains the C# port of the popular Java SQL formatter <https://github.com/vertical-blank/sql-formatter>,
 <br />

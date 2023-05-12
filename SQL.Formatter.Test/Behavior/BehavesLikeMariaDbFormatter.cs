@@ -51,14 +51,23 @@ namespace SQL.Formatter.Test.Behavior
                     "NATURAL RIGHT JOIN",
                     "NATURAL RIGHT OUTER JOIN",
                 });
-                
+
+            SupportsSharpComments(formatter);
+            SupportsSettingVariables(formatter);
+        }
+
+        public static void SupportsSharpComments(SqlFormatter.Formatter formatter)
+        {
             Assert.Equal(
                 "SELECT\n"
                 + "  a # comment\n"
                 + "FROM\n"
                 + "  b # comment",
                 formatter.Format("SELECT a # comment\nFROM b # comment"));
-            
+        }
+
+        public static void SupportsSettingVariables(SqlFormatter.Formatter formatter)
+        {
             Assert.Equal(
                 "SET\n"
                 + "  @foo := (\n"

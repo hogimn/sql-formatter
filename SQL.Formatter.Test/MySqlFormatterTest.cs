@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using SQL.Formatter.Language;
 using SQL.Formatter.Test.Behavior;
 using SQL.Formatter.Test.Feature;
@@ -8,11 +9,17 @@ namespace SQL.Formatter.Test
 {
     public class MySqlFormatterTest
     {
+        public readonly SqlFormatter.Formatter formatter = SqlFormatter.Of(Dialect.MySql);
+
         [Fact]
-        public void Test()
+        public void BehavesLikeMariaDbFormatterTest()
         {
-            var formatter = SqlFormatter.Of(Dialect.MySql);
             BehavesLikeMariaDbFormatter.Test(formatter);
+        }
+
+        [Fact]
+        public void AdditionalMySqlOperator()
+        {
             Operators.Test(formatter, new List<string>
             {
                 "->",

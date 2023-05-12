@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using System;
+using Xunit;
 
 namespace SQL.Formatter.Test.Feature
 {
@@ -6,10 +7,12 @@ namespace SQL.Formatter.Test.Feature
     {
         public static void Test(SqlFormatter.Formatter formatter)
         {
-            Assert.Equal(
-                "CREATE TABLE items (a INT PRIMARY KEY, b TEXT);",
-                formatter.Format("CREATE TABLE items (a INT PRIMARY KEY, b TEXT);"));
-            
+            FormatsShortCreateTable(formatter);
+            FormatsLongCreateTable(formatter);
+        }
+
+        private static void FormatsLongCreateTable(SqlFormatter.Formatter formatter)
+        {
             Assert.Equal(
                 "CREATE TABLE items (\n"
                 + "  a INT PRIMARY KEY,\n"
@@ -18,6 +21,13 @@ namespace SQL.Formatter.Test.Feature
                 + "  doggie INT NOT NULL\n"
                 + ");",
                 formatter.Format("CREATE TABLE items (a INT PRIMARY KEY, b TEXT, c INT NOT NULL, doggie INT NOT NULL);"));
+        }
+
+        private static void FormatsShortCreateTable(SqlFormatter.Formatter formatter)
+        {
+            Assert.Equal(
+                "CREATE TABLE items (a INT PRIMARY KEY, b TEXT);",
+                formatter.Format("CREATE TABLE items (a INT PRIMARY KEY, b TEXT);"));
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace SQL.Formatter.Test.Feature
@@ -6,6 +7,11 @@ namespace SQL.Formatter.Test.Feature
     public class Operators
     {
         public static void Test(SqlFormatter.Formatter formatter, List<string> operators)
+        {
+            SupportsOperators(formatter, operators);
+        }
+
+        private static void SupportsOperators(SqlFormatter.Formatter formatter, List<string> operators)
         {
             operators.ForEach(op =>
             {

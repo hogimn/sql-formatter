@@ -1,10 +1,16 @@
-﻿using Xunit;
+﻿using System;
+using Xunit;
 
 namespace SQL.Formatter.Test.Feature
 {
     public class Case
     {
         public static void Test(SqlFormatter.Formatter formatter)
+        {
+            FormatsCaseWhenWithABlankExpression(formatter);
+        }
+
+        private static void FormatsCaseWhenWithABlankExpression(SqlFormatter.Formatter formatter)
         {
             Assert.Equal(
                 "CASE\n"

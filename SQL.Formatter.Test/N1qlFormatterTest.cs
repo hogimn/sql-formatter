@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using SQL.Formatter.Language;
 using SQL.Formatter.Test.Behavior;
 using SQL.Formatter.Test.Feature;
@@ -8,57 +9,167 @@ namespace SQL.Formatter.Test
 {
     public class N1qlFormatterTest
     {
+        public readonly SqlFormatter.Formatter formatter = SqlFormatter.Of(Dialect.N1ql);
+
         [Fact]
-        public void Test()
+        public void BehavesLikeSqlFormatterTest()
         {
-            var formatter = SqlFormatter.Of(Dialect.N1ql);
             BehavesLikeSqlFormatter.Test(formatter);
+        }
+
+        [Fact]
+        public void StringsTest()
+        {
             Strings.Test(formatter, new List<string>
             {
                 StringLiteral.DoubleQuote,
                 StringLiteral.SingleQuote,
                 StringLiteral.BackQuote
             });
+        }
+
+        [Fact]
+        public void BetweenTest()
+        {
             Between.Test(formatter);
+        }
+
+        [Fact]
+        public void SchemaTest()
+        {
             Schema.Test(formatter);
+        }
+
+        [Fact]
+        public void OperatorsTest()
+        {
             Operators.Test(formatter, new List<string>
             {
                 "%",
                 "==",
                 "!="
             });
+        }
+
+        [Fact]
+        public void JoinTest()
+        {
             Join.Test(formatter, new List<string>
             {
                 "FULL", "CROSS", "NATURAL"
             });
-            
+        }
+
+        [Fact]
+        public void ReplacesDollarNumberedPlaceholdersWithParamValues()
+        {
             Assert.Equal(
                 "SELECT\n"
-                + "  order_lines[0].productId\n"
-                + "FROM\n"
-                + "  orders;",
+                + "  second,\n"
+                + "  third,\n"
+                + "  first;",
                 formatter.Format(
-                    "SELECT order_lines[0].productId FROM orders;"));
-                    
+                    "SELECT $1, $2, $0;",
+                    new Dictionary<string, string>
+                    {
+                        { "0", "first" },
+                        { "1", "second" },
+                        { "2", "third" }
+                    }));
+        }
+
+        [Fact]
+        public void ReplacesDollarVariablesWithParamValues()
+        {
             Assert.Equal(
                 "SELECT\n"
-                + "  fname,\n"
-                + "  email\n"
-                + "FROM\n"
+                + @"  ""variable value""," + "\n"
+                + @"  'var value'," + "\n"
+                + @"  'var value'," + "\n"
+                + @"  'var value';",
+                formatter.Format(
+                    @"SELECT $variable, $'var name', $""var name"", $`var name`;",
+                    new Dictionary<string, string>
+                    {
+                        { "variable", @"""variable value""" },
+                        { "var name", @"'var value'" }
+                    }));
+        }
+
+        [Fact]
+        public void RecognizesDollarVariables()
+        {
+            Assert.Equal(
+                "SELECT\n"
+                + @"  $variable," + "\n"
+                + @"  $'var name'," + "\n"
+                + @"  $""var name""," + "\n"
+                + @"  $`var name`;",
+                formatter.Format(
+                    @"SELECT $variable, $'var name', $""var name"", $`var name`;"));
+        }
+
+        [Fact]
+        public void FormatsUpdateQueryWithUseKeysAndReturning()
+        {
+            Assert.Equal(
+                "UPDATE\n"
                 + "  tutorial\n"
                 + "USE KEYS\n"
-                + "  ['dave', 'ian'];",
+                + "  'baldwin'\n"
+                + "SET\n"
+                + "  type = 'actor' RETURNING tutorial.type",
                 formatter.Format(
-                    "SELECT fname, email FROM tutorial USE KEYS ['dave', 'ian'];"));
-            
-            Assert.Equal(
-                "INSERT INTO\n"
-                + "  heroes (KEY, VALUE)\n"
-                + "VALUES\n"
-                + "  ('123', {'id': 1, 'type': 'Tarzan'});",
-                formatter.Format(
-                    "INSERT INTO heroes (KEY, VALUE) VALUES ('123', {'id':1,'type':'Tarzan'});"));
+                    "UPDATE tutorial USE KEYS 'baldwin' SET type = 'actor' RETURNING tutorial.type"));
+        }
 
+        [Fact]
+        public void FormatsExplainedDeleteQueryWithUseKeysAndReturning()
+        {
+            Assert.Equal(
+                "EXPLAIN DELETE FROM\n"
+                + "  tutorial t\n"
+                + "USE KEYS\n"
+                + "  'baldwin' RETURNING t",
+                formatter.Format(
+                    "EXPLAIN DELETE FROM tutorial t USE KEYS 'baldwin' RETURNING t"));
+        }
+
+        [Fact]
+        public void FormatsSelectQueryWithNestAndUseKeys()
+        {
+            Assert.Equal(
+                "SELECT\n"
+                + "  *\n"
+                + "FROM\n"
+                + "  usr\n"
+                + "USE KEYS\n"
+                + "  'Elinor_33313792'\n"
+                + "NEST\n"
+                + "  orders_with_users orders ON KEYS ARRAY s.order_id FOR s IN usr.shipped_order_history END;",
+                formatter.Format(
+                    "SELECT * FROM usr\n"
+                    + "USE KEYS 'Elinor_33313792' NEST orders_with_users orders\n"
+                    + "ON KEYS ARRAY s.order_id FOR s IN usr.shipped_order_history END;"));
+        }
+
+        [Fact]
+        public void FormatsSelectQueryWithUnnestTopLevelReservedWord()
+        {
+            Assert.Equal(
+                "SELECT\n"
+                + "  *\n"
+                + "FROM\n"
+                + "  tutorial\n"
+                + "UNNEST\n"
+                + "  tutorial.children c;",
+                formatter.Format(
+                    "SELECT * FROM tutorial UNNEST tutorial.children c;"));
+        }
+
+        [Fact]
+        public void FormatsInsertWithLargeObjectAndArrayLiterals()
+        {
             Assert.Equal(
                 "INSERT INTO\n"
                 + "  heroes (KEY, VALUE)\n"
@@ -81,85 +192,44 @@ namespace SQL.Formatter.Test
                 formatter.Format(
                     "INSERT INTO heroes (KEY, VALUE) VALUES ('123', {'id': 1, 'type': 'Tarzan',\n"
                     + "'array': [123456789, 123456789, 123456789, 123456789, 123456789], 'hello': 'world'});"));
+        }
 
+        [Fact]
+        public void FormatsInsertWithCurlyBracketObjectLiteral()
+        {
             Assert.Equal(
-                "SELECT\n"
-                + "  *\n"
+                "INSERT INTO\n"
+                + "  heroes (KEY, VALUE)\n"
+                + "VALUES\n"
+                + "  ('123', {'id': 1, 'type': 'Tarzan'});",
+                formatter.Format(
+                    "INSERT INTO heroes (KEY, VALUE) VALUES ('123', {'id':1,'type':'Tarzan'});"));
+        }
+
+        [Fact]
+        public void FormatsSelectQueryWithPrimaryKeyQuerying()
+        {
+            Assert.Equal("SELECT\n"
+                + "  fname,\n"
+                + "  email\n"
                 + "FROM\n"
                 + "  tutorial\n"
-                + "UNNEST\n"
-                + "  tutorial.children c;",
-                formatter.Format(
-                    "SELECT * FROM tutorial UNNEST tutorial.children c;"));
-            
-            Assert.Equal(
-                "SELECT\n"
-                + "  *\n"
-                + "FROM\n"
-                + "  usr\n"
                 + "USE KEYS\n"
-                + "  'Elinor_33313792'\n"
-                + "NEST\n"
-                + "  orders_with_users orders ON KEYS ARRAY s.order_id FOR s IN usr.shipped_order_history END;",
+                + "  ['dave', 'ian'];",
                 formatter.Format(
-                    "SELECT * FROM usr\n"
-                    + "USE KEYS 'Elinor_33313792' NEST orders_with_users orders\n"
-                    + "ON KEYS ARRAY s.order_id FOR s IN usr.shipped_order_history END;"));
+                    "SELECT fname, email FROM tutorial USE KEYS ['dave', 'ian'];"));
+        }
 
-            Assert.Equal(
-                "EXPLAIN DELETE FROM\n"
-                + "  tutorial t\n"
-                + "USE KEYS\n"
-                + "  'baldwin' RETURNING t",
-                formatter.Format(
-                    "EXPLAIN DELETE FROM tutorial t USE KEYS 'baldwin' RETURNING t"));
-            
-            Assert.Equal(
-                "UPDATE\n"
-                + "  tutorial\n"
-                + "USE KEYS\n"
-                + "  'baldwin'\n"
-                + "SET\n"
-                + "  type = 'actor' RETURNING tutorial.type",
-                formatter.Format(
-                    "UPDATE tutorial USE KEYS 'baldwin' SET type = 'actor' RETURNING tutorial.type"));
-            
+        [Fact]
+        public void FormatsSelectQueryWithElementSelectionExpression()
+        {
             Assert.Equal(
                 "SELECT\n"
-                + @"  $variable," + "\n"
-                + @"  $'var name'," + "\n"
-                + @"  $""var name""," + "\n"
-                + @"  $`var name`;",
+                + "  order_lines[0].productId\n"
+                + "FROM\n"
+                + "  orders;",
                 formatter.Format(
-                    @"SELECT $variable, $'var name', $""var name"", $`var name`;"));
-            
-            Assert.Equal(
-                "SELECT\n"
-                + @"  ""variable value""," + "\n"
-                + @"  'var value'," + "\n"
-                + @"  'var value'," + "\n"
-                + @"  'var value';",
-                formatter.Format(
-                    @"SELECT $variable, $'var name', $""var name"", $`var name`;",
-                    new Dictionary<string, string>
-                    {
-                        { "variable", @"""variable value""" },
-                        { "var name", @"'var value'" }
-                    }));
-            
-            Assert.Equal(
-                "SELECT\n"
-                + "  second,\n"
-                + "  third,\n"
-                + "  first;",
-                formatter.Format(
-                    "SELECT $1, $2, $0;",
-                    new Dictionary<string, string>
-                    {
-                        { "0", "first" },
-                        { "1", "second" },
-                        { "2", "third" }
-                    }));
+                    "SELECT order_lines[0].productId FROM orders;"));
         }
     }
 }

@@ -8,22 +8,53 @@ namespace SQL.Formatter.Test
 {
     public class Db2FormatterTest
     {
+        public readonly SqlFormatter.Formatter formatter = SqlFormatter.Of(Dialect.Db2);
+
         [Fact]
-        public void Test()
+        public void BehavesLikeSqlFormatterTest()
         {
-            var formatter = SqlFormatter.Of(Dialect.Db2);
             BehavesLikeSqlFormatter.Test(formatter);
+        }
+
+        [Fact]
+        public void CreateTableTest()
+        {
             CreateTable.Test(formatter);
+        }
+
+        [Fact]
+        public void AlterTableTest()
+        {
             AlterTable.Test(formatter);
+        }
+
+        [Fact]
+        public void StringsTest()
+        {
             Strings.Test(formatter, new List<string>
             {
                 StringLiteral.DoubleQuote,
                 StringLiteral.SingleQuote,
                 StringLiteral.BackQuote
             });
+        }
+
+        [Fact]
+        public void BetweenTest()
+        {
             Between.Test(formatter);
+        }
+
+        [Fact]
+        public void SchemaTest()
+        {
             Schema.Test(formatter);
-            
+        }
+
+
+        [Fact]
+        public void FormatsFetchFirstLikeLimit()
+        {
             Assert.Equal(
                 "SELECT\n"
                 + "  col1\n"

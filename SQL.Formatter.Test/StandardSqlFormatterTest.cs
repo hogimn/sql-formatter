@@ -8,23 +8,87 @@ namespace SQL.Formatter.Test
 {
     public class StandardSqlFormatterTest
     {
+        private readonly SqlFormatter.Formatter formatter = SqlFormatter.Standard();
+
         [Fact]
-        public void Test()
+        public void BehavesLikeSqlFormatterTest()
         {
-            var formatter = SqlFormatter.Standard();
             BehavesLikeSqlFormatter.Test(formatter);
+        }
+
+        [Fact]
+        public void CaseTest()
+        {
             Case.Test(formatter);
+        }
+
+        [Fact]
+        public void CreateTableTest()
+        {
             CreateTable.Test(formatter);
+        }
+
+        [Fact]
+        public void AlterTableTest()
+        {
             AlterTable.Test(formatter);
+        }
+
+        [Fact]
+        public void StringsTest()
+        {
             Strings.Test(formatter, new List<string>
             {
                 StringLiteral.DoubleQuote,
                 StringLiteral.SingleQuote
             });
+        }
+
+        [Fact]
+        public void BetweenTest()
+        {
             Between.Test(formatter);
+        }
+
+        [Fact]
+        public void SchemaTest()
+        {
             Schema.Test(formatter);
+        }
+
+        [Fact]
+        public void JoinTest()
+        {
             Join.Test(formatter);
-            
+        }
+
+        [Fact]
+        public void ReplacesIndexedPlaceholdersWithParamValues()
+        {
+            Assert.Equal(
+                "SELECT\n"
+                + "  first,\n"
+                + "  second,\n"
+                + "  third;",
+                formatter.Format(
+                    "SELECT ?, ?, ?;", new List<string> { "first", "second", "third" }));
+        }
+
+        [Fact]
+        public void FormatsFatchFirstLikeLimit()
+        {
+            Assert.Equal(
+                "SELECT\n"
+                + "  *\n"
+                + "FETCH FIRST\n"
+                + "  2 ROWS ONLY;",
+                formatter.Format(
+                    "SELECT * FETCH FIRST 2 ROWS ONLY;"));
+        }
+
+        [Fact]
+        public void SqlAndCommentsInSingleLine()
+        {
             Assert.Equal(
                 "SELECT\n"
                 + "  *\n"
@@ -36,7 +100,11 @@ namespace SQL.Formatter.Test
                 + "-- comment",
                 formatter.Format(
                     "SELECT * FROM table/* comment */ WHERE date BETWEEN '2001-01-01' AND '2010-12-31'; -- comment"));
+        }
 
+        [Fact]
+        public void FormatsMerge()
+        {
             Assert.Equal(
                 "merge into DW_STG_USER.ACCOUNT_DIM target using (\n"
                 + "  select\n"

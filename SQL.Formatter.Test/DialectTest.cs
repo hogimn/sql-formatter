@@ -1,4 +1,5 @@
 ﻿using SQL.Formatter.Language;
+using System;
 using Xunit;
 
 namespace SQL.Formatter.Test
@@ -6,7 +7,7 @@ namespace SQL.Formatter.Test
     public class DialectTest
     {
         [Fact]
-        public static void Test()
+        public void FindDialectByNameOrAlias()
         {
             Assert.Equal(Dialect.PlSql, Dialect.NameOf("pl/sql"));
             Assert.Equal(Dialect.PlSql, Dialect.NameOf("plsql"));

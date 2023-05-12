@@ -8,22 +8,57 @@ namespace SQL.Formatter.Test
 {
     public class SparkSqlFormatter
     {
+        public readonly SqlFormatter.Formatter formatter = SqlFormatter.Of(Dialect.SparkSql);
+
         [Fact]
-        public void Test()
+        public void BehavesLikeSqlFormatterTest()
         {
-            var formatter = SqlFormatter.Of(Dialect.SparkSql);
             BehavesLikeSqlFormatter.Test(formatter);
+        }
+
+        [Fact]
+        public void CaseTest()
+        {
             Case.Test(formatter);
+        }
+
+        [Fact]
+        public void CreateTableTest()
+        {
             CreateTable.Test(formatter);
+        }
+
+        [Fact]
+        public void AlterTableTest()
+        {
             AlterTable.Test(formatter);
+        }
+
+        [Fact]
+        public void StringsTest()
+        {
             Strings.Test(formatter, new List<string>
             {
                 StringLiteral.DoubleQuote,
                 StringLiteral.SingleQuote,
                 StringLiteral.BackQuote
             });
+        }
+
+        [Fact]
+        public void BetweenTest()
+        {
             Between.Test(formatter);
+        }
+
+        [Fact]
+        public void SchemaTest()
+        {
             Schema.Test(formatter);
+        }
+
+        public void OperatorsTest()
+        {
             Operators.Test(formatter, new List<string>
             {
                 "!=",
@@ -39,7 +74,11 @@ namespace SQL.Formatter.Test
                 "||",
                 "=="
             });
+        }
 
+        [Fact]
+        public void JoinTest()
+        {
             Join.Test(formatter, null, new List<string>
             {
                 "ANTI JOIN",
@@ -59,7 +98,11 @@ namespace SQL.Formatter.Test
                 "NATURAL RIGHT SEMI JOIN",
                 "NATURAL SEMI JOIN"
             });
+        }
 
+        [Fact]
+        public void FormatsWindowSpecificationAsTopLevel()
+        {
             Assert.Equal(
                 "SELECT\n"
                 + "  *,\n"
@@ -75,7 +118,11 @@ namespace SQL.Formatter.Test
                 + "  );",
                 formatter.Format(
                     "SELECT *, LAG(value) OVER wnd AS next_value FROM tbl WINDOW wnd as (PARTITION BY id ORDER BY time);"));
+        }
 
+        [Fact]
+        public void FormatsWindowFunctionAndEndAsInline()
+        {
             Assert.Equal(
                 "SELECT\n"
                 + "  window(time, \"1 hour\").start AS window_start,\n"
@@ -84,13 +131,21 @@ namespace SQL.Formatter.Test
                 + "  tbl;",
                 formatter.Format(
                     "SELECT window(time, \"1 hour\").start AS window_start, window(time, \"1 hour\").end AS window_end FROM tbl;"));
-            
+        }
+
+        [Fact]
+        public void DoesNotAddSpacesAroundDollarParams()
+        {
             Assert.Equal(
                 "SELECT\n"
                 + "  ${var_name};",
                 formatter.Format(
                     "SELECT ${var_name};"));
-            
+        }
+
+        [Fact]
+        public void ReplacesDollarVariablesAndDollarCurlyBracketVariablesWithParamValues()
+        {
             Assert.Equal(
                 "SELECT\n"
                 + "  'var one',\n"

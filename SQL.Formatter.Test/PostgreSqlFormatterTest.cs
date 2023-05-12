@@ -8,14 +8,35 @@ namespace SQL.Formatter.Test
 {
     public class PostgreSqlFormatterTest
     {
+        public readonly SqlFormatter.Formatter formatter = SqlFormatter.Of(Dialect.PostgreSql);
+
         [Fact]
-        public void Test()
+        public void BehavesLikeSqlFormatterTest()
         {
-            var formatter = SqlFormatter.Of(Dialect.PostgreSql);
             BehavesLikeSqlFormatter.Test(formatter);
+        }
+
+        [Fact]
+        public void CaseTest()
+        {
             Case.Test(formatter);
+        }
+
+        [Fact]
+        public void CreateTableTest()
+        {
             CreateTable.Test(formatter);
+        }
+
+        [Fact]
+        public void AlterTableTest()
+        {
             AlterTable.Test(formatter);
+        }
+
+        [Fact]
+        public void StringsTest()
+        {
             Strings.Test(formatter, new List<string>
             {
                 StringLiteral.DoubleQuote,
@@ -24,8 +45,23 @@ namespace SQL.Formatter.Test
                 StringLiteral.USingleQuote,
                 StringLiteral.Dollar
             });
+        }
+
+        [Fact]
+        public void BetweenTest()
+        {
             Between.Test(formatter);
+        }
+
+        [Fact]
+        public void SchemaTest()
+        {
             Schema.Test(formatter);
+        }
+
+        [Fact]
+        public void OperatorsTest()
+        {
             Operators.Test(formatter, new List<string>
             {
                 "%",
@@ -55,9 +91,17 @@ namespace SQL.Formatter.Test
                 "@@",
                 "@@@"
             });
+        }
 
+        [Fact]
+        public void JoinTest()
+        {
             Join.Test(formatter);
+        }
 
+        [Fact]
+        public void SupportDollarPlaceholders()
+        {
             Assert.Equal(
                 "SELECT\n"
                 + "  $1,\n"
@@ -66,7 +110,11 @@ namespace SQL.Formatter.Test
                 + "  tbl",
                 formatter.Format(
                     "SELECT $1, $2 FROM tbl"));
+        }
 
+        [Fact]
+        public void ReplacesDollarPlaceholdersWithParamValues()
+        {
             Assert.Equal(
                 "SELECT\n"
                 + @"  ""variable value""" + ",\n"
@@ -79,12 +127,20 @@ namespace SQL.Formatter.Test
                         { "1", @"""variable value""" },
                         { "2", @"""blah""" }
                     }));
+        }
 
+        [Fact]
+        public void SupportsColonNamePlaceholders()
+        {
             Assert.Equal(
                 "foo = :bar",
                 formatter.Format(
                     "foo = :bar"));
+        }
 
+        [Fact]
+        public void ReplacesColonNamePlaceholdersWithParamValues()
+        {
             Assert.Equal(
                 "foo = 'Hello'\n"
                 + "AND some_col = 10\n"

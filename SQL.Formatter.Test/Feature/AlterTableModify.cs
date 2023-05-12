@@ -1,10 +1,16 @@
-﻿using Xunit;
+﻿using System;
+using Xunit;
 
 namespace SQL.Formatter.Test.Feature
 {
     public class AlterTableModify
     {
         public static void Test(SqlFormatter.Formatter formatter)
+        {
+            FormatsAlterTableModifyStatement(formatter);
+        }
+
+        private static void FormatsAlterTableModifyStatement(SqlFormatter.Formatter formatter)
         {
             Assert.Equal(
                 "ALTER TABLE\n"

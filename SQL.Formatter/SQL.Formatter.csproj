@@ -1,75 +1,17 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{37364F94-0280-4847-A912-FD95E8840B01}</ProjectGuid>
+    <TargetFramework>net6.0</TargetFramework>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SQL.Formatter</RootNamespace>
-    <AssemblyName>SQL.Formatter</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <LangVersion>8.0</LangVersion>
-    <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AssemblyTitle>SQL.Formatter</AssemblyTitle>
+    <Product>SQL.Formatter</Product>
+    <Copyright>Copyright ©  2022</Copyright>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Core\AbstractFormatter.cs" />
-    <Compile Include="Core\DialectConfig.cs" />
-    <Compile Include="Core\FormatConfig.cs" />
-    <Compile Include="Core\Indentation.cs" />
-    <Compile Include="Core\InlineBlock.cs" />
-    <Compile Include="Core\Params.cs" />
-    <Compile Include="Core\Token.cs" />
-    <Compile Include="Core\Tokenizer.cs" />
-    <Compile Include="Core\TokenTypes.cs" />
-    <Compile Include="Core\Util\JSLikeList.cs" />
-    <Compile Include="Core\Util\RegexUtil.cs" />
-    <Compile Include="Core\Util\Utils.cs" />
-    <Compile Include="Language\N1qlFormatter.cs" />
-    <Compile Include="Language\PlSqlFormatter.cs" />
-    <Compile Include="Language\PostgreSqlFormatter.cs" />
-    <Compile Include="Language\RedshiftFormatter.cs" />
-    <Compile Include="Language\SparkSqlFormatter.cs" />
-    <Compile Include="Language\StandardSqlFormatter.cs" />
-    <Compile Include="Language\TSqlFormatter.cs" />
-    <Compile Include="Language\MySqlFormatter.cs" />
-    <Compile Include="Language\MariaDbFormatter.cs" />
-    <Compile Include="Language\Db2Formatter.cs" />
-    <Compile Include="Language\Dialect.cs" />
-    <Compile Include="Language\DialectConfigurator.cs" />
-    <Compile Include="Language\StringLiteral.cs" />
-    <Compile Include="SqlFormatter.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

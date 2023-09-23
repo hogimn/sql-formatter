@@ -1,8 +1,6 @@
 # SQL Formatter
 
-This repository contains the C# port of the popular Java SQL formatter <https://github.com/vertical-blank/sql-formatter>,
-<br />
-which is again the Java port of the popular Typescript SQL formatter https://github.com/sql-formatter-org/sql-formatter
+This repository contains the C# port of the popular [Java SQL formatter](https://github.com/vertical-blank/sql-formatter)
 
 This does not support:
 

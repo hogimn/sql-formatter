@@ -338,4 +338,4 @@ namespace SQL.Formatter.Language
         {
         }
     }
-
+}

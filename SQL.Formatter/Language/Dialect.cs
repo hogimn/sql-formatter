@@ -55,8 +55,12 @@ namespace SQL.Formatter.Language
         public static Dialect NameOf(string name)
         {
             IEnumerable<Dialect> dialects = Values.Where(d => d.Matches(name));
+
             if (dialects.Count() == 0)
+            {
                 return null;
+            }
+
             return dialects.First();
         }
     }

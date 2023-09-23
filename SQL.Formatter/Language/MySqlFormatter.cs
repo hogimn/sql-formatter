@@ -297,7 +297,6 @@ namespace SQL.Formatter.Language
                 "ELSE",
                 "OR",
                 "WHEN",
-                // joins
                 "JOIN",
                 "INNER JOIN",
                 "LEFT JOIN",
@@ -306,7 +305,6 @@ namespace SQL.Formatter.Language
                 "RIGHT OUTER JOIN",
                 "CROSS JOIN",
                 "NATURAL JOIN",
-                // non-standard joins
                 "STRAIGHT_JOIN",
                 "NATURAL LEFT JOIN",
                 "NATURAL LEFT OUTER JOIN",
@@ -336,6 +334,8 @@ namespace SQL.Formatter.Language
                 .Build();
         }
 
-        public MySqlFormatter(FormatConfig cfg) : base(cfg) { }
+        public MySqlFormatter(FormatConfig cfg) : base(cfg)
+        {
+        }
     }
-}
+

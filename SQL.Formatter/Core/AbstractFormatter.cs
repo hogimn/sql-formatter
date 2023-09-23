@@ -16,9 +16,6 @@ namespace SQL.Formatter.Core
         private JSLikeList<Token> tokens;
         private int index;
 
-        /**
-         * @param cfg FormatConfig
-         */
         public AbstractFormatter(FormatConfig cfg)
         {
             this.cfg = cfg;
@@ -34,24 +31,11 @@ namespace SQL.Formatter.Core
             return new Tokenizer(DoDialectConfig());
         }
 
-        /**
-         * Reprocess and modify a token based on parsed context.
-         *
-         * @param token The token to modify
-         * @return token
-         */
         protected virtual Token TokenOverride(Token token)
         {
-            // subclasses can override to modify tokens during formatting
             return token;
         }
 
-        /**
-         * Formats whitespaces in a SQL string to make it easier to read.
-         *
-         * @param query The SQL query string
-         * @return formatted query
-         */
         public string Format(string query)
         {
             tokens = Tokenizer().Tokenize(query);
@@ -179,7 +163,6 @@ namespace SQL.Formatter.Core
             return AddNewline(query) + EqualizeWhitespace(Show(token)) + " ";
         }
 
-        // Replace any sequence of whitespace characters with single space
         private string EqualizeWhitespace(string str)
         {
             return Regex.Replace(str, @"\s+", " ");
@@ -192,11 +175,8 @@ namespace SQL.Formatter.Core
                 TokenTypes.OPERATOR,
                 TokenTypes.RESERVED_NEWLINE};
 
-        // Opening parentheses increase the block indent level and start a new line
         private string FormatOpeningParentheses(Token token, string query)
         {
-            // Take out the preceding space unless there was whitespace there in the original query
-            // or another opening parens or line comment
             if (string.IsNullOrEmpty(token.whitespaceBefore)
                 && (TokenLookBehind() == default || !PreserveWhitespaceFor.Contains(TokenLookBehind().type)))
             {
@@ -214,7 +194,6 @@ namespace SQL.Formatter.Core
             return query;
         }
 
-        // Closing parentheses decrease the block indent level
         private string FormatClosingParentheses(Token token, string query)
         {
             if (inlineBlock.IsActive())
@@ -234,7 +213,6 @@ namespace SQL.Formatter.Core
             return query + parameters.Get(token) + " ";
         }
 
-        // Commas start a new line (unless within inline parentheses or SQL "LIMIT" clause)
         private string FormatComma(Token token, string query)
         {
             query = query.TrimEnd() + Show(token) + " ";
@@ -264,7 +242,6 @@ namespace SQL.Formatter.Core
                 + Utils.Repeat("\n", cfg.linesBetweenQueries == default ? 1 : cfg.linesBetweenQueries);
         }
 
-        // Converts token to string (uppercasing it if needed)
         private string Show(Token token)
         {
             if (cfg.uppercase

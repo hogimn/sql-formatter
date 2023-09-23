@@ -7,13 +7,6 @@ namespace SQL.Formatter
 {
     public class SqlFormatter
     {
-        /**
-         * FormatConfig whitespaces in a query to make it easier to read.
-         *
-         * @param query sql
-         * @param cfg FormatConfig
-         * @return Formatted query
-         */
         public static string Format(string query, FormatConfig cfg)
         {
             return Standard().Format(query, cfg);
@@ -62,9 +55,8 @@ namespace SQL.Formatter
         public static Formatter Of(string name)
         {
             Dialect dialect = Dialect.NameOf(name);
-            if (dialect == null)
-                throw new Exception("Unsupported SQL dialect: " + name);
-            return new Formatter(dialect);
+            return dialect == null ? throw new Exception("Unsupported SQL dialect: " + name) :
+                new Formatter(dialect);
         }
 
         public static Formatter Of(Dialect dialect)
@@ -135,3 +127,4 @@ namespace SQL.Formatter
         }
     }
 }
+

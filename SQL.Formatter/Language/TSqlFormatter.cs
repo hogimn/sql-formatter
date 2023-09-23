@@ -225,7 +225,6 @@ namespace SQL.Formatter.Language
                 "ELSE",
                 "OR",
                 "WHEN",
-                // joins
                 "JOIN",
                 "INNER JOIN",
                 "LEFT JOIN",
@@ -263,6 +262,8 @@ namespace SQL.Formatter.Language
                 .Build();
         }
 
-        public TSqlFormatter(FormatConfig cfg) : base(cfg) { }
+        public TSqlFormatter(FormatConfig cfg) : base(cfg)
+        {
+        }
     }
 }

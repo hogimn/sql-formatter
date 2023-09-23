@@ -22,7 +22,8 @@ namespace SQL.Formatter.Core.Util
         public JSLikeList<R> Map<R>(Func<T, R> mapper)
         {
             return new JSLikeList<R>(
-                tList.Select(mapper.Invoke)
+                tList
+                .Select(mapper.Invoke)
                 .ToList());
         }
 
@@ -34,7 +35,8 @@ namespace SQL.Formatter.Core.Util
         public JSLikeList<T> With(List<T> other)
         {
             return new JSLikeList<T>(
-                tList.Concat(other)
+                tList
+                .Concat(other)
                 .ToList());
         }
 
@@ -51,7 +53,9 @@ namespace SQL.Formatter.Core.Util
         public T Get(int index)
         {
             if (index < 0 || tList.Count <= index)
+            {
                 return default;
+            }
 
             return tList.ElementAt(index);
         }

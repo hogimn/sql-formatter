@@ -2,7 +2,6 @@
 
 namespace SQL.Formatter.Core
 {
-    /** Handles placeholder replacement with given params. */
     public abstract class Params
     {
         public static readonly Params Empty = new Empty();
@@ -13,38 +12,28 @@ namespace SQL.Formatter.Core
 
         public abstract object GetByName(string key);
 
-        /**
-         * @param params query param
-         */
         public static Params Of<T>(Dictionary<string, T> parameters)
         {
             return new NamedParams<T>(parameters);
         }
 
-        /**
-         * @param params query param
-         */
         public static Params Of<T>(List<T> parameters)
         {
             return new IndexedParams<T>(new Queue<T>(parameters));
         }
 
-        /**
-         * Returns param value that matches given placeholder with param key.
-         *
-         * @param token token.key Placeholder key token.value Placeholder value
-         * @return param or token.value when params are missing
-         */
         public object Get(Token token)
         {
             if (IsEmpty())
             {
                 return token.value;
             }
+
             if (!(token.key == null || string.IsNullOrEmpty(token.key)))
             {
                 return GetByName(token.key);
             }
+
             return Get();
         }
     }
@@ -108,7 +97,6 @@ namespace SQL.Formatter.Core
             return parameters.ToString();
         }
     }
-
 
     class Empty : Params
     {

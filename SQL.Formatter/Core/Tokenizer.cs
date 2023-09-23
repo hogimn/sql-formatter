@@ -8,7 +8,6 @@ namespace SQL.Formatter.Core
 {
     public class Tokenizer
     {
-        // private readonly Regex WHITESPACE_PATTERN;
         private readonly Regex NUMBER_PATTERN;
         private readonly Regex OPERATOR_PATTERN;
 
@@ -30,20 +29,8 @@ namespace SQL.Formatter.Core
         private readonly Regex IDENT_NAMED_PLACEHOLDER_PATTERN;
         private readonly Regex STRING_NAMED_PLACEHOLDER_PATTERN;
 
-        /**
-         * @param cfg {String[]} cfg.reservedWords Reserved words in SQL {String[]}
-         *     cfg.reservedTopLevelWords Words that are set to new line separately {String[]}
-         *     cfg.reservedNewlineWords Words that are set to newline {String[]} cfg.stringTypes String
-         *     types to enable: "", "", ``, [], N"" {String[]} cfg.openParens Opening parentheses to
-         *     enable, like (, [ {String[]} cfg.closeParens Closing parentheses to enable, like ), ]
-         *     {String[]} cfg.indexedPlaceholderTypes Prefixes for indexed placeholders, like ? {String[]}
-         *     cfg.namedPlaceholderTypes Prefixes for named placeholders, like @ and : {String[]}
-         *     cfg.lineCommentTypes Line comments to enable, like # and -- {String[]} cfg.specialWordChars
-         *     Special chars that can be found inside of words, like @ and #
-         */
         public Tokenizer(DialectConfig cfg)
         {
-            // this.WHITESPACE_PATTERN = Pattern.compile("^(\\s+)");
             NUMBER_PATTERN = new Regex(
                 "^((-\\s*)?[0-9]+(\\.[0-9]+)?([eE]-?[0-9]+(\\.[0-9]+)?)?|0x[0-9a-fA-F]+|0b[01]+)\\b");
 
@@ -51,7 +38,6 @@ namespace SQL.Formatter.Core
                 RegexUtil.CreateOperatorRegex(
                     new JSLikeList<string>(new List<string> { "<>", "<=", ">=" }).With(cfg.operators)));
 
-            //        this.BLOCK_COMMENT_REGEX = /^(\/\*[^]*?(?:\*\/|$))/;
             BLOCK_COMMENT_PATTERN = new Regex("^(/\\*(?s).*?(?:\\*/|$))");
             LINE_COMMENT_PATTERN = new Regex(
                 RegexUtil.CreateLineCommentRegex(new JSLikeList<string>(cfg.lineCommentTypes)));
@@ -90,32 +76,21 @@ namespace SQL.Formatter.Core
                     RegexUtil.CreateStringPattern(new JSLikeList<string>(cfg.stringTypes)));
         }
 
-        /**
-         * Takes a SQL string and breaks it into tokens. Each token is an object with type and value.
-         *
-         * @param input input The SQL string
-         * @return {Object[]} tokens An array of tokens.
-         */
         public JSLikeList<Token> Tokenize(string input)
         {
             List<Token> tokens = new List<Token>();
             Token token = null;
 
-            // Keep processing the string until it is empty
             while (!string.IsNullOrEmpty(input))
             {
-                // grab any preceding whitespace
                 string[] findBeforeWhitespace = FindBeforeWhitespace(input);
                 string whitespaceBefore = findBeforeWhitespace[0];
                 input = findBeforeWhitespace[1];
 
                 if (!string.IsNullOrEmpty(input))
                 {
-                    // Get the next token and the token type
                     token = GetNextToken(input, token);
-                    // Advance the string
                     input = input.Substring(token.value.Length);
-
                     tokens.Add(token.WithWhitespaceBefore(whitespaceBefore));
                 }
             }
@@ -127,11 +102,6 @@ namespace SQL.Formatter.Core
             int index = input.TakeWhile(char.IsWhiteSpace).Count();
             return new[] { input.Substring(0, index), input.Substring(index) };
         }
-
-        // private String GetWhitespace(String input) {
-        //   String firstMatch = GetFirstMatch(input, WHITESPACE_PATTERN);
-        //   return firstMatch != null ? firstMatch : "";
-        // }
 
         private Token GetNextToken(string input, Token previousToken)
         {
@@ -219,13 +189,11 @@ namespace SQL.Formatter.Core
             return key.Replace(RegexUtil.EscapeRegExp("\\") + quoteChar, quoteChar);
         }
 
-        // Decimal, binary, or hex numbers
         private Token GetNumberToken(string input)
         {
             return GetTokenOnFirstMatch(input, TokenTypes.NUMBER, NUMBER_PATTERN);
         }
 
-        // Punctuation and symbols
         private Token GetOperatorToken(string input)
         {
             return GetTokenOnFirstMatch(input, TokenTypes.OPERATOR, OPERATOR_PATTERN);
@@ -233,12 +201,11 @@ namespace SQL.Formatter.Core
 
         private Token GetReservedWordToken(string input, Token previousToken)
         {
-            // A reserved word cannot be preceded by a "."
-            // this makes it so in "mytable.from", "from" is not considered a reserved word
             if (previousToken?.value != null && previousToken.value.Equals("."))
             {
                 return null;
             }
+
             return Utils.FirstNotnull(
                 () => GetToplevelReservedToken(input),
                 () => GetNewlineReservedToken(input),

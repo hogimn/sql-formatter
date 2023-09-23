@@ -541,7 +541,6 @@ namespace SQL.Formatter.Language
             new List<string>{
                 "AND",
                 "OR",
-                // joins
                 "JOIN",
                 "INNER JOIN",
                 "LEFT JOIN",
@@ -576,6 +575,8 @@ namespace SQL.Formatter.Language
                 .Build();
         }
 
-        public Db2Formatter(FormatConfig cfg) : base(cfg) { }
+        public Db2Formatter(FormatConfig cfg) : base(cfg)
+        {
+        }
     }
 }

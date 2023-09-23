@@ -5,7 +5,6 @@ namespace SQL.Formatter.Language
 {
     public class StandardSqlFormatter : AbstractFormatter
     {
-        // https://jakewheat.github.io/sql-overview/sql-2008-foundation-grammar.html#reserved-word
         private static readonly List<string> ReservedWords = new List<string>{
                 "ABS",
                 "ALL",
@@ -349,7 +348,6 @@ namespace SQL.Formatter.Language
                 "ELSE",
                 "OR",
                 "WHEN",
-                // joins
                 "JOIN",
                 "INNER JOIN",
                 "LEFT JOIN",
@@ -378,6 +376,8 @@ namespace SQL.Formatter.Language
                 .Build();
         }
 
-        public StandardSqlFormatter(FormatConfig cfg) : base(cfg) { }
+        public StandardSqlFormatter(FormatConfig cfg) : base(cfg)
+        {
+        }
     }
 }

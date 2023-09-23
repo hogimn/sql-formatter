@@ -404,7 +404,6 @@ namespace SQL.Formatter.Language
                 "OUTER APPLY",
                 "WHEN",
                 "XOR",
-                // joins
                 "JOIN",
                 "INNER JOIN",
                 "LEFT JOIN",
@@ -449,6 +448,8 @@ namespace SQL.Formatter.Language
             return token;
         }
 
-        public PlSqlFormatter(FormatConfig cfg) : base(cfg) { }
+        public PlSqlFormatter(FormatConfig cfg) : base(cfg)
+        {
+        }
     }
 }

@@ -29,39 +29,36 @@ namespace SQL.Formatter.Language
 
         private class Preset
         {
-            /** `` */
             public static readonly Preset BackQuote = new Preset(
                 StringLiteral.BackQuote,
                 "((`[^`]*($|`))+)"
                 );
-            /** "" */
+
             public static readonly Preset DoubleQuote = new Preset(
                 StringLiteral.DoubleQuote,
                 "((\"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*(\"|$))+)"
-                // "((^\"((?:\"\"|[^\"])*)\")+)")
                 );
-            /** [] */
+
             public static readonly Preset Bracket = new Preset(
                 StringLiteral.Bracket,
                 "((\\[[^\\]]*($|\\]))(\\][^\\]]*($|\\]))*)"
                 );
-            /** {} */
+
             public static readonly Preset Brace = new Preset(
                 StringLiteral.Brace,
                 "((\\{[^\\}]*($|\\}))+)"
                 );
-            /** '' */
+
             public static readonly Preset SingleQuote = new Preset(
                 StringLiteral.SingleQuote,
                 "(('[^'\\\\]*(?:\\\\.[^'\\\\]*)*('|$))+)"
-                // "((^'((?:''|[^'])*)')+)")
                 );
-            /** N'' */
+
             public static readonly Preset NSingleQuote = new Preset(
                 StringLiteral.NSingleQuote,
                 "((N'[^'\\\\]*(?:\\\\.[^'\\\\]*)*('|$))+)"
                 );
-            /** q'' */
+
             public static readonly Preset QSingleQuote = new Preset(
                 StringLiteral.QSingleQuote,
                 "(?i)" +
@@ -71,22 +68,22 @@ namespace SQL.Formatter.Language
                     "((n?q'\\[(?:(?!\\]'|\\\\).)*\\]')+)",
                     "((n?q'<(?:(?!>'|\\\\).)*>')+)",
                     "((n?q'\\((?:(?!\\)'|\\\\).)*\\)')+)"));
-            // single_quote("((^'((?:''|[^'])*)')+)")
+
             public static readonly Preset ESingleQuote = new Preset(
                 StringLiteral.ESingleQuote,
                 "((E'[^'\\\\]*(?:\\\\.[^'\\\\]*)*('|$))+)"
                 );
-            /** U&amp;'' */
+
             public static readonly Preset USingleQUote = new Preset(
                 StringLiteral.USingleQuote,
                 "((U&'[^'\\\\]*(?:\\\\.[^'\\\\]*)*('|$))+)"
                 );
-            /** U&amp;"" */
+
             public static readonly Preset UDoubleQuote = new Preset(
                 StringLiteral.UDoubleQuote,
                 "((U&\"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*(\"|$))+)"
                 );
-            /** $$ */
+
             public static readonly Preset Dollar = new Preset(
                 StringLiteral.Dollar,
                 "((?<tag>\\$\\w*\\$)[\\s\\S]*?(?:\\k<tag>|$))"

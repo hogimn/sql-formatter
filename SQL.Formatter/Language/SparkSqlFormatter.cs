@@ -198,7 +198,6 @@ namespace SQL.Formatter.Language
                 "OUTER APPLY",
                 "WHEN",
                 "XOR",
-                // joins
                 "JOIN",
                 "INNER JOIN",
                 "LEFT JOIN",
@@ -209,7 +208,6 @@ namespace SQL.Formatter.Language
                 "FULL OUTER JOIN",
                 "CROSS JOIN",
                 "NATURAL JOIN",
-                // non-standard-joins
                 "ANTI JOIN",
                 "SEMI JOIN",
                 "LEFT ANTI JOIN",
@@ -251,18 +249,15 @@ namespace SQL.Formatter.Language
 
         protected override Token TokenOverride(Token token)
         {
-            // Fix cases where names are ambiguously keywords or functions
             if (Token.IsWindow(token))
             {
                 Token aheadToken = TokenLookAhead();
                 if (aheadToken != null && aheadToken.type == TokenTypes.OPEN_PAREN)
                 {
-                    // This is a function call, treat it as a reserved word
                     return new Token(TokenTypes.RESERVED, token.value);
                 }
             }
 
-            // Fix cases where names are ambiguously keywords or properties
             if (Token.IsEnd(token))
             {
                 Token backToken = TokenLookBehind();
@@ -270,7 +265,6 @@ namespace SQL.Formatter.Language
                     && backToken.type == TokenTypes.OPERATOR
                     && backToken.value.Equals("."))
                 {
-                    // This is window().end (or similar) not CASE ... END
                     return new Token(TokenTypes.WORD, token.value);
                 }
             }
@@ -278,6 +272,8 @@ namespace SQL.Formatter.Language
             return token;
         }
 
-        public SparkSqlFormatter(FormatConfig cfg) : base(cfg) { }
+        public SparkSqlFormatter(FormatConfig cfg) : base(cfg)
+        {
+        }
     }
 }

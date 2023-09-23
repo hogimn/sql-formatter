@@ -54,12 +54,6 @@ namespace SQL.Formatter.Core.Util
             return "^(" + CreateStringPattern(stringTypes) + ")";
         }
 
-        // This enables the following string patterns:
-        // 1. backtick quoted string using `` to escape
-        // 2. square bracket quoted string (SQL Server) using ]] to escape
-        // 3. double quoted string using "" or \" to escape
-        // 4. single quoted string using '' or \' to escape
-        // 5. national character quoted string using N'' or N\' to escape
         public static string CreateStringPattern(JSLikeList<string> stringTypes)
         {
             return string.Join("|", stringTypes.Map(StringLiteral.Get).ToList());
@@ -74,17 +68,18 @@ namespace SQL.Formatter.Core.Util
         {
             if (paren.Length == 1)
             {
-                // A single punctuation character
                 return EscapeRegExp(paren);
             }
-            // longer word
+
             return "\\b" + paren + "\\b";
         }
 
         public static Regex CreatePlaceholderRegexPattern(JSLikeList<string> types, string pattern)
         {
             if (types.IsEmpty())
+            {
                 return null;
+            }
 
             string typesRegex = string.Join("|", types.Map(EscapeRegExp).ToList());
 

@@ -49,7 +49,9 @@ namespace SQL.Formatter.Core
         }
         public DialectConfig WithLineCommentTypes(List<string> lineCommentTypes)
         {
-            return ToBuilder().LineCommentTypes(lineCommentTypes).Build();
+            return ToBuilder()
+                .LineCommentTypes(lineCommentTypes)
+                .Build();
         }
 
         public DialectConfig PlusLineCommentTypes(params string[] lineCommentTypes)
@@ -66,7 +68,9 @@ namespace SQL.Formatter.Core
 
         public DialectConfig WithReservedTopLevelWords(List<String> reservedTopLevelWords)
         {
-            return ToBuilder().ReservedTopLevelWords(reservedTopLevelWords).Build();
+            return ToBuilder()
+                .ReservedTopLevelWords(reservedTopLevelWords)
+                .Build();
         }
 
         public DialectConfig PlusReservedTopLevelWords(params string[] reservedTopLevelWords)
@@ -83,7 +87,9 @@ namespace SQL.Formatter.Core
 
         public DialectConfig WithReservedNewlineWords(List<string> reservedNewLineWords)
         {
-            return ToBuilder().ReservedNewlineWords(reservedNewLineWords).Build();
+            return ToBuilder()
+                .ReservedNewlineWords(reservedNewLineWords)
+                .Build();
         }
 
         public DialectConfig PlusReservedNewlineWords(params string[] reservedNewLineWords)
@@ -100,7 +106,9 @@ namespace SQL.Formatter.Core
 
         public DialectConfig WithReservedTopLevelWordsNoIndent(List<string> reservedTopLevelWordsNoIndent)
         {
-            return ToBuilder().ReservedTopLevelWordsNoIndent(reservedTopLevelWordsNoIndent).Build();
+            return ToBuilder()
+                .ReservedTopLevelWordsNoIndent(reservedTopLevelWordsNoIndent)
+                .Build();
         }
 
         public DialectConfig PlusReservedTopLevelWordsNoIndent(params string[] reservedTopLevelWordsNoIndent)
@@ -117,7 +125,9 @@ namespace SQL.Formatter.Core
 
         public DialectConfig WithReservedWords(List<string> reservedWords)
         {
-            return ToBuilder().ReservedWords(reservedWords).Build();
+            return ToBuilder()
+                .ReservedWords(reservedWords)
+                .Build();
         }
 
         public DialectConfig PlusReservedWords(params string[] reservedWords)
@@ -127,13 +137,16 @@ namespace SQL.Formatter.Core
 
         public DialectConfig PlusReservedWords(List<string> reservedWords)
         {
-            return ToBuilder().ReservedWords(Utils.Concat(this.reservedWords, reservedWords))
+            return ToBuilder()
+                .ReservedWords(Utils.Concat(this.reservedWords, reservedWords))
                 .Build();
         }
 
         public DialectConfig WithSpecialWordChars(List<string> specialWordChars)
         {
-            return ToBuilder().SpecialWordChars(specialWordChars).Build();
+            return ToBuilder()
+                .SpecialWordChars(specialWordChars)
+                .Build();
         }
 
         public DialectConfig PlusSpecialWordChars(params string[] specialWordChars)
@@ -150,7 +163,9 @@ namespace SQL.Formatter.Core
 
         public DialectConfig WithStringTypes(List<string> stringTypes)
         {
-            return ToBuilder().StringTypes(stringTypes).Build();
+            return ToBuilder()
+                .StringTypes(stringTypes)
+                .Build();
         }
 
         public DialectConfig PlusStringTypes(params string[] stringTypes)
@@ -167,7 +182,9 @@ namespace SQL.Formatter.Core
 
         public DialectConfig WithOpenParens(List<string> openParens)
         {
-            return ToBuilder().OpenParens(openParens).Build();
+            return ToBuilder()
+                .OpenParens(openParens)
+                .Build();
         }
 
         public DialectConfig PlusOpenParens(params string[] openParens)
@@ -184,7 +201,9 @@ namespace SQL.Formatter.Core
 
         public DialectConfig WithCloseParens(List<string> closeParens)
         {
-            return ToBuilder().CloseParens(closeParens).Build();
+            return ToBuilder()
+                .CloseParens(closeParens)
+                .Build();
         }
 
         public DialectConfig PlusCloseParens(params string[] closeParens)
@@ -201,7 +220,9 @@ namespace SQL.Formatter.Core
 
         public DialectConfig WithIndexedPlaceholderTypes(List<string> indexedPlaceholderTypes)
         {
-            return ToBuilder().IndexedPlaceholderTypes(indexedPlaceholderTypes).Build();
+            return ToBuilder()
+                .IndexedPlaceholderTypes(indexedPlaceholderTypes)
+                .Build();
         }
 
         public DialectConfig PlusIndexedPlaceholderTypes(params string[] indexedPlaceholderTypes)
@@ -218,7 +239,9 @@ namespace SQL.Formatter.Core
 
         public DialectConfig WithNamedPlaceholderTypes(List<string> namedPlaceholderTypes)
         {
-            return ToBuilder().NamedPlaceholderTypes(namedPlaceholderTypes).Build();
+            return ToBuilder()
+                .NamedPlaceholderTypes(namedPlaceholderTypes)
+                .Build();
         }
 
         public DialectConfig PlusNamedPlaceholderTypes(params string[] namedPlaceholderTypes)
@@ -235,7 +258,9 @@ namespace SQL.Formatter.Core
 
         public DialectConfig WithOperators(List<string> operators)
         {
-            return ToBuilder().Operators(operators).Build();
+            return ToBuilder()
+                .Operators(operators)
+                .Build();
         }
 
         public DialectConfig PlusOperators(params string[] operators)

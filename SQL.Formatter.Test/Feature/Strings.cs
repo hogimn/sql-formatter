@@ -9,7 +9,7 @@ namespace SQL.Formatter.Test.Feature
     {
         public static void Test(SqlFormatter.Formatter formatter, List<string> stringTypes)
         {
-            if (stringTypes == null) stringTypes = new List<string>();
+            stringTypes ??= new List<string>();
 
             if (stringTypes.Contains(StringLiteral.DoubleQuote))
             {

@@ -215,7 +215,6 @@ namespace SQL.Formatter.Language
                 "AND",
                 "OR",
                 "XOR",
-                // joins
                 "JOIN",
                 "INNER JOIN",
                 "LEFT JOIN",
@@ -241,6 +240,8 @@ namespace SQL.Formatter.Language
                 .Build();
         }
 
-        public N1qlFormatter(FormatConfig cfg) : base(cfg) { }
+        public N1qlFormatter(FormatConfig cfg) : base(cfg)
+        {
+        }
     }
 }

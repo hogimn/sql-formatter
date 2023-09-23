@@ -492,7 +492,6 @@ namespace SQL.Formatter.Language
                 "ELSE",
                 "OR",
                 "WHEN",
-                // joins
                 "JOIN",
                 "INNER JOIN",
                 "LEFT JOIN",
@@ -530,6 +529,8 @@ namespace SQL.Formatter.Language
                 .Build();
         }
 
-        public PostgreSqlFormatter(FormatConfig cfg) : base(cfg) { }
+        public PostgreSqlFormatter(FormatConfig cfg) : base(cfg)
+        {
+        }
     }
 }

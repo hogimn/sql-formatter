@@ -12,8 +12,9 @@ namespace SQL.Formatter.Test.Feature
             List<string> without = null,
             List<string> additionally = null)
         {
-            if (without == null) without = new List<string>();
-            if (additionally == null) additionally = new List<string>();
+            without ??= new List<string>();
+
+            additionally ??= new List<string>();
 
             var unsupportedJoinRegex = without.Count > 0 ? string.Join("|", without) : "^whateve_!%&$";
 

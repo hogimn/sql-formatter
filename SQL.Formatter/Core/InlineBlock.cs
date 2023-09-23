@@ -2,15 +2,6 @@
 
 namespace SQL.Formatter.Core
 {
-
-
-    /**
-     * Bookkeeper for inline blocks.
-     *
-     * <p>Inline blocks are parenthized expressions that are shorter than maxColumnLength. These blocks
-     * are formatted on a single line, unlike longer parenthized expressions where open-parenthesis
-     * causes newline and increase of indentation.
-     */
     public class InlineBlock
     {
         private int level;
@@ -22,13 +13,6 @@ namespace SQL.Formatter.Core
             level = 0;
         }
 
-        /**
-         * Begins inline block when lookahead through upcoming tokens determines that the block would be
-         * smaller than INLINE_MAX_LENGTH.
-         *
-         * @param tokens Array of all tokens
-         * @param index Current token position
-         */
         public void BeginIfPossible(JSLikeList<Token> tokens, int index)
         {
             if (level == 0 && IsInlineBlock(tokens, index))
@@ -45,24 +29,16 @@ namespace SQL.Formatter.Core
             }
         }
 
-        /** Finishes current inline block. There might be several nested ones. */
         public void End()
         {
             level--;
         }
 
-        /**
-         * True when inside an inline block
-         *
-         * @return {Boolean}
-         */
         public bool IsActive()
         {
             return level > 0;
         }
 
-        // Check if this should be an inline parentheses block
-        // Examples are "NOW()", "COUNT(*)", "int(10)", key(`somecolumn`), DECIMAL(7,2)
         private bool IsInlineBlock(JSLikeList<Token> tokens, int index)
         {
             int length = 0;
@@ -73,9 +49,10 @@ namespace SQL.Formatter.Core
                 Token token = tokens.Get(i);
                 length += token.value.Length;
 
-                // Overran max length
                 if (length > maxColumnLength)
+                {
                     return false;
+                }
 
                 if (token.type == TokenTypes.OPEN_PAREN)
                 {
@@ -85,26 +62,25 @@ namespace SQL.Formatter.Core
                 {
                     level--;
                     if (level == 0)
+                    {
                         return true;
+                    }
                 }
 
                 if (IsForbiddenToken(token))
+                {
                     return false;
+                }
             }
 
             return false;
         }
 
-        // Reserved words that cause newlines, comments and semicolons
-        // are not allowed inside inline parentheses block
         private bool IsForbiddenToken(Token token)
         {
             return token.type == TokenTypes.RESERVED_TOP_LEVEL
                 || token.type == TokenTypes.RESERVED_NEWLINE
-                ||
-                //                originally `TokenTypes.LINE_COMMENT` but this symbol is not defined
-                //                token.type == TokenTypes.LINE_COMMENT ||
-                token.type == TokenTypes.BLOCK_COMMENT
+                || token.type == TokenTypes.BLOCK_COMMENT
                 || token.value.Equals(";");
         }
     }

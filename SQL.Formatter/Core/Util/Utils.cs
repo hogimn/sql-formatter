@@ -6,7 +6,6 @@ namespace SQL.Formatter.Core.Util
 {
     public class Utils
     {
-
         public static List<T> NullToEmpty<T>(List<T> list)
         {
             return list ?? new List<T>();

@@ -356,7 +356,6 @@ namespace SQL.Formatter.Language
                 "SORTKEY",
                 "COMPOUND",
                 "INTERLEAVED",
-                // joins
                 "JOIN",
                 "INNER JOIN",
                 "LEFT JOIN",
@@ -388,6 +387,8 @@ namespace SQL.Formatter.Language
                 .Build();
         }
 
-        public RedshiftFormatter(FormatConfig cfg) : base(cfg) { }
+        public RedshiftFormatter(FormatConfig cfg) : base(cfg)
+        {
+        }
     }
 }

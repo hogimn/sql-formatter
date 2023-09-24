@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.Extensions.Options;
 using System.Net;
 
@@ -18,6 +19,11 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddHttpLogging(logging =>
+{
+    logging.LoggingFields = HttpLoggingFields.All;
+});
+
 var app = builder.Build();
 
 app.MapGet("/", () => "Hello World!");
@@ -29,5 +35,7 @@ app.MapControllerRoute(
     pattern: "{controller=SqlFormatter}/{action=FormatSql}");
 
 app.UseCors();
+
+app.UseHttpLogging();
 
 app.Run();

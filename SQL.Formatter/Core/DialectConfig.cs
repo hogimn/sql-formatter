@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using SQL.Formatter.Core.Util;
 
@@ -20,7 +19,7 @@ namespace SQL.Formatter.Core
         public readonly List<string> namedPlaceholderTypes;
         public readonly List<string> operators;
 
-        DialectConfig(
+        private DialectConfig(
             List<string> lineCommentTypes,
             List<string> reservedTopLevelWords,
             List<string> reservedTopLevelWordsNoIndent,
@@ -66,7 +65,7 @@ namespace SQL.Formatter.Core
                 .Build();
         }
 
-        public DialectConfig WithReservedTopLevelWords(List<String> reservedTopLevelWords)
+        public DialectConfig WithReservedTopLevelWords(List<string> reservedTopLevelWords)
         {
             return ToBuilder()
                 .ReservedTopLevelWords(reservedTopLevelWords)

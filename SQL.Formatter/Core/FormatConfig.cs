@@ -32,7 +32,6 @@ namespace SQL.Formatter.Core
             return new FormatConfigBuilder();
         }
 
-
         public class FormatConfigBuilder
         {
             private string indent = DefaultIndent;

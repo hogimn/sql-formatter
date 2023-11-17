@@ -34,9 +34,11 @@ namespace SQL.Formatter.Core.Util
         public static string CreateReservedWordRegex(JSLikeList<string> reservedWords)
         {
             if (reservedWords.IsEmpty())
+            {
                 return "^\b$";
+            }
 
-            string reservedWordsPattern =
+            var reservedWordsPattern =
                 string.Join("|", Utils.SortByLengthDesc(reservedWords).ToList()).Replace(" ", "\\s+");
 
             return "(?i)" + "^(" + reservedWordsPattern + ")\\b";
@@ -81,7 +83,7 @@ namespace SQL.Formatter.Core.Util
                 return null;
             }
 
-            string typesRegex = string.Join("|", types.Map(EscapeRegExp).ToList());
+            var typesRegex = string.Join("|", types.Map(EscapeRegExp).ToList());
 
             return new Regex(string.Format("^((?:{0})(?:{1}))", typesRegex, pattern));
         }

@@ -41,12 +41,12 @@ namespace SQL.Formatter.Core
 
         private bool IsInlineBlock(JSLikeList<Token> tokens, int index)
         {
-            int length = 0;
-            int level = 0;
+            var length = 0;
+            var level = 0;
 
-            for (int i = index; i < tokens.Size(); i++)
+            for (var i = index; i < tokens.Size(); i++)
             {
-                Token token = tokens.Get(i);
+                var token = tokens.Get(i);
                 length += token.value.Length;
 
                 if (length > maxColumnLength)
@@ -76,7 +76,7 @@ namespace SQL.Formatter.Core
             return false;
         }
 
-        private bool IsForbiddenToken(Token token)
+        private static bool IsForbiddenToken(Token token)
         {
             return token.type == TokenTypes.RESERVED_TOP_LEVEL
                 || token.type == TokenTypes.RESERVED_NEWLINE

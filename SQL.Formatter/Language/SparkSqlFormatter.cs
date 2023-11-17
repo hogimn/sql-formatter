@@ -251,7 +251,7 @@ namespace SQL.Formatter.Language
         {
             if (Token.IsWindow(token))
             {
-                Token aheadToken = TokenLookAhead();
+                var aheadToken = TokenLookAhead();
                 if (aheadToken != null && aheadToken.type == TokenTypes.OPEN_PAREN)
                 {
                     return new Token(TokenTypes.RESERVED, token.value);
@@ -260,7 +260,7 @@ namespace SQL.Formatter.Language
 
             if (Token.IsEnd(token))
             {
-                Token backToken = TokenLookBehind();
+                var backToken = TokenLookBehind();
                 if (backToken != null
                     && backToken.type == TokenTypes.OPERATOR
                     && backToken.value.Equals("."))

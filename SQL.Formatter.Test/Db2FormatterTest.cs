@@ -51,7 +51,6 @@ namespace SQL.Formatter.Test
             Schema.Test(formatter);
         }
 
-
         [Fact]
         public void FormatsFetchFirstLikeLimit()
         {

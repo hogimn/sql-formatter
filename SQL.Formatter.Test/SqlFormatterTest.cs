@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using SQL.Formatter.Language;
 using Xunit;
 
@@ -10,7 +9,7 @@ namespace SQL.Formatter.Test
         [Fact]
         public void Simple()
         {
-            string format = SqlFormatter.Format(
+            var format = SqlFormatter.Format(
                 "SELECT foo, bar, CASE baz WHEN 'one' THEN 1 WHEN 'two' THEN 2 ELSE 3 END FROM table");
 
             Assert.Equal(
@@ -31,7 +30,7 @@ namespace SQL.Formatter.Test
         [Fact]
         public void WithIndent()
         {
-            string format = SqlFormatter.Format(
+            var format = SqlFormatter.Format(
                 "SELECT foo, bar, CASE baz WHEN 'one' THEN 1 WHEN 'two' THEN 2 ELSE 3 END FROM table",
                 "    ");
             Assert.Equal(
@@ -52,10 +51,10 @@ namespace SQL.Formatter.Test
         [Fact]
         public void WithNamedParams()
         {
-            Dictionary<string, string> namedParams = new Dictionary<string, string>();
+            var namedParams = new Dictionary<string, string>();
             namedParams.Add("foo", "'bar'");
 
-            string format =
+            var format =
                 SqlFormatter.Of(Dialect.TSql).Format("SELECT * FROM tbl WHERE foo = @foo", namedParams);
             Assert.Equal(
                 "SELECT\n"
@@ -70,7 +69,7 @@ namespace SQL.Formatter.Test
         [Fact]
         public void WithFatArrow()
         {
-            string format =
+            var format =
                 SqlFormatter.Extend(config => config.PlusOperators("=>"))
                     .Format("SELECT * FROM tbl WHERE foo => '123'");
             Assert.Equal(
@@ -86,7 +85,7 @@ namespace SQL.Formatter.Test
         [Fact]
         public void WithIndexedParams()
         {
-            String format = SqlFormatter.Format("SELECT * FROM tbl WHERE foo = ?", new List<string> { "'bar'" });
+            var format = SqlFormatter.Format("SELECT * FROM tbl WHERE foo = ?", new List<string> { "'bar'" });
             Assert.Equal(
                 "SELECT\n"
                 + "  *\n"

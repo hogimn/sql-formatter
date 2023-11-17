@@ -39,21 +39,21 @@ namespace SQL.Formatter.Core
         public string Format(string query)
         {
             tokens = Tokenizer().Tokenize(query);
-            string formattedQuery = GetFormattedQueryFromTokens();
+            var formattedQuery = GetFormattedQueryFromTokens();
 
             return formattedQuery.Trim();
         }
 
         private string GetFormattedQueryFromTokens()
         {
-            string formattedQuery = "";
+            var formattedQuery = "";
 
-            int _index = -1;
+            var _index = -1;
             foreach (Token t in tokens)
             {
                 index = ++_index;
 
-                Token token = TokenOverride(t);
+                var token = TokenOverride(t);
 
                 if (token.type == TokenTypes.LINE_COMMENT)
                 {
@@ -160,10 +160,11 @@ namespace SQL.Formatter.Core
             {
                 return FormatWithSpaces(token, query);
             }
+
             return AddNewline(query) + EqualizeWhitespace(Show(token)) + " ";
         }
 
-        private string EqualizeWhitespace(string str)
+        private static string EqualizeWhitespace(string str)
         {
             return Regex.Replace(str, @"\s+", " ");
         }
@@ -182,6 +183,7 @@ namespace SQL.Formatter.Core
             {
                 query = query.TrimEnd();
             }
+
             query += Show(token);
 
             inlineBlock.BeginIfPossible(tokens, index);
@@ -191,6 +193,7 @@ namespace SQL.Formatter.Core
                 indentation.IncreaseBlockLevel();
                 query = AddNewline(query);
             }
+
             return query;
         }
 
@@ -265,6 +268,7 @@ namespace SQL.Formatter.Core
             {
                 query += "\n";
             }
+
             return query + indentation.GetIndent();
         }
 

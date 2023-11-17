@@ -445,6 +445,7 @@ namespace SQL.Formatter.Language
             {
                 return new Token(TokenTypes.RESERVED, token.value);
             }
+
             return token;
         }
 

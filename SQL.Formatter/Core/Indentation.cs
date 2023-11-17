@@ -13,7 +13,7 @@ namespace SQL.Formatter.Core
      */
     public class Indentation
     {
-        enum IndentTypes
+        private enum IndentTypes
         {
             INDENT_TYPE_TOP_LEVEL,
             INDENT_TYPE_BLOCK_LEVEL
@@ -73,7 +73,7 @@ namespace SQL.Formatter.Core
         {
             while (indentTypes.Count > 0)
             {
-                IndentTypes type = indentTypes.Pop();
+                var type = indentTypes.Pop();
                 if (type != IndentTypes.INDENT_TYPE_TOP_LEVEL)
                 {
                     break;

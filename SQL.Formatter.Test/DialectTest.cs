@@ -1,5 +1,4 @@
 ﻿using SQL.Formatter.Language;
-using System;
 using Xunit;
 
 namespace SQL.Formatter.Test

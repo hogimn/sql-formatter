@@ -78,13 +78,13 @@ namespace SQL.Formatter.Core
 
         public JSLikeList<Token> Tokenize(string input)
         {
-            List<Token> tokens = new List<Token>();
+            var tokens = new List<Token>();
             Token token = null;
 
             while (!string.IsNullOrEmpty(input))
             {
-                string[] findBeforeWhitespace = FindBeforeWhitespace(input);
-                string whitespaceBefore = findBeforeWhitespace[0];
+                var findBeforeWhitespace = FindBeforeWhitespace(input);
+                var whitespaceBefore = findBeforeWhitespace[0];
                 input = findBeforeWhitespace[1];
 
                 if (!string.IsNullOrEmpty(input))
@@ -94,12 +94,13 @@ namespace SQL.Formatter.Core
                     tokens.Add(token.WithWhitespaceBefore(whitespaceBefore));
                 }
             }
+
             return new JSLikeList<Token>(tokens);
         }
 
-        private string[] FindBeforeWhitespace(string input)
+        private static string[] FindBeforeWhitespace(string input)
         {
-            int index = input.TakeWhile(char.IsWhiteSpace).Count();
+            var index = input.TakeWhile(char.IsWhiteSpace).Count();
             return new[] { input.Substring(0, index), input.Substring(index) };
         }
 
@@ -178,13 +179,13 @@ namespace SQL.Formatter.Core
                 input, INDEXED_PLACEHOLDER_PATTERN, v => v.Substring(1));
         }
 
-        private Token GetPlaceholderTokenWithKey(string input, Regex regex, Func<string, string> parseKey)
+        private static Token GetPlaceholderTokenWithKey(string input, Regex regex, Func<string, string> parseKey)
         {
-            Token token = GetTokenOnFirstMatch(input, TokenTypes.PLACEHOLDER, regex);
+            var token = GetTokenOnFirstMatch(input, TokenTypes.PLACEHOLDER, regex);
             return token?.WithKey(parseKey.Invoke(token.value));
         }
 
-        private string GetEscapedPlaceholderKey(string key, string quoteChar)
+        private static string GetEscapedPlaceholderKey(string key, string quoteChar)
         {
             return key.Replace(RegexUtil.EscapeRegExp("\\") + quoteChar, quoteChar);
         }
@@ -246,9 +247,9 @@ namespace SQL.Formatter.Core
             return regex?.Match(input).Value ?? string.Empty;
         }
 
-        private Token GetTokenOnFirstMatch(string input, TokenTypes type, Regex regex)
+        private static Token GetTokenOnFirstMatch(string input, TokenTypes type, Regex regex)
         {
-            string match = GetFirstMatch(input, regex);
+            var match = GetFirstMatch(input, regex);
             return match.Equals(string.Empty) ? default : new Token(type, match);
         }
     }

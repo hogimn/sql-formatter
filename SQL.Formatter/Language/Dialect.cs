@@ -39,7 +39,7 @@ namespace SQL.Formatter.Language
         public readonly Func<FormatConfig, AbstractFormatter> func;
         public readonly List<string> aliases;
 
-        Dialect(Func<FormatConfig, AbstractFormatter> func, string name, params string[] aliases)
+        private Dialect(Func<FormatConfig, AbstractFormatter> func, string name, params string[] aliases)
         {
             this.func = func;
             this.name = name;
@@ -54,7 +54,7 @@ namespace SQL.Formatter.Language
 
         public static Dialect NameOf(string name)
         {
-            IEnumerable<Dialect> dialects = Values.Where(d => d.Matches(name));
+            var dialects = Values.Where(d => d.Matches(name));
 
             if (dialects.Count() == 0)
             {

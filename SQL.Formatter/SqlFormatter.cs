@@ -54,7 +54,7 @@ namespace SQL.Formatter
 
         public static Formatter Of(string name)
         {
-            Dialect dialect = Dialect.NameOf(name);
+            var dialect = Dialect.NameOf(name);
             return dialect == null ? throw new Exception("Unsupported SQL dialect: " + name) :
                 new Formatter(dialect);
         }
@@ -115,7 +115,7 @@ namespace SQL.Formatter
             {
                 AbstractFormatter Func(FormatConfig config)
                 {
-                    AbstractFormatter abstractFormatter = new AbstractFormatter(config)
+                    var abstractFormatter = new AbstractFormatter(config)
                     {
                         doDialectConfigFunc = () => sqlOperator.Invoke(underlying.Invoke(config).DoDialectConfig())
                     };

@@ -38,7 +38,7 @@ namespace SQL.Formatter.Core
         }
     }
 
-    class NamedParams<T> : Params
+    internal class NamedParams<T> : Params
     {
         private readonly Dictionary<string, T> parameters;
 
@@ -68,7 +68,7 @@ namespace SQL.Formatter.Core
         }
     }
 
-    class IndexedParams<T> : Params
+    internal class IndexedParams<T> : Params
     {
         private readonly Queue<T> parameters;
 
@@ -98,7 +98,7 @@ namespace SQL.Formatter.Core
         }
     }
 
-    class Empty : Params
+    internal class Empty : Params
     {
         public override bool IsEmpty()
         {

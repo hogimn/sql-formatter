@@ -57,6 +57,7 @@ namespace SQL.Formatter.Test
             Schema.Test(formatter);
         }
 
+        [Fact]
         public void OperatorsTest()
         {
             Operators.Test(formatter, new List<string>

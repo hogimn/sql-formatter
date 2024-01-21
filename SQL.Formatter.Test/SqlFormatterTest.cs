@@ -95,5 +95,17 @@ namespace SQL.Formatter.Test
                 + "  foo = 'bar'",
                 format);
         }
+
+        [Fact]
+        public void WithLambdasParams()
+        {
+            var format = SqlFormatter
+                .Of(Dialect.SparkSql)
+                .Format("SELECT aggregate(array(1, 2, 3), 0, (acc, x) -> acc + x, acc -> acc * 10);");
+            Assert.Equal(
+                "SELECT\n"
+                + "  aggregate(array(1, 2, 3), 0, (acc, x) -> acc + x, acc -> acc * 10);",
+                format);
+        }
     }
 }

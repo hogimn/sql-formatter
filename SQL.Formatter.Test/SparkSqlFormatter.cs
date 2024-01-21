@@ -73,7 +73,8 @@ namespace SQL.Formatter.Test
                 "%",
                 "&&",
                 "||",
-                "=="
+                "==",
+                "->"
             });
         }
 

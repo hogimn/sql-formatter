@@ -243,7 +243,7 @@ namespace SQL.Formatter.Language
                 .IndexedPlaceholderTypes(new List<string> { "?" })
                 .NamedPlaceholderTypes(new List<string> { "$" })
                 .LineCommentTypes(new List<string> { "--" })
-                .Operators(new List<string> { "!=", "<=>", "&&", "||", "==" })
+                .Operators(new List<string> { "!=", "<=>", "&&", "||", "==", "->" })
                 .Build();
         }
 

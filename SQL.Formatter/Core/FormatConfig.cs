@@ -12,19 +12,22 @@ namespace SQL.Formatter.Core
         public readonly Params parameters;
         public readonly bool uppercase;
         public readonly int linesBetweenQueries;
+        public readonly bool skipWhitespaceNearBlockParentheses;
 
         public FormatConfig(
             string indent,
             int maxColumnLength,
             Params parameters,
             bool uppercase,
-            int linesBetweenQueries)
+            int linesBetweenQueries,
+            bool skipWhitespaceNearBlockParentheses)
         {
             this.indent = indent;
             this.maxColumnLength = maxColumnLength;
             this.parameters = parameters == null ? Params.Empty : parameters;
             this.uppercase = uppercase;
             this.linesBetweenQueries = linesBetweenQueries;
+            this.skipWhitespaceNearBlockParentheses = skipWhitespaceNearBlockParentheses;
         }
 
         public static FormatConfigBuilder Builder()
@@ -39,6 +42,7 @@ namespace SQL.Formatter.Core
             private Params parameters;
             private bool uppercase;
             private int linesBetweenQueries;
+            private bool skipWhitespaceNearBlockParentheses;
 
             public FormatConfigBuilder()
             {
@@ -84,10 +88,21 @@ namespace SQL.Formatter.Core
                 return this;
             }
 
+            public FormatConfigBuilder SkipWhitespaceNearBlockParentheses(bool skipWhitespaceNearBlockParentheses)
+            {
+                this.skipWhitespaceNearBlockParentheses = skipWhitespaceNearBlockParentheses;
+                return this;
+            }
+
             public FormatConfig Build()
             {
                 return new FormatConfig(
-                    indent, maxColumnLength, parameters, uppercase, linesBetweenQueries);
+                    indent,
+                    maxColumnLength,
+                    parameters,
+                    uppercase,
+                    linesBetweenQueries,
+                    skipWhitespaceNearBlockParentheses);
             }
         }
     }

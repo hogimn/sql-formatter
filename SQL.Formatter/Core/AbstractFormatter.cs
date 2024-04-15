@@ -191,7 +191,10 @@ namespace SQL.Formatter.Core
             if (!inlineBlock.IsActive())
             {
                 indentation.IncreaseBlockLevel();
-                query = AddNewline(query);
+                if (!cfg.skipWhitespaceNearBlockParentheses)
+                {
+                    query = AddNewline(query);
+                }
             }
 
             return query;
@@ -207,7 +210,13 @@ namespace SQL.Formatter.Core
             else
             {
                 indentation.DecreaseBlockLevel();
-                return FormatWithSpaces(token, AddNewline(query));
+
+                if (!cfg.skipWhitespaceNearBlockParentheses)
+                {
+                    return FormatWithSpaces(token, AddNewline(query));
+                }
+
+                return FormatWithoutSpaces(token, query);
             }
         }
 

@@ -9,7 +9,19 @@ This does not support:
 - Stored procedures.
 - Changing of the delimiter type to something else than ;.
 
-## Examples
+# Usage
+
+## NuGet
+
+To install the Hogimn.Sql.Formatter package with NuGet, you can use the following command in your terminal or command prompt.
+
+```bash
+dotnet add package Hogimn.Sql.Formatter --version 1.0.0
+```
+
+For more details, visit the [NuGet Gallery](https://www.nuget.org/packages/Hogimn.Sql.Formatter/) page.
+
+# Examples
 
 You can easily use `SQL.Formatter.SqlFormatter` :
 
@@ -40,7 +52,7 @@ SqlFormatter.Format("SELECT * FROM tbl",
 );
 ```
 
-### Dialect
+## Dialect
 
 You can pass dialect `SQL.Formatter.Language.Dialect` or `String` to `SqlFormatter.Of` :
 
@@ -64,7 +76,7 @@ SQL formatter supports the following dialects:
 - **spark** - [Spark][]
 - **tsql** - [SQL Server Transact-SQL][tsql]
 
-### Extend formatters
+## Extend formatters
 
 Formatters can be extended as below :
 
@@ -86,7 +98,7 @@ WHERE
   A => 4
 ```
 
-### Placeholders replacement
+## Placeholders replacement
 
 You can pass `List` or `Dictionary` to `Format` :
 

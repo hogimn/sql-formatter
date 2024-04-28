@@ -1,6 +1,6 @@
-[![dotnet package](https://github.com/hogimn/SqlFormatter/actions/workflows/dotnet-desktop.yml/badge.svg?branch=master)](https://github.com/hogimn/SqlFormatter/actions/workflows/dotnet-desktop.yml)
-
 # SQL Formatter
+
+[![dotnet package](https://github.com/hogimn/SqlFormatter/actions/workflows/dotnet-desktop.yml/badge.svg?branch=master)](https://github.com/hogimn/SqlFormatter/actions/workflows/dotnet-desktop.yml)
 
 This repository contains the C# port of the popular [Java SQL formatter](https://github.com/vertical-blank/sql-formatter)
 

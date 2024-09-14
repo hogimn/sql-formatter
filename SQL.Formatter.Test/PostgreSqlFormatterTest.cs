@@ -8,36 +8,36 @@ namespace SQL.Formatter.Test
 {
     public class PostgreSqlFormatterTest
     {
-        public readonly SqlFormatter.Formatter formatter = SqlFormatter.Of(Dialect.PostgreSql);
+        public readonly SqlFormatter.Formatter Formatter = SqlFormatter.Of(Dialect.PostgreSql);
 
         [Fact]
         public void BehavesLikeSqlFormatterTest()
         {
-            BehavesLikeSqlFormatter.Test(formatter);
+            BehavesLikeSqlFormatter.Test(Formatter);
         }
 
         [Fact]
         public void CaseTest()
         {
-            Case.Test(formatter);
+            Case.Test(Formatter);
         }
 
         [Fact]
         public void CreateTableTest()
         {
-            CreateTable.Test(formatter);
+            CreateTable.Test(Formatter);
         }
 
         [Fact]
         public void AlterTableTest()
         {
-            AlterTable.Test(formatter);
+            AlterTable.Test(Formatter);
         }
 
         [Fact]
         public void StringsTest()
         {
-            Strings.Test(formatter, new List<string>
+            Strings.Test(Formatter, new List<string>
             {
                 StringLiteral.DoubleQuote,
                 StringLiteral.SingleQuote,
@@ -50,19 +50,19 @@ namespace SQL.Formatter.Test
         [Fact]
         public void BetweenTest()
         {
-            Between.Test(formatter);
+            Between.Test(Formatter);
         }
 
         [Fact]
         public void SchemaTest()
         {
-            Schema.Test(formatter);
+            Schema.Test(Formatter);
         }
 
         [Fact]
         public void OperatorsTest()
         {
-            Operators.Test(formatter, new List<string>
+            Operators.Test(Formatter, new List<string>
             {
                 "%",
                 "^",
@@ -96,7 +96,7 @@ namespace SQL.Formatter.Test
         [Fact]
         public void JoinTest()
         {
-            Join.Test(formatter);
+            Join.Test(Formatter);
         }
 
         [Fact]
@@ -108,7 +108,7 @@ namespace SQL.Formatter.Test
                 + "  $2\n"
                 + "FROM\n"
                 + "  tbl",
-                formatter.Format(
+                Formatter.Format(
                     "SELECT $1, $2 FROM tbl"));
         }
 
@@ -121,7 +121,7 @@ namespace SQL.Formatter.Test
                 + @"  ""blah""" + "\n"
                 + "FROM\n"
                 + "  tbl",
-                formatter.Format(
+                Formatter.Format(
                     "SELECT $1, $2 FROM tbl", new Dictionary<string, string>
                     {
                         { "1", @"""variable value""" },
@@ -134,7 +134,7 @@ namespace SQL.Formatter.Test
         {
             Assert.Equal(
                 "foo = :bar",
-                formatter.Format(
+                Formatter.Format(
                     "foo = :bar"));
         }
 
@@ -145,7 +145,7 @@ namespace SQL.Formatter.Test
                 "foo = 'Hello'\n"
                 + "AND some_col = 10\n"
                 + "OR col = 7",
-                formatter.Format(
+                Formatter.Format(
                     @"foo = :bar AND :""field"" = 10 OR col = :'val'", new Dictionary<string, string>
                     {
                         { "bar", "'Hello'" },

@@ -8,36 +8,36 @@ namespace SQL.Formatter.Test
 {
     public class RedShiftFormatterTest
     {
-        public readonly SqlFormatter.Formatter formatter = SqlFormatter.Of(Dialect.Redshift);
+        public readonly SqlFormatter.Formatter Formatter = SqlFormatter.Of(Dialect.Redshift);
 
         [Fact]
         public void BehaviesLikeSqlFormatterTest()
         {
-            BehavesLikeSqlFormatter.Test(formatter);
+            BehavesLikeSqlFormatter.Test(Formatter);
         }
 
         [Fact]
         public void CreateTableTest()
         {
-            CreateTable.Test(formatter);
+            CreateTable.Test(Formatter);
         }
 
         [Fact]
         public void AlterTableTest()
         {
-            AlterTable.Test(formatter);
+            AlterTable.Test(Formatter);
         }
 
         [Fact]
         public void AlterTableModifyTest()
         {
-            AlterTableModify.Test(formatter);
+            AlterTableModify.Test(Formatter);
         }
 
         [Fact]
         public void StringsTest()
         {
-            Strings.Test(formatter, new List<string>
+            Strings.Test(Formatter, new List<string>
             {
                 StringLiteral.DoubleQuote,
                 StringLiteral.SingleQuote,
@@ -48,13 +48,13 @@ namespace SQL.Formatter.Test
         [Fact]
         public void SchemaTest()
         {
-            Schema.Test(formatter);
+            Schema.Test(Formatter);
         }
 
         [Fact]
         public void OperatorsTest()
         {
-            Operators.Test(formatter, new List<string>
+            Operators.Test(Formatter, new List<string>
             {
                 "%",
                 "^",
@@ -74,7 +74,7 @@ namespace SQL.Formatter.Test
         [Fact]
         public void JoinTest()
         {
-            Join.Test(formatter);
+            Join.Test(Formatter);
         }
 
         [Fact]
@@ -89,7 +89,7 @@ namespace SQL.Formatter.Test
                 + "  col2 DESC\n"
                 + "LIMIT\n"
                 + "  10;",
-                formatter.Format(
+                Formatter.Format(
                     "SELECT col1 FROM tbl ORDER BY col2 DESC LIMIT 10;"));
         }
 
@@ -102,7 +102,7 @@ namespace SQL.Formatter.Test
                 + "FROM\n"
                 + "  -- This is a comment\n"
                 + "  MyTable;",
-                formatter.Format(
+                Formatter.Format(
                     "SELECT col FROM\n"
                     + "-- This is a comment\n"
                     + "MyTable;"));
@@ -116,7 +116,7 @@ namespace SQL.Formatter.Test
                 + "  @col1\n"
                 + "FROM\n"
                 + "  tbl",
-                formatter.Format(
+                Formatter.Format(
                     "SELECT @col1 FROM tbl"));
         }
 
@@ -132,7 +132,7 @@ namespace SQL.Formatter.Test
                 + ")\n"
                 + "DISTKEY(created_at)\n"
                 + "SORTKEY(created_at);",
-                formatter.Format(
+                Formatter.Format(
                     "CREATE TABLE items (a INT PRIMARY KEY, b TEXT, c INT NOT NULL, d INT NOT NULL) DISTKEY(created_at) SORTKEY(created_at);"));
         }
 
@@ -152,7 +152,7 @@ namespace SQL.Formatter.Test
                 + "  ',' QUOTE '\"'\n"
                 + "REGION\n"
                 + "  AS 'us-east-1'",
-                formatter.Format(
+                Formatter.Format(
                     "COPY schema.table\n"
                     + "FROM 's3://bucket/file.csv'\n"
                     + "IAM_ROLE 'arn:aws:iam::123456789:role/rolename'\n"

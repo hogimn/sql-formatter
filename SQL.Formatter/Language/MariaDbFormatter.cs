@@ -5,7 +5,7 @@ namespace SQL.Formatter.Language
 {
     public class MariaDbFormatter : AbstractFormatter
     {
-        private static readonly List<string> ReservedWords = new List<string>{
+        private static readonly List<string> s_reservedWords = new List<string>{
         "ACCESSIBLE",
         "ADD",
         "ALL",
@@ -255,7 +255,7 @@ namespace SQL.Formatter.Language
         "YEAR_MONTH",
         "ZEROFILL"};
 
-        private static readonly List<string> ReservedTopLevelWords =
+        private static readonly List<string> s_reservedTopLevelWords =
             new List<string>{
                 "ADD",
                 "ALTER COLUMN",
@@ -275,10 +275,10 @@ namespace SQL.Formatter.Language
                 "VALUES",
                 "WHERE"};
 
-        private static readonly List<string> ReservedTopLevelWordsNoIndent =
+        private static readonly List<string> s_reservedTopLevelWordsNoIndent =
             new List<string> { "INTERSECT", "INTERSECT ALL", "UNION", "UNION ALL" };
 
-        private static readonly List<string> ReservedNewlineWords =
+        private static readonly List<string> s_reservedNewlineWords =
             new List<string>{
                 "AND",
                 "ELSE",
@@ -301,10 +301,10 @@ namespace SQL.Formatter.Language
         public override DialectConfig DoDialectConfig()
         {
             return DialectConfig.Builder()
-                .ReservedWords(ReservedWords)
-                .ReservedTopLevelWords(ReservedTopLevelWords)
-                .ReservedTopLevelWordsNoIndent(ReservedTopLevelWordsNoIndent)
-                .ReservedNewlineWords(ReservedNewlineWords)
+                .ReservedWords(s_reservedWords)
+                .ReservedTopLevelWords(s_reservedTopLevelWords)
+                .ReservedTopLevelWordsNoIndent(s_reservedTopLevelWordsNoIndent)
+                .ReservedNewlineWords(s_reservedNewlineWords)
                 .StringTypes(
                     new List<string>{
                         StringLiteral.DoubleQuote,

@@ -8,18 +8,18 @@ namespace SQL.Formatter.Test
 {
     public class N1qlFormatterTest
     {
-        public readonly SqlFormatter.Formatter formatter = SqlFormatter.Of(Dialect.N1ql);
+        public readonly SqlFormatter.Formatter Formatter = SqlFormatter.Of(Dialect.N1ql);
 
         [Fact]
         public void BehavesLikeSqlFormatterTest()
         {
-            BehavesLikeSqlFormatter.Test(formatter);
+            BehavesLikeSqlFormatter.Test(Formatter);
         }
 
         [Fact]
         public void StringsTest()
         {
-            Strings.Test(formatter, new List<string>
+            Strings.Test(Formatter, new List<string>
             {
                 StringLiteral.DoubleQuote,
                 StringLiteral.SingleQuote,
@@ -30,19 +30,19 @@ namespace SQL.Formatter.Test
         [Fact]
         public void BetweenTest()
         {
-            Between.Test(formatter);
+            Between.Test(Formatter);
         }
 
         [Fact]
         public void SchemaTest()
         {
-            Schema.Test(formatter);
+            Schema.Test(Formatter);
         }
 
         [Fact]
         public void OperatorsTest()
         {
-            Operators.Test(formatter, new List<string>
+            Operators.Test(Formatter, new List<string>
             {
                 "%",
                 "==",
@@ -53,7 +53,7 @@ namespace SQL.Formatter.Test
         [Fact]
         public void JoinTest()
         {
-            Join.Test(formatter, new List<string>
+            Join.Test(Formatter, new List<string>
             {
                 "FULL", "CROSS", "NATURAL"
             });
@@ -67,7 +67,7 @@ namespace SQL.Formatter.Test
                 + "  second,\n"
                 + "  third,\n"
                 + "  first;",
-                formatter.Format(
+                Formatter.Format(
                     "SELECT $1, $2, $0;",
                     new Dictionary<string, string>
                     {
@@ -86,7 +86,7 @@ namespace SQL.Formatter.Test
                 + @"  'var value'," + "\n"
                 + @"  'var value'," + "\n"
                 + @"  'var value';",
-                formatter.Format(
+                Formatter.Format(
                     @"SELECT $variable, $'var name', $""var name"", $`var name`;",
                     new Dictionary<string, string>
                     {
@@ -104,7 +104,7 @@ namespace SQL.Formatter.Test
                 + @"  $'var name'," + "\n"
                 + @"  $""var name""," + "\n"
                 + @"  $`var name`;",
-                formatter.Format(
+                Formatter.Format(
                     @"SELECT $variable, $'var name', $""var name"", $`var name`;"));
         }
 
@@ -118,7 +118,7 @@ namespace SQL.Formatter.Test
                 + "  'baldwin'\n"
                 + "SET\n"
                 + "  type = 'actor' RETURNING tutorial.type",
-                formatter.Format(
+                Formatter.Format(
                     "UPDATE tutorial USE KEYS 'baldwin' SET type = 'actor' RETURNING tutorial.type"));
         }
 
@@ -130,7 +130,7 @@ namespace SQL.Formatter.Test
                 + "  tutorial t\n"
                 + "USE KEYS\n"
                 + "  'baldwin' RETURNING t",
-                formatter.Format(
+                Formatter.Format(
                     "EXPLAIN DELETE FROM tutorial t USE KEYS 'baldwin' RETURNING t"));
         }
 
@@ -146,7 +146,7 @@ namespace SQL.Formatter.Test
                 + "  'Elinor_33313792'\n"
                 + "NEST\n"
                 + "  orders_with_users orders ON KEYS ARRAY s.order_id FOR s IN usr.shipped_order_history END;",
-                formatter.Format(
+                Formatter.Format(
                     "SELECT * FROM usr\n"
                     + "USE KEYS 'Elinor_33313792' NEST orders_with_users orders\n"
                     + "ON KEYS ARRAY s.order_id FOR s IN usr.shipped_order_history END;"));
@@ -162,7 +162,7 @@ namespace SQL.Formatter.Test
                 + "  tutorial\n"
                 + "UNNEST\n"
                 + "  tutorial.children c;",
-                formatter.Format(
+                Formatter.Format(
                     "SELECT * FROM tutorial UNNEST tutorial.children c;"));
         }
 
@@ -188,7 +188,7 @@ namespace SQL.Formatter.Test
                 + "      'hello': 'world'\n"
                 + "    }\n"
                 + "  );",
-                formatter.Format(
+                Formatter.Format(
                     "INSERT INTO heroes (KEY, VALUE) VALUES ('123', {'id': 1, 'type': 'Tarzan',\n"
                     + "'array': [123456789, 123456789, 123456789, 123456789, 123456789], 'hello': 'world'});"));
         }
@@ -201,7 +201,7 @@ namespace SQL.Formatter.Test
                 + "  heroes (KEY, VALUE)\n"
                 + "VALUES\n"
                 + "  ('123', {'id': 1, 'type': 'Tarzan'});",
-                formatter.Format(
+                Formatter.Format(
                     "INSERT INTO heroes (KEY, VALUE) VALUES ('123', {'id':1,'type':'Tarzan'});"));
         }
 
@@ -215,7 +215,7 @@ namespace SQL.Formatter.Test
                 + "  tutorial\n"
                 + "USE KEYS\n"
                 + "  ['dave', 'ian'];",
-                formatter.Format(
+                Formatter.Format(
                     "SELECT fname, email FROM tutorial USE KEYS ['dave', 'ian'];"));
         }
 
@@ -227,7 +227,7 @@ namespace SQL.Formatter.Test
                 + "  order_lines[0].productId\n"
                 + "FROM\n"
                 + "  orders;",
-                formatter.Format(
+                Formatter.Format(
                     "SELECT order_lines[0].productId FROM orders;"));
         }
     }

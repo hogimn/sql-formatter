@@ -51,8 +51,10 @@ namespace SQL.Formatter.Test
         [Fact]
         public void WithNamedParams()
         {
-            var namedParams = new Dictionary<string, string>();
-            namedParams.Add("foo", "'bar'");
+            var namedParams = new Dictionary<string, string>
+            {
+                { "foo", "'bar'" }
+            };
 
             var format =
                 SqlFormatter.Of(Dialect.TSql).Format("SELECT * FROM tbl WHERE foo = @foo", namedParams);

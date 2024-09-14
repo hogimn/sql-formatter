@@ -11,43 +11,43 @@ namespace SQL.Formatter.Core
             INDENT_TYPE_BLOCK_LEVEL
         }
 
-        private readonly string indent;
-        private readonly Stack<IndentTypes> indentTypes;
+        private readonly string _indent;
+        private readonly Stack<IndentTypes> _indentTypes;
 
         public Indentation(string indent)
         {
-            this.indent = indent;
-            indentTypes = new Stack<IndentTypes>();
+            _indent = indent;
+            _indentTypes = new Stack<IndentTypes>();
         }
 
         public string GetIndent() =>
-            string.Concat(Enumerable.Range(0, indentTypes.Count)
-                .Select(_ => indent));
+            string.Concat(Enumerable.Range(0, _indentTypes.Count)
+                .Select(_ => _indent));
 
         public void IncreaseTopLevel()
         {
-            indentTypes.Push(IndentTypes.INDENT_TYPE_TOP_LEVEL);
+            _indentTypes.Push(IndentTypes.INDENT_TYPE_TOP_LEVEL);
         }
 
         public void IncreaseBlockLevel()
         {
-            indentTypes.Push(IndentTypes.INDENT_TYPE_BLOCK_LEVEL);
+            _indentTypes.Push(IndentTypes.INDENT_TYPE_BLOCK_LEVEL);
         }
 
         public void DecreaseTopLevel()
         {
-            if (indentTypes.Count != 0 &&
-                indentTypes.Peek() == IndentTypes.INDENT_TYPE_TOP_LEVEL)
+            if (_indentTypes.Count != 0 &&
+                _indentTypes.Peek() == IndentTypes.INDENT_TYPE_TOP_LEVEL)
             {
-                indentTypes.Pop();
+                _indentTypes.Pop();
             }
         }
 
         public void DecreaseBlockLevel()
         {
-            while (indentTypes.Count > 0)
+            while (_indentTypes.Count > 0)
             {
-                var type = indentTypes.Pop();
+                var type = _indentTypes.Pop();
                 if (type != IndentTypes.INDENT_TYPE_TOP_LEVEL)
                 {
                     break;
@@ -57,7 +57,7 @@ namespace SQL.Formatter.Core
 
         public void ResetIndentation()
         {
-            indentTypes.Clear();
+            _indentTypes.Clear();
         }
     }
 }

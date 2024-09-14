@@ -8,36 +8,36 @@ namespace SQL.Formatter.Test
 {
     public class TSqlFormatterTest
     {
-        public readonly SqlFormatter.Formatter formatter = SqlFormatter.Of(Dialect.TSql);
+        public readonly SqlFormatter.Formatter Formatter = SqlFormatter.Of(Dialect.TSql);
 
         [Fact]
         public void BehavesLikeSqlFormatterTest()
         {
-            BehavesLikeSqlFormatter.Test(formatter);
+            BehavesLikeSqlFormatter.Test(Formatter);
         }
 
         [Fact]
         public void CaseTest()
         {
-            Case.Test(formatter);
+            Case.Test(Formatter);
         }
 
         [Fact]
         public void CreateTableTest()
         {
-            CreateTable.Test(formatter);
+            CreateTable.Test(Formatter);
         }
 
         [Fact]
         public void AlterTableTest()
         {
-            AlterTable.Test(formatter);
+            AlterTable.Test(Formatter);
         }
 
         [Fact]
         public void StringsTest()
         {
-            Strings.Test(formatter, new List<string>
+            Strings.Test(Formatter, new List<string>
             {
                 StringLiteral.DoubleQuote,
                 StringLiteral.SingleQuote,
@@ -49,19 +49,19 @@ namespace SQL.Formatter.Test
         [Fact]
         public void BetweenTest()
         {
-            Between.Test(formatter);
+            Between.Test(Formatter);
         }
 
         [Fact]
         public void SchemaTest()
         {
-            Schema.Test(formatter);
+            Schema.Test(Formatter);
         }
 
         [Fact]
         public void OperatorsTest()
         {
-            Operators.Test(formatter, new List<string>
+            Operators.Test(Formatter, new List<string>
             {
                 "%",
                 "&",
@@ -86,7 +86,7 @@ namespace SQL.Formatter.Test
         [Fact]
         public void JoinTest()
         {
-            Join.Test(formatter, new List<string>
+            Join.Test(Formatter, new List<string>
             {
                 "NATURAL"
             });
@@ -100,7 +100,7 @@ namespace SQL.Formatter.Test
                 + "  Customers (ID, MoneyBalance, Address, City)\n"
                 + "VALUES\n"
                 + "  (12, -123.4, 'Skagen 2111', 'Stv');",
-                formatter.Format(
+                Formatter.Format(
                     "INSERT Customers (ID, MoneyBalance, Address, City) VALUES (12,-123.4, 'Skagen 2111','Stv');"));
         }
 
@@ -112,7 +112,7 @@ namespace SQL.Formatter.Test
                 + "  @variable,\n"
                 + "  @\"var name\",\n"
                 + "  @[var name];",
-                formatter.Format(
+                Formatter.Format(
                     "SELECT @variable, @\"var name\", @[var name];"));
         }
 
@@ -126,7 +126,7 @@ namespace SQL.Formatter.Test
                 + "FROM\n"
                 + "  t\n"
                 + "  CROSS JOIN t2 on t.id = t2.id_t",
-                formatter.Format(
+                Formatter.Format(
                     "SELECT a, b FROM t CROSS JOIN t2 on t.id = t2.id_t"));
         }
 
@@ -138,7 +138,7 @@ namespace SQL.Formatter.Test
                 + "  'var value',\n"
                 + "  'var value1',\n"
                 + "  'var value2';",
-                formatter.Format(
+                Formatter.Format(
                     "SELECT @variable, @\"var name1\", @[var name2];", new Dictionary<string, string>
                     {
                         { "variable", "'var value'"},

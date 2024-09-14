@@ -74,7 +74,7 @@ namespace SQL.Formatter
                 this.underlying = underlying;
             }
 
-            public Formatter(Dialect dialect) : this(dialect.func) { }
+            public Formatter(Dialect dialect) : this(dialect.Func) { }
 
             public string Format(string query, FormatConfig cfg)
             {
@@ -117,7 +117,7 @@ namespace SQL.Formatter
                 {
                     var abstractFormatter = new AbstractFormatter(config)
                     {
-                        doDialectConfigFunc = () => sqlOperator.Invoke(underlying.Invoke(config).DoDialectConfig())
+                        _doDialectConfigFunc = () => sqlOperator.Invoke(underlying.Invoke(config).DoDialectConfig())
                     };
                     return abstractFormatter;
                 }

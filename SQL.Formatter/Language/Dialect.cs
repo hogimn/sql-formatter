@@ -35,28 +35,28 @@ namespace SQL.Formatter.Language
             }
         }
 
-        public readonly string name;
-        public readonly Func<FormatConfig, AbstractFormatter> func;
-        public readonly List<string> aliases;
+        public readonly string Name;
+        public readonly Func<FormatConfig, AbstractFormatter> Func;
+        public readonly List<string> Aliases;
 
         private Dialect(Func<FormatConfig, AbstractFormatter> func, string name, params string[] aliases)
         {
-            this.func = func;
-            this.name = name;
-            this.aliases = new List<string>(aliases);
+            Func = func;
+            Name = name;
+            Aliases = new List<string>(aliases);
         }
 
         private bool Matches(string name)
         {
-            return this.name.ToLower().Equals(name.ToLower())
-                || aliases.Select(s => s.ToLower()).Intersect(new string[] { name.ToLower() }).Any();
+            return Name.ToLower().Equals(name.ToLower())
+                || Aliases.Select(s => s.ToLower()).Intersect(new string[] { name.ToLower() }).Any();
         }
 
         public static Dialect NameOf(string name)
         {
             var dialects = Values.Where(d => d.Matches(name));
 
-            if (dialects.Count() == 0)
+            if (!dialects.Any())
             {
                 return null;
             }

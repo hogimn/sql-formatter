@@ -5,7 +5,7 @@ namespace SQL.Formatter.Language
 {
     public class StandardSqlFormatter : AbstractFormatter
     {
-        private static readonly List<string> ReservedWords = new List<string>{
+        private static readonly List<string> s_reservedWords = new List<string>{
                 "ABS",
                 "ALL",
                 "ALLOCATE",
@@ -303,7 +303,7 @@ namespace SQL.Formatter.Language
                 "WITHOUT",
                 "YEAR"};
 
-        private static readonly List<string> ReservedTopLevelWords =
+        private static readonly List<string> s_reservedTopLevelWords =
             new List<string>{
                 "ADD",
                 "ALTER COLUMN",
@@ -330,7 +330,7 @@ namespace SQL.Formatter.Language
                 "VALUES",
                 "WHERE"};
 
-        private static readonly List<string> ReservedTopLevelWordsNoIndent =
+        private static readonly List<string> s_reservedTopLevelWordsNoIndent =
             new List<string>{
                 "INTERSECT",
                 "INTERSECT ALL",
@@ -342,7 +342,7 @@ namespace SQL.Formatter.Language
                 "EXCEPT ALL",
                 "EXCEPT DISTINCT"};
 
-        private static readonly List<string> ReservedNewlineWords =
+        private static readonly List<string> s_reservedNewlineWords =
             new List<string>{
                 "AND",
                 "ELSE",
@@ -362,10 +362,10 @@ namespace SQL.Formatter.Language
         public override DialectConfig DoDialectConfig()
         {
             return DialectConfig.Builder()
-                .ReservedWords(ReservedWords)
-                .ReservedTopLevelWords(ReservedTopLevelWords)
-                .ReservedTopLevelWordsNoIndent(ReservedTopLevelWordsNoIndent)
-                .ReservedNewlineWords(ReservedNewlineWords)
+                .ReservedWords(s_reservedWords)
+                .ReservedTopLevelWords(s_reservedTopLevelWords)
+                .ReservedTopLevelWordsNoIndent(s_reservedTopLevelWordsNoIndent)
+                .ReservedNewlineWords(s_reservedNewlineWords)
                 .StringTypes(new List<string> { StringLiteral.DoubleQuote, StringLiteral.SingleQuote })
                 .OpenParens(new List<string> { "(", "CASE" })
                 .CloseParens(new List<string> { ")", "END" })

@@ -8,36 +8,36 @@ namespace SQL.Formatter.Test
 {
     public class StandardSqlFormatterTest
     {
-        private readonly SqlFormatter.Formatter formatter = SqlFormatter.Standard();
+        private readonly SqlFormatter.Formatter _formatter = SqlFormatter.Standard();
 
         [Fact]
         public void BehavesLikeSqlFormatterTest()
         {
-            BehavesLikeSqlFormatter.Test(formatter);
+            BehavesLikeSqlFormatter.Test(_formatter);
         }
 
         [Fact]
         public void CaseTest()
         {
-            Case.Test(formatter);
+            Case.Test(_formatter);
         }
 
         [Fact]
         public void CreateTableTest()
         {
-            CreateTable.Test(formatter);
+            CreateTable.Test(_formatter);
         }
 
         [Fact]
         public void AlterTableTest()
         {
-            AlterTable.Test(formatter);
+            AlterTable.Test(_formatter);
         }
 
         [Fact]
         public void StringsTest()
         {
-            Strings.Test(formatter, new List<string>
+            Strings.Test(_formatter, new List<string>
             {
                 StringLiteral.DoubleQuote,
                 StringLiteral.SingleQuote
@@ -47,19 +47,19 @@ namespace SQL.Formatter.Test
         [Fact]
         public void BetweenTest()
         {
-            Between.Test(formatter);
+            Between.Test(_formatter);
         }
 
         [Fact]
         public void SchemaTest()
         {
-            Schema.Test(formatter);
+            Schema.Test(_formatter);
         }
 
         [Fact]
         public void JoinTest()
         {
-            Join.Test(formatter);
+            Join.Test(_formatter);
         }
 
         [Fact]
@@ -70,7 +70,7 @@ namespace SQL.Formatter.Test
                 + "  first,\n"
                 + "  second,\n"
                 + "  third;",
-                formatter.Format(
+                _formatter.Format(
                     "SELECT ?, ?, ?;", new List<string> { "first", "second", "third" }));
         }
 
@@ -82,7 +82,7 @@ namespace SQL.Formatter.Test
                 + "  *\n"
                 + "FETCH FIRST\n"
                 + "  2 ROWS ONLY;",
-                formatter.Format(
+                _formatter.Format(
                     "SELECT * FETCH FIRST 2 ROWS ONLY;"));
         }
 
@@ -98,7 +98,7 @@ namespace SQL.Formatter.Test
                 + "WHERE\n"
                 + "  date BETWEEN '2001-01-01' AND '2010-12-31';\n"
                 + "-- comment",
-                formatter.Format(
+                _formatter.Format(
                     "SELECT * FROM table/* comment */ WHERE date BETWEEN '2001-01-01' AND '2010-12-31'; -- comment"));
         }
 
@@ -144,7 +144,7 @@ namespace SQL.Formatter.Test
                 + "    source.m_usageType,\n"
                 + "    source.m_category\n"
                 + "  )",
-                formatter.Format(
+                _formatter.Format(
                     "merge into DW_STG_USER.ACCOUNT_DIM target using ( select COMMON_NAME m_commonName, ORIGIN m_origin, USAGE_TYPE m_usageType, CATEGORY m_category from MY_TABLE where USAGE_TYPE = :value ) source on source.m_usageType = target.USAGE_TYPE when matched then update set target.COMMON_NAME = source.m_commonName, target.ORIGIN = source.m_origin, target.USAGE_TYPE = source.m_usageType, target.CATEGORY = source.m_category where ((source.m_commonName <> target.COMMON_NAME)or(source.m_origin <> target.ORIGIN)or(source.m_usageType <> target.USAGE_TYPE)or(source.m_category <> target.CATEGORY)) when not matched then insert ( target.COMMON_NAME, target.ORIGIN, target.USAGE_TYPE, target.CATEGORY) values (source.m_commonName, source.m_origin, source.m_usageType, source.m_category)"));
         }
     }

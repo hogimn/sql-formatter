@@ -5,7 +5,7 @@ namespace SQL.Formatter.Language
 {
     public class SparkSqlFormatter : AbstractFormatter
     {
-        private static readonly List<string> ReservedWords = new List<string>{
+        private static readonly List<string> s_reservedWords = new List<string>{
         "ALL",
         "ALTER",
         "ANALYSE",
@@ -149,7 +149,7 @@ namespace SQL.Formatter.Language
         "WITH",
         "YEAR_MONTH"};
 
-        private static readonly List<string> ReservedTopLevelWords =
+        private static readonly List<string> s_reservedTopLevelWords =
             new List<string>{
                 "ADD",
                 "AFTER",
@@ -184,10 +184,10 @@ namespace SQL.Formatter.Language
                 "WHERE",
                 "WINDOW"};
 
-        private static readonly List<string> ReservedTopLevelWordsNoIndent =
+        private static readonly List<string> s_reservedTopLevelWordsNoIndent =
             new List<string> { "EXCEPT ALL", "EXCEPT", "INTERSECT ALL", "INTERSECT", "UNION ALL", "UNION" };
 
-        private static readonly List<string> ReservedNewlineWords =
+        private static readonly List<string> s_reservedNewlineWords =
             new List<string>{
                 "AND",
                 "CREATE OR",
@@ -228,10 +228,10 @@ namespace SQL.Formatter.Language
         public override DialectConfig DoDialectConfig()
         {
             return DialectConfig.Builder()
-                .ReservedWords(ReservedWords)
-                .ReservedTopLevelWords(ReservedTopLevelWords)
-                .ReservedTopLevelWordsNoIndent(ReservedTopLevelWordsNoIndent)
-                .ReservedNewlineWords(ReservedNewlineWords)
+                .ReservedWords(s_reservedWords)
+                .ReservedTopLevelWords(s_reservedTopLevelWords)
+                .ReservedTopLevelWordsNoIndent(s_reservedTopLevelWordsNoIndent)
+                .ReservedNewlineWords(s_reservedNewlineWords)
                 .StringTypes(
                     new List<string>{
                         StringLiteral.DoubleQuote,
@@ -252,9 +252,9 @@ namespace SQL.Formatter.Language
             if (Token.IsWindow(token))
             {
                 var aheadToken = TokenLookAhead();
-                if (aheadToken != null && aheadToken.type == TokenTypes.OPEN_PAREN)
+                if (aheadToken != null && aheadToken.Type == TokenTypes.OPEN_PAREN)
                 {
-                    return new Token(TokenTypes.RESERVED, token.value);
+                    return new Token(TokenTypes.RESERVED, token.Value);
                 }
             }
 
@@ -262,10 +262,10 @@ namespace SQL.Formatter.Language
             {
                 var backToken = TokenLookBehind();
                 if (backToken != null
-                    && backToken.type == TokenTypes.OPERATOR
-                    && backToken.value.Equals("."))
+                    && backToken.Type == TokenTypes.OPERATOR
+                    && backToken.Value.Equals("."))
                 {
-                    return new Token(TokenTypes.WORD, token.value);
+                    return new Token(TokenTypes.WORD, token.Value);
                 }
             }
 

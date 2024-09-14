@@ -8,42 +8,42 @@ namespace SQL.Formatter.Test
 {
     public class PlSqlFormatterTest
     {
-        public readonly SqlFormatter.Formatter formatter = SqlFormatter.Of(Dialect.PlSql);
+        public readonly SqlFormatter.Formatter Formatter = SqlFormatter.Of(Dialect.PlSql);
 
         [Fact]
         public void BehavesLikeSqlFormatterTest()
         {
-            BehavesLikeSqlFormatter.Test(formatter);
+            BehavesLikeSqlFormatter.Test(Formatter);
         }
 
         [Fact]
         public void CaseTest()
         {
-            Case.Test(formatter);
+            Case.Test(Formatter);
         }
 
         [Fact]
         public void CreateTableTest()
         {
-            CreateTable.Test(formatter);
+            CreateTable.Test(Formatter);
         }
 
         [Fact]
         public void AlterTableTest()
         {
-            AlterTable.Test(formatter);
+            AlterTable.Test(Formatter);
         }
 
         [Fact]
         public void AlterTableModifyTest()
         {
-            AlterTableModify.Test(formatter);
+            AlterTableModify.Test(Formatter);
         }
 
         [Fact]
         public void StringsTest()
         {
-            Strings.Test(formatter, new List<string>
+            Strings.Test(Formatter, new List<string>
             {
                 StringLiteral.DoubleQuote,
                 StringLiteral.SingleQuote,
@@ -55,19 +55,19 @@ namespace SQL.Formatter.Test
         [Fact]
         public void BetweenTest()
         {
-            Between.Test(formatter);
+            Between.Test(Formatter);
         }
 
         [Fact]
         public void SchemaTest()
         {
-            Schema.Test(formatter);
+            Schema.Test(Formatter);
         }
 
         [Fact]
         public void OperatorsTest()
         {
-            Operators.Test(formatter, new List<string>
+            Operators.Test(Formatter, new List<string>
             {
                 "||",
                 "**",
@@ -79,7 +79,7 @@ namespace SQL.Formatter.Test
         [Fact]
         public void JoinTest()
         {
-            Join.Test(formatter);
+            Join.Test(Formatter);
         }
 
         [Fact]
@@ -119,7 +119,7 @@ namespace SQL.Formatter.Test
                 + "  t1\n"
                 + "ORDER BY\n"
                 + "  order1;",
-                formatter.Format(
+                Formatter.Format(
                     "WITH t1(id, parent_id) AS (\n"
                     + "  -- Anchor member.\n"
                     + "  SELECT\n"
@@ -181,7 +181,7 @@ namespace SQL.Formatter.Test
                 + "  t1\n"
                 + "ORDER BY\n"
                 + "  order1;",
-                formatter.Format(
+                Formatter.Format(
                     "WITH t1(id, parent_id) AS (\n"
                     + "  -- Anchor member.\n"
                     + "  SELECT\n"
@@ -216,7 +216,7 @@ namespace SQL.Formatter.Test
                 + "FROM\n"
                 + "  t\n"
                 + "  OUTER APPLY fn(t.id)",
-                formatter.Format(
+                Formatter.Format(
                     "SELECT a, b FROM t OUTER APPLY fn(t.id)"));
         }
 
@@ -226,7 +226,7 @@ namespace SQL.Formatter.Test
             Assert.Equal(
                 "SELECT\n"
                 + "  N'value'",
-                formatter.Format(
+                Formatter.Format(
                     "SELECT N'value'"));
         }
 
@@ -239,7 +239,7 @@ namespace SQL.Formatter.Test
                 + "  M\n"
                 + "FROM\n"
                 + "  t",
-                formatter.Format(
+                Formatter.Format(
                     "SELECT N, M FROM t"));
         }
 
@@ -253,7 +253,7 @@ namespace SQL.Formatter.Test
                 + "FROM\n"
                 + "  t\n"
                 + "  CROSS APPLY fn(t.id)",
-                formatter.Format(
+                Formatter.Format(
                     "SELECT a, b FROM t CROSS APPLY fn(t.id)"));
         }
 
@@ -265,7 +265,7 @@ namespace SQL.Formatter.Test
                 + "  first,\n"
                 + "  second,\n"
                 + "  third;",
-                formatter.Format(
+                Formatter.Format(
                     "SELECT ?, ?, ?;", new List<string>
                     {
                         "first",
@@ -282,7 +282,7 @@ namespace SQL.Formatter.Test
                 + "  second,\n"
                 + "  third,\n"
                 + "  first;",
-                formatter.Format(
+                Formatter.Format(
                     "SELECT ?1, ?2, ?0;", new Dictionary<string, string>
                     {
                         { "0", "first" },
@@ -299,7 +299,7 @@ namespace SQL.Formatter.Test
                 + "  ?1,\n"
                 + "  ?25,\n"
                 + "  ?;",
-                formatter.Format(
+                Formatter.Format(
                     "SELECT ?1, ?25, ?;"));
         }
 
@@ -311,7 +311,7 @@ namespace SQL.Formatter.Test
                 + "  Customers (ID, MoneyBalance, Address, City)\n"
                 + "VALUES\n"
                 + "  (12, -123.4, 'Skagen 2111', 'Stv');",
-                formatter.Format(
+                Formatter.Format(
                     "INSERT Customers (ID, MoneyBalance, Address, City) VALUES (12,-123.4, 'Skagen 2111','Stv');"));
         }
 
@@ -324,7 +324,7 @@ namespace SQL.Formatter.Test
                 + "  col.2@\n"
                 + "FROM\n"
                 + "  tbl",
-                formatter.Format(
+                Formatter.Format(
                     "SELECT my_col$1#, col.2@ FROM tbl\n"));
         }
 
@@ -337,7 +337,7 @@ namespace SQL.Formatter.Test
                 + "FROM\n"
                 + "  -- This is a comment\n"
                 + "  MyTable;",
-                formatter.Format(
+                Formatter.Format(
                     "SELECT col FROM\n-- This is a comment\nMyTable;\n"));
         }
 
@@ -353,7 +353,7 @@ namespace SQL.Formatter.Test
                 + "  col2 DESC\n"
                 + "FETCH FIRST\n"
                 + "  20 ROWS ONLY;",
-                formatter.Format(
+                Formatter.Format(
                     "SELECT col1 FROM tbl ORDER BY col2 DESC FETCH FIRST 20 ROWS ONLY;"));
         }
     }

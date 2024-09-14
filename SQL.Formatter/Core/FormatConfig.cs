@@ -7,12 +7,12 @@ namespace SQL.Formatter.Core
         public static readonly string DefaultIndent = "  ";
         public static readonly int DefaultColumnMaxLength = 50;
 
-        public readonly string indent;
-        public readonly int maxColumnLength;
-        public readonly Params parameters;
-        public readonly bool uppercase;
-        public readonly int linesBetweenQueries;
-        public readonly bool skipWhitespaceNearBlockParentheses;
+        public readonly string Indent;
+        public readonly int MaxColumnLength;
+        public readonly Params Parameters;
+        public readonly bool Uppercase;
+        public readonly int LinesBetweenQueries;
+        public readonly bool SkipWhitespaceNearBlockParentheses;
 
         public FormatConfig(
             string indent,
@@ -22,12 +22,12 @@ namespace SQL.Formatter.Core
             int linesBetweenQueries,
             bool skipWhitespaceNearBlockParentheses)
         {
-            this.indent = indent;
-            this.maxColumnLength = maxColumnLength;
-            this.parameters = parameters == null ? Params.Empty : parameters;
-            this.uppercase = uppercase;
-            this.linesBetweenQueries = linesBetweenQueries;
-            this.skipWhitespaceNearBlockParentheses = skipWhitespaceNearBlockParentheses;
+            Indent = indent;
+            MaxColumnLength = maxColumnLength;
+            Parameters = parameters == null ? Params.Empty : parameters;
+            Uppercase = uppercase;
+            LinesBetweenQueries = linesBetweenQueries;
+            SkipWhitespaceNearBlockParentheses = skipWhitespaceNearBlockParentheses;
         }
 
         public static FormatConfigBuilder Builder()
@@ -37,12 +37,12 @@ namespace SQL.Formatter.Core
 
         public class FormatConfigBuilder
         {
-            private string indent = DefaultIndent;
-            private int maxColumnLength = DefaultColumnMaxLength;
-            private Params parameters;
-            private bool uppercase;
-            private int linesBetweenQueries;
-            private bool skipWhitespaceNearBlockParentheses;
+            private string _indent = DefaultIndent;
+            private int _maxColumnLength = DefaultColumnMaxLength;
+            private Params _parameters;
+            private bool _uppercase;
+            private int _linesBetweenQueries;
+            private bool _skipWhitespaceNearBlockParentheses;
 
             public FormatConfigBuilder()
             {
@@ -50,19 +50,19 @@ namespace SQL.Formatter.Core
 
             public FormatConfigBuilder Indent(string indent)
             {
-                this.indent = indent;
+                _indent = indent;
                 return this;
             }
 
             public FormatConfigBuilder MaxColumnLength(int maxColumnLength)
             {
-                this.maxColumnLength = maxColumnLength;
+                _maxColumnLength = maxColumnLength;
                 return this;
             }
 
             public FormatConfigBuilder Params(Params parameters)
             {
-                this.parameters = parameters;
+                _parameters = parameters;
                 return this;
             }
 
@@ -78,31 +78,31 @@ namespace SQL.Formatter.Core
 
             public FormatConfigBuilder Uppercase(bool uppercase)
             {
-                this.uppercase = uppercase;
+                _uppercase = uppercase;
                 return this;
             }
 
             public FormatConfigBuilder LinesBetweenQueries(int linesBetweenQueries)
             {
-                this.linesBetweenQueries = linesBetweenQueries;
+                _linesBetweenQueries = linesBetweenQueries;
                 return this;
             }
 
             public FormatConfigBuilder SkipWhitespaceNearBlockParentheses(bool skipWhitespaceNearBlockParentheses)
             {
-                this.skipWhitespaceNearBlockParentheses = skipWhitespaceNearBlockParentheses;
+                _skipWhitespaceNearBlockParentheses = skipWhitespaceNearBlockParentheses;
                 return this;
             }
 
             public FormatConfig Build()
             {
                 return new FormatConfig(
-                    indent,
-                    maxColumnLength,
-                    parameters,
-                    uppercase,
-                    linesBetweenQueries,
-                    skipWhitespaceNearBlockParentheses);
+                    _indent,
+                    _maxColumnLength,
+                    _parameters,
+                    _uppercase,
+                    _linesBetweenQueries,
+                    _skipWhitespaceNearBlockParentheses);
             }
         }
     }

@@ -7,12 +7,12 @@ namespace SQL.Formatter.Core.Util
 {
     public class RegexUtil
     {
-        private static readonly string EscapeRegex =
+        private static readonly string s_escapeRegex =
             string.Join("|",
                 new List<string> { "^", "$", "\\", ".", "*", "+", "*", "?", "(", ")", "[", "]", "{", "}", "|" }
                 .Select(spChr => "(\\" + spChr + ")"));
 
-        public static readonly Regex EscapeRegexPattern = new Regex(EscapeRegex);
+        public static readonly Regex EscapeRegexPattern = new Regex(s_escapeRegex);
 
         public static string EscapeRegExp(string s)
         {
@@ -47,7 +47,7 @@ namespace SQL.Formatter.Core.Util
         public static string CreateWordRegex(JSLikeList<string> specialChars)
         {
             return "^([\\p{L}\\p{Nd}\\p{Mn}\\p{Pc}"
-                + specialChars.Join("")
+                + specialChars.Join(string.Empty)
                 + "]+)";
         }
 

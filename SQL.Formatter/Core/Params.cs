@@ -26,12 +26,12 @@ namespace SQL.Formatter.Core
         {
             if (IsEmpty())
             {
-                return token.value;
+                return token.Value;
             }
 
-            if (!(token.key == null || string.IsNullOrEmpty(token.key)))
+            if (!(token.Key == null || string.IsNullOrEmpty(token.Key)))
             {
-                return GetByName(token.key);
+                return GetByName(token.Key);
             }
 
             return Get();
@@ -40,16 +40,16 @@ namespace SQL.Formatter.Core
 
     internal class NamedParams<T> : Params
     {
-        private readonly Dictionary<string, T> parameters;
+        private readonly Dictionary<string, T> _parameters;
 
         public NamedParams(Dictionary<string, T> parameters)
         {
-            this.parameters = parameters;
+            _parameters = parameters;
         }
 
         public override bool IsEmpty()
         {
-            return parameters.Count == 0;
+            return _parameters.Count == 0;
         }
 
         public override object Get()
@@ -59,32 +59,32 @@ namespace SQL.Formatter.Core
 
         public override object GetByName(string key)
         {
-            return parameters[key];
+            return _parameters[key];
         }
 
         public override string ToString()
         {
-            return parameters.ToString();
+            return _parameters.ToString();
         }
     }
 
     internal class IndexedParams<T> : Params
     {
-        private readonly Queue<T> parameters;
+        private readonly Queue<T> _parameters;
 
         public IndexedParams(Queue<T> parameters)
         {
-            this.parameters = parameters;
+            _parameters = parameters;
         }
 
         public override bool IsEmpty()
         {
-            return parameters.Count == 0;
+            return _parameters.Count == 0;
         }
 
         public override object Get()
         {
-            return parameters.Dequeue();
+            return _parameters.Dequeue();
         }
 
         public override object GetByName(string key)
@@ -94,7 +94,7 @@ namespace SQL.Formatter.Core
 
         public override string ToString()
         {
-            return parameters.ToString();
+            return _parameters.ToString();
         }
     }
 

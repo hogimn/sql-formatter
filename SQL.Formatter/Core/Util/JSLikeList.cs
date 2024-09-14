@@ -7,35 +7,35 @@ namespace SQL.Formatter.Core.Util
 {
     public class JSLikeList<T> : IEnumerable
     {
-        private readonly List<T> tList;
+        private readonly List<T> _tList;
 
         public JSLikeList(List<T> tList)
         {
-            this.tList = tList ?? new List<T>();
+            _tList = tList ?? new List<T>();
         }
 
         public List<T> ToList()
         {
-            return tList;
+            return _tList;
         }
 
         public JSLikeList<R> Map<R>(Func<T, R> mapper)
         {
             return new JSLikeList<R>(
-                tList
+                _tList
                 .Select(mapper.Invoke)
                 .ToList());
         }
 
         public string Join(string delimiter)
         {
-            return string.Join(delimiter, tList);
+            return string.Join(delimiter, _tList);
         }
 
         public JSLikeList<T> With(List<T> other)
         {
             return new JSLikeList<T>(
-                tList
+                _tList
                 .Concat(other)
                 .ToList());
         }
@@ -47,27 +47,27 @@ namespace SQL.Formatter.Core.Util
 
         public bool IsEmpty()
         {
-            return tList == null || tList.Count == 0;
+            return _tList == null || _tList.Count == 0;
         }
 
         public T Get(int index)
         {
-            if (index < 0 || tList.Count <= index)
+            if (index < 0 || _tList.Count <= index)
             {
                 return default;
             }
 
-            return tList.ElementAt(index);
+            return _tList.ElementAt(index);
         }
 
         public IEnumerator GetEnumerator()
         {
-            return tList.GetEnumerator();
+            return _tList.GetEnumerator();
         }
 
         public int Size()
         {
-            return tList.Count;
+            return _tList.Count;
         }
     }
 }

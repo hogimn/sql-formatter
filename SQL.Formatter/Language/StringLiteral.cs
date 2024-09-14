@@ -17,15 +17,15 @@ namespace SQL.Formatter.Language
         public static readonly string Dollar = "$$";
         public static readonly string Bracket = "[]";
 
-        private static readonly Dictionary<string, string> Literals;
+        private static readonly Dictionary<string, string> s_literals;
 
         static StringLiteral()
         {
-            Literals = Preset.Presets.ToList()
+            s_literals = Preset.Presets.ToList()
                 .ToDictionary(preset => preset.GetKey(), preset => preset.GetRegex());
         }
 
-        public static string Get(string key) => Literals[key];
+        public static string Get(string key) => s_literals[key];
 
         private class Preset
         {
@@ -108,18 +108,18 @@ namespace SQL.Formatter.Language
                 }
             }
 
-            public readonly string key;
-            public readonly string regex;
+            public readonly string Key;
+            public readonly string Regex;
 
             public Preset(string key, string regex)
             {
-                this.key = key;
-                this.regex = regex;
+                Key = key;
+                Regex = regex;
             }
 
-            public string GetKey() => key;
+            public string GetKey() => Key;
 
-            public string GetRegex() => regex;
+            public string GetRegex() => Regex;
         }
     }
 }

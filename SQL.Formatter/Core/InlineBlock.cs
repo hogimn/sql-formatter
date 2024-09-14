@@ -4,39 +4,39 @@ namespace SQL.Formatter.Core
 {
     public class InlineBlock
     {
-        private int level;
-        private readonly int maxColumnLength;
+        private int _level;
+        private readonly int _maxColumnLength;
 
         public InlineBlock(int maxColumnLength)
         {
-            this.maxColumnLength = maxColumnLength;
-            level = 0;
+            _maxColumnLength = maxColumnLength;
+            _level = 0;
         }
 
         public void BeginIfPossible(JSLikeList<Token> tokens, int index)
         {
-            if (level == 0 && IsInlineBlock(tokens, index))
+            if (_level == 0 && IsInlineBlock(tokens, index))
             {
-                level = 1;
+                _level = 1;
             }
-            else if (level > 0)
+            else if (_level > 0)
             {
-                level++;
+                _level++;
             }
             else
             {
-                level = 0;
+                _level = 0;
             }
         }
 
         public void End()
         {
-            level--;
+            _level--;
         }
 
         public bool IsActive()
         {
-            return level > 0;
+            return _level > 0;
         }
 
         private bool IsInlineBlock(JSLikeList<Token> tokens, int index)
@@ -47,18 +47,18 @@ namespace SQL.Formatter.Core
             for (var i = index; i < tokens.Size(); i++)
             {
                 var token = tokens.Get(i);
-                length += token.value.Length;
+                length += token.Value.Length;
 
-                if (length > maxColumnLength)
+                if (length > _maxColumnLength)
                 {
                     return false;
                 }
 
-                if (token.type == TokenTypes.OPEN_PAREN)
+                if (token.Type == TokenTypes.OPEN_PAREN)
                 {
                     level++;
                 }
-                else if (token.type == TokenTypes.CLOSE_PAREN)
+                else if (token.Type == TokenTypes.CLOSE_PAREN)
                 {
                     level--;
                     if (level == 0)
@@ -78,10 +78,10 @@ namespace SQL.Formatter.Core
 
         private static bool IsForbiddenToken(Token token)
         {
-            return token.type == TokenTypes.RESERVED_TOP_LEVEL
-                || token.type == TokenTypes.RESERVED_NEWLINE
-                || token.type == TokenTypes.BLOCK_COMMENT
-                || token.value.Equals(";");
+            return token.Type == TokenTypes.RESERVED_TOP_LEVEL
+                || token.Type == TokenTypes.RESERVED_NEWLINE
+                || token.Type == TokenTypes.BLOCK_COMMENT
+                || token.Value.Equals(";");
         }
     }
 }

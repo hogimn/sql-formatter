@@ -8,18 +8,18 @@ namespace SQL.Formatter.Test
 {
     public class MySqlFormatterTest
     {
-        public readonly SqlFormatter.Formatter formatter = SqlFormatter.Of(Dialect.MySql);
+        public readonly SqlFormatter.Formatter Formatter = SqlFormatter.Of(Dialect.MySql);
 
         [Fact]
         public void BehavesLikeMariaDbFormatterTest()
         {
-            BehavesLikeMariaDbFormatter.Test(formatter);
+            BehavesLikeMariaDbFormatter.Test(Formatter);
         }
 
         [Fact]
         public void AdditionalMySqlOperator()
         {
-            Operators.Test(formatter, new List<string>
+            Operators.Test(Formatter, new List<string>
             {
                 "->",
                 "->>"

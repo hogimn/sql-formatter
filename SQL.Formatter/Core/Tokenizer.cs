@@ -8,72 +8,72 @@ namespace SQL.Formatter.Core
 {
     public class Tokenizer
     {
-        private readonly Regex NUMBER_PATTERN;
-        private readonly Regex OPERATOR_PATTERN;
+        private readonly Regex _numberPattern;
+        private readonly Regex _operatorPattern;
 
-        private readonly Regex BLOCK_COMMENT_PATTERN;
-        private readonly Regex LINE_COMMENT_PATTERN;
+        private readonly Regex _blockCommentPattern;
+        private readonly Regex _lineCommentPattern;
 
-        private readonly Regex RESERVED_TOP_LEVEL_PATTERN;
-        private readonly Regex RESERVED_TOP_LEVEL_NO_INDENT_PATTERN;
-        private readonly Regex RESERVED_NEWLINE_PATTERN;
-        private readonly Regex RESERVED_PLAIN_PATTERN;
+        private readonly Regex _reservedTopLevelPattern;
+        private readonly Regex _reservedTopLevelNoIndentPattern;
+        private readonly Regex _reservedNewLinePattern;
+        private readonly Regex _reservedPlainPattern;
 
-        private readonly Regex WORD_PATTERN;
-        private readonly Regex STRING_PATTERN;
+        private readonly Regex _wordPattern;
+        private readonly Regex _stringPattern;
 
-        private readonly Regex OPEN_PAREN_PATTERN;
-        private readonly Regex CLOSE_PAREN_PATTERN;
+        private readonly Regex _openParenPattern;
+        private readonly Regex _closeParenPattern;
 
-        private readonly Regex INDEXED_PLACEHOLDER_PATTERN;
-        private readonly Regex IDENT_NAMED_PLACEHOLDER_PATTERN;
-        private readonly Regex STRING_NAMED_PLACEHOLDER_PATTERN;
+        private readonly Regex _indexedPlaceholderPattern;
+        private readonly Regex _indentNamedPlaceholderPattern;
+        private readonly Regex _stringNamedPlaceholderPattern;
 
         public Tokenizer(DialectConfig cfg)
         {
-            NUMBER_PATTERN = new Regex(
+            _numberPattern = new Regex(
                 "^((-\\s*)?[0-9]+(\\.[0-9]+)?([eE]-?[0-9]+(\\.[0-9]+)?)?|0x[0-9a-fA-F]+|0b[01]+)\\b");
 
-            OPERATOR_PATTERN = new Regex(
+            _operatorPattern = new Regex(
                 RegexUtil.CreateOperatorRegex(
-                    new JSLikeList<string>(new List<string> { "<>", "<=", ">=" }).With(cfg.operators)));
+                    new JSLikeList<string>(new List<string> { "<>", "<=", ">=" }).With(cfg.Operators)));
 
-            BLOCK_COMMENT_PATTERN = new Regex("^(/\\*(?s).*?(?:\\*/|$))");
-            LINE_COMMENT_PATTERN = new Regex(
-                RegexUtil.CreateLineCommentRegex(new JSLikeList<string>(cfg.lineCommentTypes)));
+            _blockCommentPattern = new Regex("^(/\\*(?s).*?(?:\\*/|$))");
+            _lineCommentPattern = new Regex(
+                RegexUtil.CreateLineCommentRegex(new JSLikeList<string>(cfg.LineCommentTypes)));
 
-            RESERVED_TOP_LEVEL_PATTERN =
+            _reservedTopLevelPattern =
                 new Regex(
-                    RegexUtil.CreateReservedWordRegex(new JSLikeList<string>(cfg.reservedTopLevelWords)));
-            RESERVED_TOP_LEVEL_NO_INDENT_PATTERN =
+                    RegexUtil.CreateReservedWordRegex(new JSLikeList<string>(cfg.ReservedTopLevelWords)));
+            _reservedTopLevelNoIndentPattern =
                 new Regex(
-                    RegexUtil.CreateReservedWordRegex(new JSLikeList<string>(cfg.reservedTopLevelWordsNoIndent)));
-            RESERVED_NEWLINE_PATTERN =
+                    RegexUtil.CreateReservedWordRegex(new JSLikeList<string>(cfg.ReservedTopLevelWordsNoIndent)));
+            _reservedNewLinePattern =
                 new Regex(
-                    RegexUtil.CreateReservedWordRegex(new JSLikeList<string>(cfg.reservedNewlineWords)));
-            RESERVED_PLAIN_PATTERN =
-                new Regex(RegexUtil.CreateReservedWordRegex(new JSLikeList<string>(cfg.reservedWords)));
+                    RegexUtil.CreateReservedWordRegex(new JSLikeList<string>(cfg.ReservedNewlineWords)));
+            _reservedPlainPattern =
+                new Regex(RegexUtil.CreateReservedWordRegex(new JSLikeList<string>(cfg.ReservedWords)));
 
-            WORD_PATTERN =
-                new Regex(RegexUtil.CreateWordRegex(new JSLikeList<string>(cfg.specialWordChars)));
-            STRING_PATTERN =
-                new Regex(RegexUtil.CreateStringRegex(new JSLikeList<string>(cfg.stringTypes)));
+            _wordPattern =
+                new Regex(RegexUtil.CreateWordRegex(new JSLikeList<string>(cfg.SpecialWordChars)));
+            _stringPattern =
+                new Regex(RegexUtil.CreateStringRegex(new JSLikeList<string>(cfg.StringTypes)));
 
-            OPEN_PAREN_PATTERN =
-                new Regex(RegexUtil.CreateParenRegex(new JSLikeList<string>(cfg.openParens)));
-            CLOSE_PAREN_PATTERN =
-                new Regex(RegexUtil.CreateParenRegex(new JSLikeList<string>(cfg.closeParens)));
+            _openParenPattern =
+                new Regex(RegexUtil.CreateParenRegex(new JSLikeList<string>(cfg.OpenParens)));
+            _closeParenPattern =
+                new Regex(RegexUtil.CreateParenRegex(new JSLikeList<string>(cfg.CloseParens)));
 
-            INDEXED_PLACEHOLDER_PATTERN =
+            _indexedPlaceholderPattern =
                 RegexUtil.CreatePlaceholderRegexPattern(
-                    new JSLikeList<string>(cfg.indexedPlaceholderTypes), "[0-9]*");
-            IDENT_NAMED_PLACEHOLDER_PATTERN =
+                    new JSLikeList<string>(cfg.IndexedPlaceholderTypes), "[0-9]*");
+            _indentNamedPlaceholderPattern =
                 RegexUtil.CreatePlaceholderRegexPattern(
-                    new JSLikeList<string>(cfg.namedPlaceholderTypes), "[a-zA-Z0-9._$]+");
-            STRING_NAMED_PLACEHOLDER_PATTERN =
+                    new JSLikeList<string>(cfg.NamedPlaceholderTypes), "[a-zA-Z0-9._$]+");
+            _stringNamedPlaceholderPattern =
                 RegexUtil.CreatePlaceholderRegexPattern(
-                    new JSLikeList<string>(cfg.namedPlaceholderTypes),
-                    RegexUtil.CreateStringPattern(new JSLikeList<string>(cfg.stringTypes)));
+                    new JSLikeList<string>(cfg.NamedPlaceholderTypes),
+                    RegexUtil.CreateStringPattern(new JSLikeList<string>(cfg.StringTypes)));
         }
 
         public JSLikeList<Token> Tokenize(string input)
@@ -90,7 +90,7 @@ namespace SQL.Formatter.Core
                 if (!string.IsNullOrEmpty(input))
                 {
                     token = GetNextToken(input, token);
-                    input = input.Substring(token.value.Length);
+                    input = input[token.Value.Length..];
                     tokens.Add(token.WithWhitespaceBefore(whitespaceBefore));
                 }
             }
@@ -101,7 +101,7 @@ namespace SQL.Formatter.Core
         private static string[] FindBeforeWhitespace(string input)
         {
             var index = input.TakeWhile(char.IsWhiteSpace).Count();
-            return new[] { input.Substring(0, index), input.Substring(index) };
+            return new[] { input[..index], input[index..] };
         }
 
         private Token GetNextToken(string input, Token previousToken)
@@ -127,27 +127,27 @@ namespace SQL.Formatter.Core
 
         private Token GetLineCommentToken(string input)
         {
-            return GetTokenOnFirstMatch(input, TokenTypes.LINE_COMMENT, LINE_COMMENT_PATTERN);
+            return GetTokenOnFirstMatch(input, TokenTypes.LINE_COMMENT, _lineCommentPattern);
         }
 
         private Token GetBlockCommentToken(string input)
         {
-            return GetTokenOnFirstMatch(input, TokenTypes.BLOCK_COMMENT, BLOCK_COMMENT_PATTERN);
+            return GetTokenOnFirstMatch(input, TokenTypes.BLOCK_COMMENT, _blockCommentPattern);
         }
 
         private Token GetStringToken(string input)
         {
-            return GetTokenOnFirstMatch(input, TokenTypes.STRING, STRING_PATTERN);
+            return GetTokenOnFirstMatch(input, TokenTypes.STRING, _stringPattern);
         }
 
         private Token GetOpenParenToken(string input)
         {
-            return GetTokenOnFirstMatch(input, TokenTypes.OPEN_PAREN, OPEN_PAREN_PATTERN);
+            return GetTokenOnFirstMatch(input, TokenTypes.OPEN_PAREN, _openParenPattern);
         }
 
         private Token GetCloseParenToken(string input)
         {
-            return GetTokenOnFirstMatch(input, TokenTypes.CLOSE_PAREN, CLOSE_PAREN_PATTERN);
+            return GetTokenOnFirstMatch(input, TokenTypes.CLOSE_PAREN, _closeParenPattern);
         }
 
         private Token GetPlaceholderToken(string input)
@@ -161,28 +161,28 @@ namespace SQL.Formatter.Core
         private Token GetIdentNamedPlaceholderToken(string input)
         {
             return GetPlaceholderTokenWithKey(
-                input, IDENT_NAMED_PLACEHOLDER_PATTERN, v => v.Substring(1));
+                input, _indentNamedPlaceholderPattern, v => v[1..]);
         }
 
         private Token GetStringNamedPlaceholderToken(string input)
         {
             return GetPlaceholderTokenWithKey(
                 input,
-                STRING_NAMED_PLACEHOLDER_PATTERN,
+                _stringNamedPlaceholderPattern,
                 v => GetEscapedPlaceholderKey(
-                    v.Substring(2, v.Length - 3), v.Substring(v.Length - 1)));
+                    v[2..^1], v[^1..]));
         }
 
         private Token GetIndexedPlaceholderToken(string input)
         {
             return GetPlaceholderTokenWithKey(
-                input, INDEXED_PLACEHOLDER_PATTERN, v => v.Substring(1));
+                input, _indexedPlaceholderPattern, v => v[1..]);
         }
 
         private static Token GetPlaceholderTokenWithKey(string input, Regex regex, Func<string, string> parseKey)
         {
             var token = GetTokenOnFirstMatch(input, TokenTypes.PLACEHOLDER, regex);
-            return token?.WithKey(parseKey.Invoke(token.value));
+            return token?.WithKey(parseKey.Invoke(token.Value));
         }
 
         private static string GetEscapedPlaceholderKey(string key, string quoteChar)
@@ -192,17 +192,17 @@ namespace SQL.Formatter.Core
 
         private Token GetNumberToken(string input)
         {
-            return GetTokenOnFirstMatch(input, TokenTypes.NUMBER, NUMBER_PATTERN);
+            return GetTokenOnFirstMatch(input, TokenTypes.NUMBER, _numberPattern);
         }
 
         private Token GetOperatorToken(string input)
         {
-            return GetTokenOnFirstMatch(input, TokenTypes.OPERATOR, OPERATOR_PATTERN);
+            return GetTokenOnFirstMatch(input, TokenTypes.OPERATOR, _operatorPattern);
         }
 
         private Token GetReservedWordToken(string input, Token previousToken)
         {
-            if (previousToken?.value != null && previousToken.value.Equals("."))
+            if (previousToken?.Value != null && previousToken.Value.Equals("."))
             {
                 return null;
             }
@@ -217,29 +217,29 @@ namespace SQL.Formatter.Core
         private Token GetToplevelReservedToken(string input)
         {
             return GetTokenOnFirstMatch(
-                input, TokenTypes.RESERVED_TOP_LEVEL, RESERVED_TOP_LEVEL_PATTERN);
+                input, TokenTypes.RESERVED_TOP_LEVEL, _reservedTopLevelPattern);
         }
 
         private Token GetNewlineReservedToken(string input)
         {
             return GetTokenOnFirstMatch(
-                input, TokenTypes.RESERVED_NEWLINE, RESERVED_NEWLINE_PATTERN);
+                input, TokenTypes.RESERVED_NEWLINE, _reservedNewLinePattern);
         }
 
         private Token GetTopLevelReservedTokenNoIndent(string input)
         {
             return GetTokenOnFirstMatch(
-                input, TokenTypes.RESERVED_TOP_LEVEL_NO_INDENT, RESERVED_TOP_LEVEL_NO_INDENT_PATTERN);
+                input, TokenTypes.RESERVED_TOP_LEVEL_NO_INDENT, _reservedTopLevelNoIndentPattern);
         }
 
         private Token GetPlainReservedToken(string input)
         {
-            return GetTokenOnFirstMatch(input, TokenTypes.RESERVED, RESERVED_PLAIN_PATTERN);
+            return GetTokenOnFirstMatch(input, TokenTypes.RESERVED, _reservedPlainPattern);
         }
 
         private Token GetWordToken(string input)
         {
-            return GetTokenOnFirstMatch(input, TokenTypes.WORD, WORD_PATTERN);
+            return GetTokenOnFirstMatch(input, TokenTypes.WORD, _wordPattern);
         }
 
         private static string GetFirstMatch(string input, Regex regex)

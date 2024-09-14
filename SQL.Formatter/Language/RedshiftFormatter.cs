@@ -5,7 +5,7 @@ namespace SQL.Formatter.Language
 {
     public class RedshiftFormatter : AbstractFormatter
     {
-        private static readonly List<string> ReservedWords = new List<string>{
+        private static readonly List<string> s_reservedWords = new List<string>{
         "AES128",
         "AES256",
         "ALLOWOVERWRITE",
@@ -218,7 +218,7 @@ namespace SQL.Formatter.Language
         "EVEN",
         "ALL"};
 
-        private static readonly List<string> ReservedTopLevelWords =
+        private static readonly List<string> s_reservedTopLevelWords =
             new List<string>{
                 "ADD",
                 "AFTER",
@@ -338,9 +338,9 @@ namespace SQL.Formatter.Language
                 "HIVE METASTORE",
                 "CATALOG_ROLE"};
 
-        private static readonly List<string> ReservedTopLevelWordsNoIndent = new List<string>();
+        private static readonly List<string> s_reservedTopLevelWordsNoIndent = new List<string>();
 
-        private static readonly List<string> ReservedNewlineWords =
+        private static readonly List<string> s_reservedNewlineWords =
             new List<string>{
                 "AND",
                 "ELSE",
@@ -370,10 +370,10 @@ namespace SQL.Formatter.Language
         public override DialectConfig DoDialectConfig()
         {
             return DialectConfig.Builder()
-                .ReservedWords(ReservedWords)
-                .ReservedTopLevelWords(ReservedTopLevelWords)
-                .ReservedTopLevelWordsNoIndent(ReservedTopLevelWordsNoIndent)
-                .ReservedNewlineWords(ReservedNewlineWords)
+                .ReservedWords(s_reservedWords)
+                .ReservedTopLevelWords(s_reservedTopLevelWords)
+                .ReservedTopLevelWordsNoIndent(s_reservedTopLevelWordsNoIndent)
+                .ReservedNewlineWords(s_reservedNewlineWords)
                 .StringTypes(
                     new List<string>{
                         StringLiteral.DoubleQuote, StringLiteral.SingleQuote, StringLiteral.BackQuote})

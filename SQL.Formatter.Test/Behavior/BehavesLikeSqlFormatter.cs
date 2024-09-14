@@ -452,8 +452,8 @@ namespace SQL.Formatter.Test.Behavior
 
         public static void DoesNothingWithEmptyInput(SqlFormatter.Formatter formatter)
         {
-            var result = formatter.Format("");
-            Assert.Equal("", result);
+            var result = formatter.Format(string.Empty);
+            Assert.Equal(string.Empty, result);
         }
     }
 }

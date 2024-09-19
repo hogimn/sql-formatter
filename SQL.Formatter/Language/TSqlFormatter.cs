@@ -11,7 +11,7 @@ namespace SQL.Formatter.Language
         "PROCEDURE",
         "ALL",
         "FETCH",
-        "public",
+        "PUBLIC",
         "ALTER",
         "FILE",
         "RAISERROR",

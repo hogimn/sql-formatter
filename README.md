@@ -76,6 +76,10 @@ SQL formatter supports the following dialects:
 - **spark** - [Spark][]
 - **tsql** - [SQL Server Transact-SQL][tsql]
 
+I’m currently using the default dialect for Oracle SQL, and it performs well for my needs.  
+As such, I don’t have the motivation to maintain or expand support for other dialects.  
+If you require support for additional dialects, please consider contributing to this project.  
+
 ## Extend formatters
 
 Formatters can be extended as below :

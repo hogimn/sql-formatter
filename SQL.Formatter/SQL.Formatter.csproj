@@ -7,8 +7,8 @@
     <AssemblyTitle>SQL.Formatter</AssemblyTitle>
     <Product>SQL.Formatter</Product>
     <Copyright>Copyright ©  2022</Copyright>
-    <AssemblyVersion>1.0.0.0</AssemblyVersion>
-    <FileVersion>1.0.0.0</FileVersion>
+    <Version>1.0.1</Version>
+    <PackageId>Hogimn.Sql.Formatter</PackageId>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />

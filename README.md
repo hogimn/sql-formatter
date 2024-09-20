@@ -16,7 +16,7 @@ This does not support:
 To install the Hogimn.Sql.Formatter package with NuGet, you can use the following command in your terminal or command prompt.
 
 ```bash
-dotnet add package Hogimn.Sql.Formatter --version 1.0.0
+dotnet add package Hogimn.Sql.Formatter --version 1.0.1
 ```
 
 For more details, visit the [NuGet Gallery](https://www.nuget.org/packages/Hogimn.Sql.Formatter/) page.

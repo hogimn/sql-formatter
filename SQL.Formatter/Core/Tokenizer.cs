@@ -90,7 +90,7 @@ namespace SQL.Formatter.Core
                 if (!string.IsNullOrEmpty(input))
                 {
                     token = GetNextToken(input, token);
-                    input = input[token.Value.Length..];
+                    input = input.Substring(token.Value.Length);
                     tokens.Add(token.WithWhitespaceBefore(whitespaceBefore));
                 }
             }
@@ -101,7 +101,7 @@ namespace SQL.Formatter.Core
         private static string[] FindBeforeWhitespace(string input)
         {
             var index = input.TakeWhile(char.IsWhiteSpace).Count();
-            return new[] { input[..index], input[index..] };
+            return new[] { input.Substring(0, index), input.Substring(index) };
         }
 
         private Token GetNextToken(string input, Token previousToken)
@@ -161,7 +161,7 @@ namespace SQL.Formatter.Core
         private Token GetIdentNamedPlaceholderToken(string input)
         {
             return GetPlaceholderTokenWithKey(
-                input, _indentNamedPlaceholderPattern, v => v[1..]);
+                 input, _indentNamedPlaceholderPattern, v => v.Substring(1));
         }
 
         private Token GetStringNamedPlaceholderToken(string input)
@@ -170,13 +170,13 @@ namespace SQL.Formatter.Core
                 input,
                 _stringNamedPlaceholderPattern,
                 v => GetEscapedPlaceholderKey(
-                    v[2..^1], v[^1..]));
+                    v.Substring(2, v.Length - 3), v.Substring(v.Length - 1)));
         }
 
         private Token GetIndexedPlaceholderToken(string input)
         {
             return GetPlaceholderTokenWithKey(
-                input, _indexedPlaceholderPattern, v => v[1..]);
+                input, _indexedPlaceholderPattern, v => v.Substring(1));
         }
 
         private static Token GetPlaceholderTokenWithKey(string input, Regex regex, Func<string, string> parseKey)

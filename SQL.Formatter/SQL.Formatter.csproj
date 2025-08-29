@@ -10,7 +10,6 @@
     <Version>2.0.1</Version>
     <PackageId>Hogimn.Sql.Formatter</PackageId>
     <RepositoryUrl>https://github.com/hogimn/sql-formatter</RepositoryUrl>
-    <RepositoryUrl>https://github.com/hogimn/sql-formatter</RepositoryUrl>
     <PackageTags>sql, sql-formatter, sql-beautifier</PackageTags>
     <PackageDescription>SQL Formatter is a library that formats SQL queries for better readability and consistency.</PackageDescription>
     <Authors>Hogimn</Authors>

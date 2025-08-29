@@ -26,8 +26,8 @@ namespace SQL.Formatter.Core
             _index = 0;
         }
 
-        protected Indentation Indentation => _indentation;  
-
+        protected Indentation Indentation => _indentation;
+        
         public Tokenizer Tokenizer()
         {
             return new Tokenizer(DoDialectConfig());

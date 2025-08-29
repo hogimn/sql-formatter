@@ -26,6 +26,8 @@ namespace SQL.Formatter.Core
             _index = 0;
         }
 
+        protected Indentation Indentation => _indentation;  
+
         public Tokenizer Tokenizer()
         {
             return new Tokenizer(DoDialectConfig());
@@ -120,29 +122,29 @@ namespace SQL.Formatter.Core
             return formattedQuery;
         }
 
-        private string FormatLineComment(Token token, string query)
+        protected virtual string FormatLineComment(Token token, string query)
         {
             return AddNewline(query + Show(token));
         }
 
-        private string FormatBlockComment(Token token, string query)
+        protected virtual string FormatBlockComment(Token token, string query)
         {
             return AddNewline(AddNewline(query) + IndentComment(token.Value));
         }
 
-        private string IndentComment(string comment)
+        protected virtual string IndentComment(string comment)
         {
             return comment.Replace("\n", "\n" + _indentation.GetIndent());
         }
 
-        private string FormatTopLevelReservedWordNoIndent(Token token, string query)
+        protected virtual string FormatTopLevelReservedWordNoIndent(Token token, string query)
         {
             _indentation.DecreaseTopLevel();
             query = AddNewline(query) + EqualizeWhitespace(Show(token));
             return AddNewline(query);
         }
 
-        private string FormatToplevelReservedWord(Token token, string query)
+        protected virtual string FormatToplevelReservedWord(Token token, string query)
         {
             _indentation.DecreaseTopLevel();
 
@@ -154,7 +156,7 @@ namespace SQL.Formatter.Core
             return AddNewline(query);
         }
 
-        private string FormatNewlineReservedWord(Token token, string query)
+        protected virtual string FormatNewlineReservedWord(Token token, string query)
         {
             if (Token.IsAnd(token) && Token.IsBetween(TokenLookBehind(2)))
             {
@@ -164,7 +166,7 @@ namespace SQL.Formatter.Core
             return AddNewline(query) + EqualizeWhitespace(Show(token)) + " ";
         }
 
-        private static string EqualizeWhitespace(string str)
+        protected static string EqualizeWhitespace(string str)
         {
             return Regex.Replace(str, @"\s+", " ");
         }
@@ -176,7 +178,7 @@ namespace SQL.Formatter.Core
                 TokenTypes.OPERATOR,
                 TokenTypes.RESERVED_NEWLINE};
 
-        private string FormatOpeningParentheses(Token token, string query)
+        protected virtual string FormatOpeningParentheses(Token token, string query)
         {
             if (string.IsNullOrEmpty(token.WhitespaceBefore)
                 && (TokenLookBehind() == default || !s_preserveWhitespaceFor.Contains(TokenLookBehind().Type)))
@@ -200,7 +202,7 @@ namespace SQL.Formatter.Core
             return query;
         }
 
-        private string FormatClosingParentheses(Token token, string query)
+        protected virtual string FormatClosingParentheses(Token token, string query)
         {
             if (_inlineBlock.IsActive())
             {
@@ -220,33 +222,33 @@ namespace SQL.Formatter.Core
             }
         }
 
-        private string FormatPlaceholder(Token token, string query)
+        protected virtual string FormatPlaceholder(Token token, string query)
         {
             return query + _parameters.Get(token) + " ";
         }
 
-        private string FormatComma(Token token, string query)
+        protected virtual string FormatComma(Token token, string query)
         {
             query = query.TrimEnd() + Show(token) + " ";
             return _inlineBlock.IsActive() || Token.IsLimit(_previousReservedToken) ? query : AddNewline(query);
         }
 
-        private string FormatWithSpaceAfter(Token token, string query)
+        protected virtual string FormatWithSpaceAfter(Token token, string query)
         {
             return query.TrimEnd() + Show(token) + " ";
         }
 
-        private string FormatWithoutSpaces(Token token, string query)
+        protected virtual string FormatWithoutSpaces(Token token, string query)
         {
             return query.TrimEnd() + Show(token);
         }
 
-        private string FormatWithSpaces(Token token, string query)
+        protected virtual string FormatWithSpaces(Token token, string query)
         {
             return query + Show(token) + " ";
         }
 
-        private string FormatQuerySeparator(Token token, string query)
+        protected virtual string FormatQuerySeparator(Token token, string query)
         {
             _indentation.ResetIndentation();
             return query.TrimEnd()
@@ -254,7 +256,7 @@ namespace SQL.Formatter.Core
                 + Utils.Repeat("\n", _cfg.LinesBetweenQueries == default ? 1 : _cfg.LinesBetweenQueries);
         }
 
-        private string Show(Token token)
+        protected virtual string Show(Token token)
         {
             if (_cfg.Uppercase
                 && (token.Type == TokenTypes.RESERVED
@@ -270,7 +272,7 @@ namespace SQL.Formatter.Core
             return token.Value;
         }
 
-        private string AddNewline(string query)
+        protected virtual string AddNewline(string query)
         {
             query = query.TrimEnd();
             if (!query.EndsWith("\n"))

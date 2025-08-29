@@ -1,8 +1,8 @@
 # SQL Formatter
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/hogimn/sql-formatter/blob/main/LICENSE)
-[![NuGet](https://img.shields.io/nuget/v/Hogimn.Sql.Formatter.svg)](https://www.nuget.org/packages/Hogimn.Sql.Formatter/)
-[![.NET Standard](https://img.shields.io/badge/.NET%20Standard-2.0-brightgreen.svg)](https://learn.microsoft.com/dotnet/standard/net-standard?tabs=net-standard-2-0)
-[![Build Status](https://github.com/hogimn/SqlFormatter/actions/workflows/dotnet-desktop.yml/badge.svg?branch=main)](https://github.com/hogimn/SqlFormatter/actions/workflows/dotnet-desktop.yml)
+[![](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/hogimn/sql-formatter/blob/main/LICENSE)
+[![](https://img.shields.io/nuget/v/Hogimn.Sql.Formatter.svg)](https://www.nuget.org/packages/Hogimn.Sql.Formatter/)
+[![](https://img.shields.io/badge/.NET%20Standard-2.0-brightgreen.svg)](https://learn.microsoft.com/dotnet/standard/net-standard?tabs=net-standard-2-0)
+[![](https://github.com/hogimn/SqlFormatter/actions/workflows/dotnet-desktop.yml/badge.svg?branch=main)](https://github.com/hogimn/SqlFormatter/actions/workflows/dotnet-desktop.yml)
 
 This repository contains the C# port of the popular [Java SQL formatter](https://github.com/vertical-blank/sql-formatter)
 

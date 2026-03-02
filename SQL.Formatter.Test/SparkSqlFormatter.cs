@@ -8,36 +8,36 @@ namespace SQL.Formatter.Test
 {
     public class SparkSqlFormatter
     {
-        public readonly SqlFormatter.Formatter Formatter = SqlFormatter.Of(Dialect.SparkSql);
+        private readonly SqlFormatter.Formatter _formatter = SqlFormatter.Of(Dialect.SparkSql);
 
         [Fact]
         public void BehavesLikeSqlFormatterTest()
         {
-            BehavesLikeSqlFormatter.Test(Formatter);
+            BehavesLikeSqlFormatter.Test(_formatter);
         }
 
         [Fact]
         public void CaseTest()
         {
-            Case.Test(Formatter);
+            Case.Test(_formatter);
         }
 
         [Fact]
         public void CreateTableTest()
         {
-            CreateTable.Test(Formatter);
+            CreateTable.Test(_formatter);
         }
 
         [Fact]
         public void AlterTableTest()
         {
-            AlterTable.Test(Formatter);
+            AlterTable.Test(_formatter);
         }
 
         [Fact]
         public void StringsTest()
         {
-            Strings.Test(Formatter, new List<string>
+            Strings.Test(_formatter, new List<string>
             {
                 StringLiteral.DoubleQuote,
                 StringLiteral.SingleQuote,
@@ -48,19 +48,19 @@ namespace SQL.Formatter.Test
         [Fact]
         public void BetweenTest()
         {
-            Between.Test(Formatter);
+            Between.Test(_formatter);
         }
 
         [Fact]
         public void SchemaTest()
         {
-            Schema.Test(Formatter);
+            Schema.Test(_formatter);
         }
 
         [Fact]
         public void OperatorsTest()
         {
-            Operators.Test(Formatter, new List<string>
+            Operators.Test(_formatter, new List<string>
             {
                 "!=",
                 "%",
@@ -81,7 +81,7 @@ namespace SQL.Formatter.Test
         [Fact]
         public void JoinTest()
         {
-            Join.Test(Formatter, null, new List<string>
+            Join.Test(_formatter, null, new List<string>
             {
                 "ANTI JOIN",
                 "SEMI JOIN",
@@ -118,7 +118,7 @@ namespace SQL.Formatter.Test
                 + "    ORDER BY\n"
                 + "      time\n"
                 + "  );",
-                Formatter.Format(
+                _formatter.Format(
                     "SELECT *, LAG(value) OVER wnd AS next_value FROM tbl WINDOW wnd as (PARTITION BY id ORDER BY time);"));
         }
 
@@ -131,7 +131,7 @@ namespace SQL.Formatter.Test
                 + "  window(time, \"1 hour\").end AS window_end\n"
                 + "FROM\n"
                 + "  tbl;",
-                Formatter.Format(
+                _formatter.Format(
                     "SELECT window(time, \"1 hour\").start AS window_start, window(time, \"1 hour\").end AS window_end FROM tbl;"));
         }
 
@@ -141,7 +141,7 @@ namespace SQL.Formatter.Test
             Assert.Equal(
                 "SELECT\n"
                 + "  ${var_name};",
-                Formatter.Format(
+                _formatter.Format(
                     "SELECT ${var_name};"));
         }
 
@@ -152,7 +152,7 @@ namespace SQL.Formatter.Test
                 "SELECT\n"
                 + "  'var one',\n"
                 + "  'var two';",
-                Formatter.Format(
+                _formatter.Format(
                     "SELECT $var1, ${var2};", new Dictionary<string, string>
                     {
                         { "var1", "'var one'" },

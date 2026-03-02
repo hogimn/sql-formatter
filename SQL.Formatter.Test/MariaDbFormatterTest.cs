@@ -6,12 +6,11 @@ namespace SQL.Formatter.Test
 {
     public class MariaDbFormatterTest
     {
-        public readonly SqlFormatter.Formatter Formatter = SqlFormatter.Of(Dialect.MariaDb);
-
+        private readonly SqlFormatter.Formatter _formatter = SqlFormatter.Of(Dialect.MariaDb);
         [Fact]
         public void BehavesLikeMariaDbFormatterTest()
         {
-            BehavesLikeMariaDbFormatter.Test(Formatter);
+            BehavesLikeMariaDbFormatter.Test(_formatter);
         }
     }
 }

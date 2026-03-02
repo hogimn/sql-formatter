@@ -75,7 +75,7 @@ namespace SQL.Formatter.Test
         }
 
         [Fact]
-        public void FormatsFatchFirstLikeLimit()
+        public void FormatsFetchFirstLikeLimit()
         {
             Assert.Equal(
                 "SELECT\n"

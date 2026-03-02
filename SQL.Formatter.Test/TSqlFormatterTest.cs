@@ -8,36 +8,36 @@ namespace SQL.Formatter.Test
 {
     public class TSqlFormatterTest
     {
-        public readonly SqlFormatter.Formatter Formatter = SqlFormatter.Of(Dialect.TSql);
+        private readonly SqlFormatter.Formatter _formatter = SqlFormatter.Of(Dialect.TSql);
 
         [Fact]
         public void BehavesLikeSqlFormatterTest()
         {
-            BehavesLikeSqlFormatter.Test(Formatter);
+            BehavesLikeSqlFormatter.Test(_formatter);
         }
 
         [Fact]
         public void CaseTest()
         {
-            Case.Test(Formatter);
+            Case.Test(_formatter);
         }
 
         [Fact]
         public void CreateTableTest()
         {
-            CreateTable.Test(Formatter);
+            CreateTable.Test(_formatter);
         }
 
         [Fact]
         public void AlterTableTest()
         {
-            AlterTable.Test(Formatter);
+            AlterTable.Test(_formatter);
         }
 
         [Fact]
         public void StringsTest()
         {
-            Strings.Test(Formatter, new List<string>
+            Strings.Test(_formatter, new List<string>
             {
                 StringLiteral.DoubleQuote,
                 StringLiteral.SingleQuote,
@@ -49,19 +49,19 @@ namespace SQL.Formatter.Test
         [Fact]
         public void BetweenTest()
         {
-            Between.Test(Formatter);
+            Between.Test(_formatter);
         }
 
         [Fact]
         public void SchemaTest()
         {
-            Schema.Test(Formatter);
+            Schema.Test(_formatter);
         }
 
         [Fact]
         public void OperatorsTest()
         {
-            Operators.Test(Formatter, new List<string>
+            Operators.Test(_formatter, new List<string>
             {
                 "%",
                 "&",
@@ -86,7 +86,7 @@ namespace SQL.Formatter.Test
         [Fact]
         public void JoinTest()
         {
-            Join.Test(Formatter, new List<string>
+            Join.Test(_formatter, new List<string>
             {
                 "NATURAL"
             });
@@ -100,7 +100,7 @@ namespace SQL.Formatter.Test
                 + "  Customers (ID, MoneyBalance, Address, City)\n"
                 + "VALUES\n"
                 + "  (12, -123.4, 'Skagen 2111', 'Stv');",
-                Formatter.Format(
+                _formatter.Format(
                     "INSERT Customers (ID, MoneyBalance, Address, City) VALUES (12,-123.4, 'Skagen 2111','Stv');"));
         }
 
@@ -112,7 +112,7 @@ namespace SQL.Formatter.Test
                 + "  @variable,\n"
                 + "  @\"var name\",\n"
                 + "  @[var name];",
-                Formatter.Format(
+                _formatter.Format(
                     "SELECT @variable, @\"var name\", @[var name];"));
         }
 
@@ -121,13 +121,16 @@ namespace SQL.Formatter.Test
         {
             Assert.Equal(
                 "SELECT\n"
-                + "  a,\n"
-                + "  b\n"
-                + "FROM\n"
-                + "  t\n"
-                + "  CROSS JOIN t2 on t.id = t2.id_t",
-                Formatter.Format(
-                    "SELECT a, b FROM t CROSS JOIN t2 on t.id = t2.id_t"));
+                + "  'var value',\n"
+                + "  'var value1',\n"
+                + "  'var value2';",
+                _formatter.Format(
+                    "SELECT @variable, @\"var name1\", @[var name2];", new Dictionary<string, string>
+                    {
+                        { "variable", "'var value'"},
+                        { "var name1", "'var value1'"},
+                        { "var name2", "'var value2'"},
+                    }));
         }
 
         [Fact]
@@ -135,16 +138,13 @@ namespace SQL.Formatter.Test
         {
             Assert.Equal(
                 "SELECT\n"
-                + "  'var value',\n"
-                + "  'var value1',\n"
-                + "  'var value2';",
-                Formatter.Format(
-                    "SELECT @variable, @\"var name1\", @[var name2];", new Dictionary<string, string>
-                    {
-                        { "variable", "'var value'"},
-                        { "var name1", "'var value1'"},
-                        { "var name2", "'var value2'"},
-                    }));
+                + "  a,\n"
+                + "  b\n"
+                + "FROM\n"
+                + "  t\n"
+                + "  CROSS JOIN t2 on t.id = t2.id_t",
+                _formatter.Format(
+                    "SELECT a, b FROM t CROSS JOIN t2 on t.id = t2.id_t"));
         }
     }
 }

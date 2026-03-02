@@ -8,30 +8,30 @@ namespace SQL.Formatter.Test
 {
     public class Db2FormatterTest
     {
-        public readonly SqlFormatter.Formatter Formatter = SqlFormatter.Of(Dialect.Db2);
+        private readonly SqlFormatter.Formatter _formatter = SqlFormatter.Of(Dialect.Db2);
 
         [Fact]
         public void BehavesLikeSqlFormatterTest()
         {
-            BehavesLikeSqlFormatter.Test(Formatter);
+            BehavesLikeSqlFormatter.Test(_formatter);
         }
 
         [Fact]
         public void CreateTableTest()
         {
-            CreateTable.Test(Formatter);
+            CreateTable.Test(_formatter);
         }
 
         [Fact]
         public void AlterTableTest()
         {
-            AlterTable.Test(Formatter);
+            AlterTable.Test(_formatter);
         }
 
         [Fact]
         public void StringsTest()
         {
-            Strings.Test(Formatter, new List<string>
+            Strings.Test(_formatter, new List<string>
             {
                 StringLiteral.DoubleQuote,
                 StringLiteral.SingleQuote,
@@ -42,13 +42,13 @@ namespace SQL.Formatter.Test
         [Fact]
         public void BetweenTest()
         {
-            Between.Test(Formatter);
+            Between.Test(_formatter);
         }
 
         [Fact]
         public void SchemaTest()
         {
-            Schema.Test(Formatter);
+            Schema.Test(_formatter);
         }
 
         [Fact]
@@ -63,7 +63,7 @@ namespace SQL.Formatter.Test
                 + "  col2 DESC\n"
                 + "FETCH FIRST\n"
                 + "  20 ROWS ONLY;",
-                Formatter.Format(
+                _formatter.Format(
                     "SELECT col1 FROM tbl ORDER BY col2 DESC FETCH FIRST 20 ROWS ONLY;"));
         }
     }

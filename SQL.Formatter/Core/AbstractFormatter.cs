@@ -282,7 +282,7 @@ namespace SQL.Formatter.Core
 
         protected virtual string Show(Token token)
         {
-            if (_cfg.Uppercase
+            if (_cfg.Case > CaseTypes.NONE
                 && (token.Type == TokenTypes.RESERVED
                     || token.Type == TokenTypes.RESERVED_TOP_LEVEL
                     || token.Type == TokenTypes.RESERVED_TOP_LEVEL_NO_INDENT
@@ -291,7 +291,7 @@ namespace SQL.Formatter.Core
                     || token.Type == TokenTypes.CLOSE_PAREN))
             {
                 // Note: If memory is still tight, caching upper-case values at the token generation stage is even better.
-                return token.Value.ToUpper();
+                return _cfg.Case == CaseTypes.UPPER ? token.Value.ToUpper() : token.Value.ToLower();
             }
 
             return token.Value;

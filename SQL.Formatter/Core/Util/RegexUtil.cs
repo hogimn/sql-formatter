@@ -9,7 +9,7 @@ namespace SQL.Formatter.Core.Util
     {
         private static readonly string s_escapeRegex =
             string.Join("|",
-                new List<string> { "^", "$", "\\", ".", "*", "+", "*", "?", "(", ")", "[", "]", "{", "}", "|" }
+                new List<string> { "^", "$", "\\", ".", "*", "+", "?", "(", ")", "[", "]", "{", "}", "|" }
                 .Select(spChr => "(\\" + spChr + ")"));
 
         public static readonly Regex EscapeRegexPattern = new Regex(s_escapeRegex);

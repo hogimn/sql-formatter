@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Text.RegularExpressions;
 using SQL.Formatter.Core.Util;
 using SQL.Formatter.Language;
@@ -15,6 +16,19 @@ namespace SQL.Formatter.Core
         protected Token _previousReservedToken;
         private JSLikeList<Token> _tokens;
         private int _index;
+
+        // OPTIMIZATION: Compile the regex once statically to prevent recompilation overhead
+        private static readonly Regex s_whitespaceRegex = new Regex(@"\s+", RegexOptions.Compiled);
+
+        private static readonly HashSet<TokenTypes> s_preserveWhitespaceFor =
+            new HashSet<TokenTypes> {
+                TokenTypes.OPEN_PAREN,
+                TokenTypes.LINE_COMMENT,
+                TokenTypes.OPERATOR,
+                TokenTypes.RESERVED_NEWLINE
+            };
+
+        public Func<DialectConfig> _doDialectConfigFunc;
 
         public AbstractFormatter(FormatConfig cfg)
         {
@@ -41,95 +55,97 @@ namespace SQL.Formatter.Core
         public string Format(string query)
         {
             _tokens = Tokenizer().Tokenize(query);
-            var formattedQuery = GetFormattedQueryFromTokens();
-
-            return formattedQuery.Trim();
+            return GetFormattedQueryFromTokens().Trim();
         }
 
         private string GetFormattedQueryFromTokens()
         {
-            var formattedQuery = string.Empty;
+            // OPTIMIZATION: Use a StringBuilder initialized with an estimated capacity to prevent resizing.
+            // If you know average query sizes, set this capacity accordingly.
+            var formattedQuery = new StringBuilder(1024);
 
             var index = -1;
             foreach (Token t in _tokens)
             {
                 _index = ++index;
-
                 var token = TokenOverride(t);
 
                 if (token.Type == TokenTypes.LINE_COMMENT)
                 {
-                    formattedQuery = FormatLineComment(token, formattedQuery);
+                    FormatLineComment(token, formattedQuery);
                 }
                 else if (token.Type == TokenTypes.BLOCK_COMMENT)
                 {
-                    formattedQuery = FormatBlockComment(token, formattedQuery);
+                    FormatBlockComment(token, formattedQuery);
                 }
                 else if (token.Type == TokenTypes.RESERVED_TOP_LEVEL)
                 {
-                    formattedQuery = FormatToplevelReservedWord(token, formattedQuery);
+                    FormatToplevelReservedWord(token, formattedQuery);
                     _previousReservedToken = token;
                 }
                 else if (token.Type == TokenTypes.RESERVED_TOP_LEVEL_NO_INDENT)
                 {
-                    formattedQuery = FormatTopLevelReservedWordNoIndent(token, formattedQuery);
+                    FormatTopLevelReservedWordNoIndent(token, formattedQuery);
                     _previousReservedToken = token;
                 }
                 else if (token.Type == TokenTypes.RESERVED_NEWLINE)
                 {
-                    formattedQuery = FormatNewlineReservedWord(token, formattedQuery);
+                    FormatNewlineReservedWord(token, formattedQuery);
                     _previousReservedToken = token;
                 }
                 else if (token.Type == TokenTypes.RESERVED)
                 {
-                    formattedQuery = FormatWithSpaces(token, formattedQuery);
+                    FormatWithSpaces(token, formattedQuery);
                     _previousReservedToken = token;
                 }
                 else if (token.Type == TokenTypes.OPEN_PAREN)
                 {
-                    formattedQuery = FormatOpeningParentheses(token, formattedQuery);
+                    FormatOpeningParentheses(token, formattedQuery);
                 }
                 else if (token.Type == TokenTypes.CLOSE_PAREN)
                 {
-                    formattedQuery = FormatClosingParentheses(token, formattedQuery);
+                    FormatClosingParentheses(token, formattedQuery);
                 }
                 else if (token.Type == TokenTypes.PLACEHOLDER)
                 {
-                    formattedQuery = FormatPlaceholder(token, formattedQuery);
+                    FormatPlaceholder(token, formattedQuery);
                 }
                 else if (token.Value.Equals(","))
                 {
-                    formattedQuery = FormatComma(token, formattedQuery);
+                    FormatComma(token, formattedQuery);
                 }
                 else if (token.Value.Equals(":"))
                 {
-                    formattedQuery = FormatWithSpaceAfter(token, formattedQuery);
+                    FormatWithSpaceAfter(token, formattedQuery);
                 }
                 else if (token.Value.Equals("."))
                 {
-                    formattedQuery = FormatWithoutSpaces(token, formattedQuery);
+                    FormatWithoutSpaces(token, formattedQuery);
                 }
                 else if (token.Value.Equals(";"))
                 {
-                    formattedQuery = FormatQuerySeparator(token, formattedQuery);
+                    FormatQuerySeparator(token, formattedQuery);
                 }
                 else
                 {
-                    formattedQuery = FormatWithSpaces(token, formattedQuery);
+                    FormatWithSpaces(token, formattedQuery);
                 }
             }
 
-            return formattedQuery;
+            return formattedQuery.ToString();
         }
 
-        protected virtual string FormatLineComment(Token token, string query)
+        protected virtual void FormatLineComment(Token token, StringBuilder query)
         {
-            return AddNewline(query + Show(token));
+            query.Append(Show(token));
+            AddNewline(query);
         }
 
-        protected virtual string FormatBlockComment(Token token, string query)
+        protected virtual void FormatBlockComment(Token token, StringBuilder query)
         {
-            return AddNewline(AddNewline(query) + IndentComment(token.Value));
+            AddNewline(query);
+            query.Append(IndentComment(token.Value));
+            AddNewline(query);
         }
 
         protected virtual string IndentComment(string comment)
@@ -137,56 +153,51 @@ namespace SQL.Formatter.Core
             return comment.Replace("\n", "\n" + _indentation.GetIndent());
         }
 
-        protected virtual string FormatTopLevelReservedWordNoIndent(Token token, string query)
+        protected virtual void FormatTopLevelReservedWordNoIndent(Token token, StringBuilder query)
         {
             _indentation.DecreaseTopLevel();
-            query = AddNewline(query) + EqualizeWhitespace(Show(token));
-            return AddNewline(query);
+            AddNewline(query);
+            query.Append(EqualizeWhitespace(Show(token)));
+            AddNewline(query);
         }
 
-        protected virtual string FormatToplevelReservedWord(Token token, string query)
+        protected virtual void FormatToplevelReservedWord(Token token, StringBuilder query)
         {
             _indentation.DecreaseTopLevel();
-
-            query = AddNewline(query);
-
+            AddNewline(query);
             _indentation.IncreaseTopLevel();
 
-            query += EqualizeWhitespace(Show(token));
-            return AddNewline(query);
+            query.Append(EqualizeWhitespace(Show(token)));
+            AddNewline(query);
         }
 
-        protected virtual string FormatNewlineReservedWord(Token token, string query)
+        protected virtual void FormatNewlineReservedWord(Token token, StringBuilder query)
         {
             if (Token.IsAnd(token) && Token.IsBetween(TokenLookBehind(2)))
             {
-                return FormatWithSpaces(token, query);
+                FormatWithSpaces(token, query);
+                return;
             }
 
-            return AddNewline(query) + EqualizeWhitespace(Show(token)) + " ";
+            AddNewline(query);
+            query.Append(EqualizeWhitespace(Show(token))).Append(" ");
         }
 
         protected static string EqualizeWhitespace(string str)
         {
-            return Regex.Replace(str, @"\s+", " ");
+            // Uses the statically compiled regex
+            return s_whitespaceRegex.Replace(str, " ");
         }
 
-        private static readonly HashSet<TokenTypes> s_preserveWhitespaceFor =
-            new HashSet<TokenTypes> {
-                TokenTypes.OPEN_PAREN,
-                TokenTypes.LINE_COMMENT,
-                TokenTypes.OPERATOR,
-                TokenTypes.RESERVED_NEWLINE};
-
-        protected virtual string FormatOpeningParentheses(Token token, string query)
+        protected virtual void FormatOpeningParentheses(Token token, StringBuilder query)
         {
             if (string.IsNullOrEmpty(token.WhitespaceBefore)
                 && (TokenLookBehind() == default || !s_preserveWhitespaceFor.Contains(TokenLookBehind().Type)))
             {
-                query = query.TrimEnd();
+                TrimEnd(query);
             }
 
-            query += Show(token);
+            query.Append(Show(token));
 
             _inlineBlock.BeginIfPossible(_tokens, _index);
 
@@ -195,19 +206,17 @@ namespace SQL.Formatter.Core
                 _indentation.IncreaseBlockLevel();
                 if (!_cfg.SkipWhitespaceNearBlockParentheses)
                 {
-                    query = AddNewline(query);
+                    AddNewline(query);
                 }
             }
-
-            return query;
         }
 
-        protected virtual string FormatClosingParentheses(Token token, string query)
+        protected virtual void FormatClosingParentheses(Token token, StringBuilder query)
         {
             if (_inlineBlock.IsActive())
             {
                 _inlineBlock.End();
-                return FormatWithSpaceAfter(token, query);
+                FormatWithSpaceAfter(token, query);
             }
             else
             {
@@ -215,45 +224,60 @@ namespace SQL.Formatter.Core
 
                 if (!_cfg.SkipWhitespaceNearBlockParentheses)
                 {
-                    return FormatWithSpaces(token, AddNewline(query));
+                    AddNewline(query);
+                    FormatWithSpaces(token, query);
                 }
-
-                return FormatWithoutSpaces(token, query);
+                else
+                {
+                    FormatWithoutSpaces(token, query);
+                }
             }
         }
 
-        protected virtual string FormatPlaceholder(Token token, string query)
+        protected virtual void FormatPlaceholder(Token token, StringBuilder query)
         {
-            return query + _parameters.Get(token) + " ";
+            query.Append(_parameters.Get(token)).Append(" ");
         }
 
-        protected virtual string FormatComma(Token token, string query)
+        protected virtual void FormatComma(Token token, StringBuilder query)
         {
-            query = query.TrimEnd() + Show(token) + " ";
-            return _inlineBlock.IsActive() || Token.IsLimit(_previousReservedToken) ? query : AddNewline(query);
+            TrimEnd(query);
+            query.Append(Show(token)).Append(" ");
+
+            if (!_inlineBlock.IsActive() && !Token.IsLimit(_previousReservedToken))
+            {
+                AddNewline(query);
+            }
         }
 
-        protected virtual string FormatWithSpaceAfter(Token token, string query)
+        protected virtual void FormatWithSpaceAfter(Token token, StringBuilder query)
         {
-            return query.TrimEnd() + Show(token) + " ";
+            TrimEnd(query);
+            query.Append(Show(token)).Append(" ");
         }
 
-        protected virtual string FormatWithoutSpaces(Token token, string query)
+        protected virtual void FormatWithoutSpaces(Token token, StringBuilder query)
         {
-            return query.TrimEnd() + Show(token);
+            TrimEnd(query);
+            query.Append(Show(token));
         }
 
-        protected virtual string FormatWithSpaces(Token token, string query)
+        protected virtual void FormatWithSpaces(Token token, StringBuilder query)
         {
-            return query + Show(token) + " ";
+            query.Append(Show(token)).Append(" ");
         }
 
-        protected virtual string FormatQuerySeparator(Token token, string query)
+        protected virtual void FormatQuerySeparator(Token token, StringBuilder query)
         {
             _indentation.ResetIndentation();
-            return query.TrimEnd()
-                + Show(token)
-                + Utils.Repeat("\n", _cfg.LinesBetweenQueries == default ? 1 : _cfg.LinesBetweenQueries);
+            TrimEnd(query);
+            query.Append(Show(token));
+
+            var lines = _cfg.LinesBetweenQueries == default ? 1 : _cfg.LinesBetweenQueries;
+            for (var i = 0; i < lines; i++)
+            {
+                query.Append('\n');
+            }
         }
 
         protected virtual string Show(Token token)
@@ -266,49 +290,42 @@ namespace SQL.Formatter.Core
                     || token.Type == TokenTypes.OPEN_PAREN
                     || token.Type == TokenTypes.CLOSE_PAREN))
             {
+                // Note: If memory is still tight, caching upper-case values at the token generation stage is even better.
                 return token.Value.ToUpper();
             }
 
             return token.Value;
         }
 
-        protected virtual string AddNewline(string query)
+        protected virtual void AddNewline(StringBuilder query)
         {
-            query = query.TrimEnd();
-            if (!query.EndsWith("\n"))
+            TrimEnd(query);
+            // Replaces expensive .EndsWith("\n") with a fast char index lookup
+            if (query.Length == 0 || query[query.Length - 1] != '\n')
             {
-                query += "\n";
+                query.Append('\n');
             }
 
-            return query + _indentation.GetIndent();
+            query.Append(_indentation.GetIndent());
         }
 
-        protected Token TokenLookBehind()
+        // OPTIMIZATION: Extremely fast inline trailing whitespace removal
+        protected void TrimEnd(StringBuilder sb)
         {
-            return TokenLookBehind(1);
+            while (sb.Length > 0 && char.IsWhiteSpace(sb[sb.Length - 1]))
+            {
+                sb.Length--;
+            }
         }
 
-        protected Token TokenLookBehind(int n)
-        {
-            return _tokens.Get(_index - n);
-        }
-
-        protected Token TokenLookAhead()
-        {
-            return TokenLookAhead(1);
-        }
-
-        protected Token TokenLookAhead(int n)
-        {
-            return _tokens.Get(_index + n);
-
-        }
+        protected Token TokenLookBehind() => TokenLookBehind(1);
+        protected Token TokenLookBehind(int n) => _tokens.Get(_index - n);
+        protected Token TokenLookAhead() => TokenLookAhead(1);
+        protected Token TokenLookAhead(int n) => _tokens.Get(_index + n);
 
         public virtual DialectConfig DoDialectConfig()
         {
             return _doDialectConfigFunc.Invoke();
         }
-
-        public Func<DialectConfig> _doDialectConfigFunc;
     }
 }

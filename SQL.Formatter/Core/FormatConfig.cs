@@ -24,16 +24,15 @@ namespace SQL.Formatter.Core
             Params parameters,
             bool uppercase,
             int linesBetweenQueries,
-            bool skipWhitespaceNearBlockParentheses) 
-            
+            bool skipWhitespaceNearBlockParentheses)
             : this(
-                  indent, 
-                  maxColumnLength, 
-                  parameters, 
-                  uppercase ? CaseTypes.UPPER : CaseTypes.NONE, 
-                  linesBetweenQueries, 
+                  indent,
+                  maxColumnLength,
+                  parameters,
+                  uppercase ? CaseTypes.UPPER : CaseTypes.NONE,
+                  linesBetweenQueries,
                   skipWhitespaceNearBlockParentheses)
-        {            
+        {
         }
 
         public FormatConfig(

@@ -6,13 +6,13 @@ namespace SQL.Formatter.Test
 {
     public class FormatConfigTest
     {
-        private static readonly SqlFormatter.Formatter Formatter = SqlFormatter.Of(Dialect.StandardSql);
+        private static readonly SqlFormatter.Formatter s_formatter = SqlFormatter.Of(Dialect.StandardSql);
 
         [Fact]
         public void Upper_FormatsKeywordsInUppercase()
         {
             var cfg = FormatConfig.Builder().Case(CaseTypes.UPPER).Build();
-            var result = Formatter.Format("select id from users where id = 1", cfg);
+            var result = s_formatter.Format("select id from users where id = 1", cfg);
 
             Assert.Equal(
                 "SELECT\n"
@@ -30,7 +30,7 @@ namespace SQL.Formatter.Test
 #pragma warning disable CS0618
             var cfg = FormatConfig.Builder().Uppercase(true).Build();
 #pragma warning restore CS0618
-            var result = Formatter.Format("select id from users where id = 1", cfg);
+            var result = s_formatter.Format("select id from users where id = 1", cfg);
 
             Assert.Equal(
                 "SELECT\n"
@@ -48,7 +48,7 @@ namespace SQL.Formatter.Test
 #pragma warning disable CS0618
             var cfg = FormatConfig.Builder().Uppercase(false).Build();
 #pragma warning restore CS0618
-            var result = Formatter.Format("select id FROM users", cfg);
+            var result = s_formatter.Format("select id FROM users", cfg);
 
             Assert.Equal(
                 "select\n"
@@ -62,7 +62,7 @@ namespace SQL.Formatter.Test
         public void Lower_FormatsKeywordsInLowercase()
         {
             var cfg = FormatConfig.Builder().Case(CaseTypes.LOWER).Build();
-            var result = Formatter.Format("SELECT id FROM Users WHERE id = 1", cfg);
+            var result = s_formatter.Format("SELECT id FROM Users WHERE id = 1", cfg);
 
             Assert.Equal(
                 "select\n"
@@ -104,7 +104,7 @@ namespace SQL.Formatter.Test
                 .Case(CaseTypes.UPPER)
                 .Build();
 
-            var result = Formatter.Format("select id from users", cfg);
+            var result = s_formatter.Format("select id from users", cfg);
 
             Assert.Equal(
                 "SELECT\n"
@@ -122,7 +122,7 @@ namespace SQL.Formatter.Test
                 .Case(CaseTypes.LOWER)
                 .Build();
 
-            var result = Formatter.Format("SELECT id FROM users", cfg);
+            var result = s_formatter.Format("SELECT id FROM users", cfg);
 
             Assert.Equal(
                 "select\n"
@@ -136,7 +136,7 @@ namespace SQL.Formatter.Test
         public void NeitherUppercaseNorLowercase_PreservesKeywordCase()
         {
             var cfg = FormatConfig.Builder().Build();
-            var result = Formatter.Format("SeLeCt id FrOm users", cfg);
+            var result = s_formatter.Format("SeLeCt id FrOm users", cfg);
 
             Assert.Equal(
                 "SeLeCt\n"
@@ -150,7 +150,7 @@ namespace SQL.Formatter.Test
         public void None_PreservesKeywordCase()
         {
             var cfg = FormatConfig.Builder().Case(CaseTypes.NONE).Build();
-            var result = Formatter.Format("SeLeCt id FrOm users", cfg);
+            var result = s_formatter.Format("SeLeCt id FrOm users", cfg);
 
             Assert.Equal(
                 "SeLeCt\n"

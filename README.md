@@ -46,7 +46,7 @@ You can also pass `FormatConfig` object built by builder:
 SqlFormatter.Format("SELECT * FROM tbl",
   FormatConfig.Builder()
     .Indent("    ") // Defaults to two spaces
-    .Uppercase(true) // Defaults to false (not safe to use when SQL dialect has case-sensitive identifiers)
+    .Case(CaseTypes.UPPER) // Defaults to NONE (not safe to use when SQL dialect has case-sensitive identifiers)
     .LinesBetweenQueries(2) // Defaults to 1
     .MaxColumnLength(100) // Defaults to 50
     .Params(new List<string>{"a", "b", "c"}) // Dictionary or List. See Placeholders replacement.

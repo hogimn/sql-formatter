@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace SQL.Formatter.Core
 {
@@ -10,10 +11,13 @@ namespace SQL.Formatter.Core
         public readonly string Indent;
         public readonly int MaxColumnLength;
         public readonly Params Parameters;
+        [Obsolete("Use Case instead of Uppercase")]
         public readonly bool Uppercase;
+        public readonly CaseTypes Case;
         public readonly int LinesBetweenQueries;
         public readonly bool SkipWhitespaceNearBlockParentheses;
 
+        [Obsolete("Use the constructor with caseType instead of uppercase")]
         public FormatConfig(
             string indent,
             int maxColumnLength,
@@ -21,11 +25,31 @@ namespace SQL.Formatter.Core
             bool uppercase,
             int linesBetweenQueries,
             bool skipWhitespaceNearBlockParentheses)
+            : this(
+                  indent,
+                  maxColumnLength,
+                  parameters,
+                  uppercase ? CaseTypes.UPPER : CaseTypes.NONE,
+                  linesBetweenQueries,
+                  skipWhitespaceNearBlockParentheses)
+        {
+        }
+
+        public FormatConfig(
+            string indent,
+            int maxColumnLength,
+            Params parameters,
+            CaseTypes caseType,
+            int linesBetweenQueries,
+            bool skipWhitespaceNearBlockParentheses)
         {
             Indent = indent;
             MaxColumnLength = maxColumnLength;
             Parameters = parameters == null ? Params.Empty : parameters;
-            Uppercase = uppercase;
+            Case = caseType;
+#pragma warning disable CS0618
+            Uppercase = caseType == CaseTypes.UPPER;
+#pragma warning restore CS0618
             LinesBetweenQueries = linesBetweenQueries;
             SkipWhitespaceNearBlockParentheses = skipWhitespaceNearBlockParentheses;
         }
@@ -40,7 +64,7 @@ namespace SQL.Formatter.Core
             private string _indent = DefaultIndent;
             private int _maxColumnLength = DefaultColumnMaxLength;
             private Params _parameters;
-            private bool _uppercase;
+            private CaseTypes _case;
             private int _linesBetweenQueries;
             private bool _skipWhitespaceNearBlockParentheses;
 
@@ -76,9 +100,17 @@ namespace SQL.Formatter.Core
                 return Params(Core.Params.Of(parameters));
             }
 
+            [Obsolete("Use Case instead of Uppercase")]
             public FormatConfigBuilder Uppercase(bool uppercase)
             {
-                _uppercase = uppercase;
+                _case = uppercase ? CaseTypes.UPPER : CaseTypes.NONE;
+
+                return this;
+            }
+
+            public FormatConfigBuilder Case(CaseTypes caseType)
+            {
+                _case = caseType;
                 return this;
             }
 
@@ -100,7 +132,7 @@ namespace SQL.Formatter.Core
                     _indent,
                     _maxColumnLength,
                     _parameters,
-                    _uppercase,
+                    _case,
                     _linesBetweenQueries,
                     _skipWhitespaceNearBlockParentheses);
             }

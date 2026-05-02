@@ -7,7 +7,7 @@
     <AssemblyTitle>SQL.Formatter</AssemblyTitle>
     <Product>SQL.Formatter</Product>
     <Copyright>Copyright ©  2022</Copyright>
-    <Version>2.0.2</Version>
+    <Version>2.0.3</Version>
     <PackageId>Hogimn.Sql.Formatter</PackageId>
     <RepositoryUrl>https://github.com/hogimn/sql-formatter</RepositoryUrl>
     <PackageTags>sql, sql-formatter, sql-beautifier</PackageTags>

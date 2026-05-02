@@ -1,4 +1,4 @@
-namespace SQL.Formatter.Core
+﻿namespace SQL.Formatter.Core
 {
     public enum CaseTypes
     {

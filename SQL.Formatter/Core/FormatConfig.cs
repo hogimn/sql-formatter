@@ -55,7 +55,6 @@ namespace SQL.Formatter.Core
             SkipWhitespaceNearBlockParentheses = skipWhitespaceNearBlockParentheses;
         }
 
-
         public static FormatConfigBuilder Builder()
         {
             return new FormatConfigBuilder();

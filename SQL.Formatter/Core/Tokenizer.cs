@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text.RegularExpressions;
 using SQL.Formatter.Core.Util;
 
@@ -76,181 +75,135 @@ namespace SQL.Formatter.Core
                     RegexUtil.CreateStringPattern(new JSLikeList<string>(cfg.StringTypes)));
         }
 
+        private (int offset, int length) SkipWhitespace(string input, int start)
+        {
+            var current = start;
+            while (current < input.Length && char.IsWhiteSpace(input[current]))
+            {
+                current++;
+            }
+
+            return (start, current - start);
+        }
+
         public JSLikeList<Token> Tokenize(string input)
         {
             var tokens = new List<Token>();
-            Token token = null;
+            Token previousToken = default;
+            var currentIndex = 0;
 
-            while (!string.IsNullOrEmpty(input))
+            while (currentIndex < input.Length)
             {
-                var findBeforeWhitespace = FindBeforeWhitespace(input);
-                var whitespaceBefore = findBeforeWhitespace[0];
-                input = findBeforeWhitespace[1];
+                var (wsOffset, wsLen) = SkipWhitespace(input, currentIndex);
+                currentIndex += wsLen;
 
-                if (!string.IsNullOrEmpty(input))
+                if (currentIndex >= input.Length)
                 {
-                    token = GetNextToken(input, token);
-                    input = input.Substring(token.Value.Length);
-                    tokens.Add(token.WithWhitespaceBefore(whitespaceBefore));
+                    break;
+                }
+
+                var token = GetNextToken(input, currentIndex, previousToken);
+
+                if (token != null)
+                {
+                    tokens.Add(token.WithWhitespace(input, wsOffset, wsLen));
+                    currentIndex += token.Value.Length;
+                    previousToken = token;
+                }
+                else
+                {
+                    currentIndex++;
                 }
             }
 
             return new JSLikeList<Token>(tokens);
         }
 
-        private static string[] FindBeforeWhitespace(string input)
-        {
-            var index = input.TakeWhile(char.IsWhiteSpace).Count();
-            return new[] { input.Substring(0, index), input.Substring(index) };
-        }
-
-        private Token GetNextToken(string input, Token previousToken)
+        private Token GetNextToken(string input, int offset, Token previousToken)
         {
             return Utils.FirstNotnull(
-                () => GetCommentToken(input),
-                () => GetStringToken(input),
-                () => GetOpenParenToken(input),
-                () => GetCloseParenToken(input),
-                () => GetPlaceholderToken(input),
-                () => GetNumberToken(input),
-                () => GetReservedWordToken(input, previousToken),
-                () => GetWordToken(input),
-                () => GetOperatorToken(input));
+                () => GetCommentToken(input, offset),
+                () => GetStringToken(input, offset),
+                () => GetOpenParenToken(input, offset),
+                () => GetCloseParenToken(input, offset),
+                () => GetPlaceholderToken(input, offset),
+                () => GetNumberToken(input, offset),
+                () => GetReservedWordToken(input, offset, previousToken),
+                () => GetWordToken(input, offset),
+                () => GetOperatorToken(input, offset));
         }
 
-        private Token GetCommentToken(string input)
+        private Token GetCommentToken(string input, int offset)
         {
             return Utils.FirstNotnull(
-                () => GetLineCommentToken(input),
-                () => GetBlockCommentToken(input));
+                () => GetTokenOnFirstMatch(input, offset, TokenTypes.LINE_COMMENT, _lineCommentPattern),
+                () => GetTokenOnFirstMatch(input, offset, TokenTypes.BLOCK_COMMENT, _blockCommentPattern));
         }
 
-        private Token GetLineCommentToken(string input)
-        {
-            return GetTokenOnFirstMatch(input, TokenTypes.LINE_COMMENT, _lineCommentPattern);
-        }
+        private Token GetStringToken(string input, int offset) =>
+            GetTokenOnFirstMatch(input, offset, TokenTypes.STRING, _stringPattern);
 
-        private Token GetBlockCommentToken(string input)
-        {
-            return GetTokenOnFirstMatch(input, TokenTypes.BLOCK_COMMENT, _blockCommentPattern);
-        }
+        private Token GetOpenParenToken(string input, int offset) =>
+            GetTokenOnFirstMatch(input, offset, TokenTypes.OPEN_PAREN, _openParenPattern);
 
-        private Token GetStringToken(string input)
-        {
-            return GetTokenOnFirstMatch(input, TokenTypes.STRING, _stringPattern);
-        }
+        private Token GetCloseParenToken(string input, int offset) =>
+            GetTokenOnFirstMatch(input, offset, TokenTypes.CLOSE_PAREN, _closeParenPattern);
 
-        private Token GetOpenParenToken(string input)
-        {
-            return GetTokenOnFirstMatch(input, TokenTypes.OPEN_PAREN, _openParenPattern);
-        }
-
-        private Token GetCloseParenToken(string input)
-        {
-            return GetTokenOnFirstMatch(input, TokenTypes.CLOSE_PAREN, _closeParenPattern);
-        }
-
-        private Token GetPlaceholderToken(string input)
+        private Token GetPlaceholderToken(string input, int offset)
         {
             return Utils.FirstNotnull(
-                () => GetIdentNamedPlaceholderToken(input),
-                () => GetStringNamedPlaceholderToken(input),
-                () => GetIndexedPlaceholderToken(input));
+                () => GetPlaceholderTokenWithKey(input, offset, _indentNamedPlaceholderPattern, v => v.Substring(1)),
+                () => GetPlaceholderTokenWithKey(input, offset, _stringNamedPlaceholderPattern, v =>
+                {
+                    return GetEscapedPlaceholderKey(v.Substring(2, v.Length - 3), v.Substring(v.Length - 1));
+                }),
+                () => GetPlaceholderTokenWithKey(input, offset, _indexedPlaceholderPattern, v => v.Substring(1)));
         }
 
-        private Token GetIdentNamedPlaceholderToken(string input)
+        private static Token GetPlaceholderTokenWithKey(string input, int offset, Regex regex, Func<string, string> parseKey)
         {
-            return GetPlaceholderTokenWithKey(
-                 input, _indentNamedPlaceholderPattern, v => v.Substring(1));
-        }
-
-        private Token GetStringNamedPlaceholderToken(string input)
-        {
-            return GetPlaceholderTokenWithKey(
-                input,
-                _stringNamedPlaceholderPattern,
-                v => GetEscapedPlaceholderKey(
-                    v.Substring(2, v.Length - 3), v.Substring(v.Length - 1)));
-        }
-
-        private Token GetIndexedPlaceholderToken(string input)
-        {
-            return GetPlaceholderTokenWithKey(
-                input, _indexedPlaceholderPattern, v => v.Substring(1));
-        }
-
-        private static Token GetPlaceholderTokenWithKey(string input, Regex regex, Func<string, string> parseKey)
-        {
-            var token = GetTokenOnFirstMatch(input, TokenTypes.PLACEHOLDER, regex);
+            var token = GetTokenOnFirstMatch(input, offset, TokenTypes.PLACEHOLDER, regex);
             return token?.WithKey(parseKey.Invoke(token.Value));
         }
 
-        private static string GetEscapedPlaceholderKey(string key, string quoteChar)
+        private static string GetEscapedPlaceholderKey(string key, string quoteChar) =>
+            key.Replace(RegexUtil.EscapeRegExp("\\") + quoteChar, quoteChar);
+
+        private Token GetNumberToken(string input, int offset) =>
+            GetTokenOnFirstMatch(input, offset, TokenTypes.NUMBER, _numberPattern);
+
+        private Token GetOperatorToken(string input, int offset) =>
+            GetTokenOnFirstMatch(input, offset, TokenTypes.OPERATOR, _operatorPattern);
+
+        private Token GetReservedWordToken(string input, int offset, Token previousToken)
         {
-            return key.Replace(RegexUtil.EscapeRegExp("\\") + quoteChar, quoteChar);
+            return previousToken?.Value == "."
+                ? default
+                : Utils.FirstNotnull(
+                () => GetTokenOnFirstMatch(input, offset, TokenTypes.RESERVED_TOP_LEVEL, _reservedTopLevelPattern),
+                () => GetTokenOnFirstMatch(input, offset, TokenTypes.RESERVED_NEWLINE, _reservedNewLinePattern),
+                () => GetTokenOnFirstMatch(input, offset, TokenTypes.RESERVED_TOP_LEVEL_NO_INDENT, _reservedTopLevelNoIndentPattern),
+                () => GetTokenOnFirstMatch(input, offset, TokenTypes.RESERVED, _reservedPlainPattern));
         }
 
-        private Token GetNumberToken(string input)
-        {
-            return GetTokenOnFirstMatch(input, TokenTypes.NUMBER, _numberPattern);
-        }
+        private Token GetWordToken(string input, int offset) =>
+            GetTokenOnFirstMatch(input, offset, TokenTypes.WORD, _wordPattern);
 
-        private Token GetOperatorToken(string input)
+        private static Token GetTokenOnFirstMatch(string input, int offset, TokenTypes type, Regex regex)
         {
-            return GetTokenOnFirstMatch(input, TokenTypes.OPERATOR, _operatorPattern);
-        }
-
-        private Token GetReservedWordToken(string input, Token previousToken)
-        {
-            if (previousToken?.Value != null && previousToken.Value.Equals("."))
+            if (regex == null)
             {
-                return null;
+                return default;
             }
 
-            return Utils.FirstNotnull(
-                () => GetToplevelReservedToken(input),
-                () => GetNewlineReservedToken(input),
-                () => GetTopLevelReservedTokenNoIndent(input),
-                () => GetPlainReservedToken(input));
-        }
+            var match = regex.Match(input, offset, input.Length - offset);
 
-        private Token GetToplevelReservedToken(string input)
-        {
-            return GetTokenOnFirstMatch(
-                input, TokenTypes.RESERVED_TOP_LEVEL, _reservedTopLevelPattern);
-        }
+            if (match.Success && match.Index == offset)
+            {
+                return new Token(type, match.Value);
+            }
 
-        private Token GetNewlineReservedToken(string input)
-        {
-            return GetTokenOnFirstMatch(
-                input, TokenTypes.RESERVED_NEWLINE, _reservedNewLinePattern);
-        }
-
-        private Token GetTopLevelReservedTokenNoIndent(string input)
-        {
-            return GetTokenOnFirstMatch(
-                input, TokenTypes.RESERVED_TOP_LEVEL_NO_INDENT, _reservedTopLevelNoIndentPattern);
-        }
-
-        private Token GetPlainReservedToken(string input)
-        {
-            return GetTokenOnFirstMatch(input, TokenTypes.RESERVED, _reservedPlainPattern);
-        }
-
-        private Token GetWordToken(string input)
-        {
-            return GetTokenOnFirstMatch(input, TokenTypes.WORD, _wordPattern);
-        }
-
-        private static string GetFirstMatch(string input, Regex regex)
-        {
-            return regex?.Match(input).Value ?? string.Empty;
-        }
-
-        private static Token GetTokenOnFirstMatch(string input, TokenTypes type, Regex regex)
-        {
-            var match = GetFirstMatch(input, regex);
-            return match.Equals(string.Empty) ? default : new Token(type, match);
+            return default;
         }
     }
 }

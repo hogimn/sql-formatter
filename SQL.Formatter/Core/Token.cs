@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace SQL.Formatter.Core
 {
@@ -8,44 +7,52 @@ namespace SQL.Formatter.Core
         public readonly TokenTypes Type;
         public readonly string Value;
         public readonly string Regex;
-        public readonly string WhitespaceBefore;
         public readonly string Key;
 
-        public Token(TokenTypes type, string value, string regex, string whitespaceBefore, string key)
+        private readonly string _input;
+        public readonly int WhitespaceStart;
+        public readonly int WhitespaceLength;
+
+        public string WhitespaceBefore =>
+            (_input != null && WhitespaceLength > 0)
+            ? _input.Substring(WhitespaceStart, WhitespaceLength)
+            : string.Empty;
+
+        public Token(
+            TokenTypes type,
+            string value,
+            string regex = null,
+            string key = null,
+            string input = null,
+            int wsStart = 0,
+            int wsLen = 0)
         {
             Type = type;
             Value = value;
             Regex = regex;
-            WhitespaceBefore = whitespaceBefore;
             Key = key;
+            _input = input;
+            WhitespaceStart = wsStart;
+            WhitespaceLength = wsLen;
         }
 
-        public Token(TokenTypes type, string value, string regex, string whitespaceBefore)
-            : this(type, value, regex, whitespaceBefore, null) { }
-
-        public Token(TokenTypes type, string value, string regex)
-            : this(type, value, regex, null) { }
-
-        public Token(TokenTypes type, string value)
-            : this(type, value, null) { }
-
-        public Token WithWhitespaceBefore(string whitespaceBefore)
+        public Token WithWhitespace(string input, int start, int length)
         {
-            return new Token(Type, Value, Regex, whitespaceBefore, Key);
+            return new Token(Type, Value, Regex, Key, input, start, length);
         }
 
         public Token WithKey(string key)
         {
-            return new Token(Type, Value, Regex, WhitespaceBefore, key);
+            return new Token(Type, Value, Regex, key, _input, WhitespaceStart, WhitespaceLength);
         }
 
         public override string ToString()
         {
-            return "type: " + Type + ", value: [" + Value + "], regex: /" + Regex + "/, key:" + Key;
+            return $"type: {Type}, value: [{Value}], regex: /{Regex}/, key: {Key}";
         }
 
         private static readonly Regex s_and =
-            new Regex("^AND$", RegexOptions.IgnoreCase);
+             new Regex("^AND$", RegexOptions.IgnoreCase);
         private static readonly Regex s_between =
             new Regex("^BETWEEN$", RegexOptions.IgnoreCase);
         private static readonly Regex s_limit =
@@ -59,44 +66,30 @@ namespace SQL.Formatter.Core
         private static readonly Regex s_end =
             new Regex("^END$", RegexOptions.IgnoreCase);
 
-        private static Func<Token, bool> IsToken(TokenTypes type, Regex regex)
+        private static bool IsToken(Token token, TokenTypes type, Regex regex)
         {
-            return token => token?.Type == type && regex.IsMatch(token.Value);
+            return token != null && token.Type == type && regex.IsMatch(token.Value);
         }
 
-        public static bool IsAnd(Token token)
-        {
-            return IsToken(TokenTypes.RESERVED_NEWLINE, s_and).Invoke(token);
-        }
+        public static bool IsAnd(Token token) =>
+            IsToken(token, TokenTypes.RESERVED_NEWLINE, s_and);
 
-        public static bool IsBetween(Token token)
-        {
-            return IsToken(TokenTypes.RESERVED, s_between).Invoke(token);
-        }
+        public static bool IsBetween(Token token) =>
+            IsToken(token, TokenTypes.RESERVED, s_between);
 
-        public static bool IsLimit(Token token)
-        {
-            return IsToken(TokenTypes.RESERVED_TOP_LEVEL, s_limit).Invoke(token);
-        }
+        public static bool IsLimit(Token token) =>
+            IsToken(token, TokenTypes.RESERVED_TOP_LEVEL, s_limit);
 
-        public static bool IsSet(Token token)
-        {
-            return IsToken(TokenTypes.RESERVED_TOP_LEVEL, s_set).Invoke(token);
-        }
+        public static bool IsSet(Token token) =>
+            IsToken(token, TokenTypes.RESERVED_TOP_LEVEL, s_set);
 
-        public static bool IsBy(Token token)
-        {
-            return IsToken(TokenTypes.RESERVED, s_by).Invoke(token);
-        }
+        public static bool IsBy(Token token) =>
+            IsToken(token, TokenTypes.RESERVED, s_by);
 
-        public static bool IsWindow(Token token)
-        {
-            return IsToken(TokenTypes.RESERVED_TOP_LEVEL, s_window).Invoke(token);
-        }
+        public static bool IsWindow(Token token) =>
+            IsToken(token, TokenTypes.RESERVED_TOP_LEVEL, s_window);
 
-        public static bool IsEnd(Token token)
-        {
-            return IsToken(TokenTypes.CLOSE_PAREN, s_end).Invoke(token);
-        }
+        public static bool IsEnd(Token token) =>
+            IsToken(token, TokenTypes.CLOSE_PAREN, s_end);
     }
 }

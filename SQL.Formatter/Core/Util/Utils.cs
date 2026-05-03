@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace SQL.Formatter.Core.Util
@@ -9,11 +8,6 @@ namespace SQL.Formatter.Core.Util
         public static List<T> NullToEmpty<T>(List<T> list)
         {
             return list ?? new List<T>();
-        }
-
-        public static R FirstNotnull<R>(params Func<R>[] suppliers) where R : class
-        {
-            return suppliers.FirstOrDefault(supplier => supplier() != null)?.Invoke();
         }
 
         public static string Repeat(string s, int n)

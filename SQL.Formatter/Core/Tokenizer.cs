@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using SQL.Formatter.Core.Util;
 
@@ -89,7 +88,7 @@ namespace SQL.Formatter.Core
         public JSLikeList<Token> Tokenize(string input)
         {
             var tokens = new List<Token>();
-            Token previousToken = default;
+            Token previousToken = null;
             var currentIndex = 0;
 
             while (currentIndex < input.Length)
@@ -121,23 +120,94 @@ namespace SQL.Formatter.Core
 
         private Token GetNextToken(string input, int offset, Token previousToken)
         {
-            return Utils.FirstNotnull(
-                () => GetCommentToken(input, offset),
-                () => GetStringToken(input, offset),
-                () => GetOpenParenToken(input, offset),
-                () => GetCloseParenToken(input, offset),
-                () => GetPlaceholderToken(input, offset),
-                () => GetNumberToken(input, offset),
-                () => GetReservedWordToken(input, offset, previousToken),
-                () => GetWordToken(input, offset),
-                () => GetOperatorToken(input, offset));
+            var token = GetCommentToken(input, offset);
+            if (token != null)
+            {
+                return token;
+            }
+
+            token = GetStringToken(input, offset);
+            if (token != null)
+            {
+                return token;
+            }
+
+            token = GetOpenParenToken(input, offset);
+            if (token != null)
+            {
+                return token;
+            }
+
+            token = GetCloseParenToken(input, offset);
+            if (token != null)
+            {
+                return token;
+            }
+
+            token = GetPlaceholderToken(input, offset);
+            if (token != null)
+            {
+                return token;
+            }
+
+            token = GetNumberToken(input, offset);
+            if (token != null)
+            {
+                return token;
+            }
+
+            token = GetReservedWordToken(input, offset, previousToken);
+            if (token != null)
+            {
+                return token;
+            }
+
+            token = GetWordToken(input, offset);
+            if (token != null)
+            {
+                return token;
+            }
+
+            return GetOperatorToken(input, offset);
         }
 
         private Token GetCommentToken(string input, int offset)
         {
-            return Utils.FirstNotnull(
-                () => GetTokenOnFirstMatch(input, offset, TokenTypes.LINE_COMMENT, _lineCommentPattern),
-                () => GetTokenOnFirstMatch(input, offset, TokenTypes.BLOCK_COMMENT, _blockCommentPattern));
+            var token = GetTokenOnFirstMatch(input, offset, TokenTypes.LINE_COMMENT, _lineCommentPattern);
+            if (token != null)
+            {
+                return token;
+            }
+
+            return GetTokenOnFirstMatch(input, offset, TokenTypes.BLOCK_COMMENT, _blockCommentPattern);
+        }
+
+        private Token GetReservedWordToken(string input, int offset, Token previousToken)
+        {
+            if (previousToken?.Value == ".")
+            {
+                return null;
+            }
+
+            var token = GetTokenOnFirstMatch(input, offset, TokenTypes.RESERVED_TOP_LEVEL, _reservedTopLevelPattern);
+            if (token != null)
+            {
+                return token;
+            }
+
+            token = GetTokenOnFirstMatch(input, offset, TokenTypes.RESERVED_NEWLINE, _reservedNewLinePattern);
+            if (token != null)
+            {
+                return token;
+            }
+
+            token = GetTokenOnFirstMatch(input, offset, TokenTypes.RESERVED_TOP_LEVEL_NO_INDENT, _reservedTopLevelNoIndentPattern);
+            if (token != null)
+            {
+                return token;
+            }
+
+            return GetTokenOnFirstMatch(input, offset, TokenTypes.RESERVED, _reservedPlainPattern);
         }
 
         private Token GetStringToken(string input, int offset) =>
@@ -151,19 +221,27 @@ namespace SQL.Formatter.Core
 
         private Token GetPlaceholderToken(string input, int offset)
         {
-            return Utils.FirstNotnull(
-                () => GetPlaceholderTokenWithKey(input, offset, _indentNamedPlaceholderPattern, v => v.Substring(1)),
-                () => GetPlaceholderTokenWithKey(input, offset, _stringNamedPlaceholderPattern, v =>
-                {
-                    return GetEscapedPlaceholderKey(v.Substring(2, v.Length - 3), v.Substring(v.Length - 1));
-                }),
-                () => GetPlaceholderTokenWithKey(input, offset, _indexedPlaceholderPattern, v => v.Substring(1)));
-        }
+            var token = GetTokenOnFirstMatch(input, offset, TokenTypes.PLACEHOLDER, _indentNamedPlaceholderPattern);
+            if (token != null)
+            {
+                return token.WithKey(token.Value.Substring(1));
+            }
 
-        private static Token GetPlaceholderTokenWithKey(string input, int offset, Regex regex, Func<string, string> parseKey)
-        {
-            var token = GetTokenOnFirstMatch(input, offset, TokenTypes.PLACEHOLDER, regex);
-            return token?.WithKey(parseKey.Invoke(token.Value));
+            token = GetTokenOnFirstMatch(input, offset, TokenTypes.PLACEHOLDER, _stringNamedPlaceholderPattern);
+            if (token != null)
+            {
+                var v = token.Value;
+                var key = GetEscapedPlaceholderKey(v.Substring(2, v.Length - 3), v.Substring(v.Length - 1));
+                return token.WithKey(key);
+            }
+
+            token = GetTokenOnFirstMatch(input, offset, TokenTypes.PLACEHOLDER, _indexedPlaceholderPattern);
+            if (token != null)
+            {
+                return token.WithKey(token.Value.Substring(1));
+            }
+
+            return null;
         }
 
         private static string GetEscapedPlaceholderKey(string key, string quoteChar) =>
@@ -175,17 +253,6 @@ namespace SQL.Formatter.Core
         private Token GetOperatorToken(string input, int offset) =>
             GetTokenOnFirstMatch(input, offset, TokenTypes.OPERATOR, _operatorPattern);
 
-        private Token GetReservedWordToken(string input, int offset, Token previousToken)
-        {
-            return previousToken?.Value == "."
-                ? default
-                : Utils.FirstNotnull(
-                () => GetTokenOnFirstMatch(input, offset, TokenTypes.RESERVED_TOP_LEVEL, _reservedTopLevelPattern),
-                () => GetTokenOnFirstMatch(input, offset, TokenTypes.RESERVED_NEWLINE, _reservedNewLinePattern),
-                () => GetTokenOnFirstMatch(input, offset, TokenTypes.RESERVED_TOP_LEVEL_NO_INDENT, _reservedTopLevelNoIndentPattern),
-                () => GetTokenOnFirstMatch(input, offset, TokenTypes.RESERVED, _reservedPlainPattern));
-        }
-
         private Token GetWordToken(string input, int offset) =>
             GetTokenOnFirstMatch(input, offset, TokenTypes.WORD, _wordPattern);
 
@@ -193,7 +260,7 @@ namespace SQL.Formatter.Core
         {
             if (regex == null)
             {
-                return default;
+                return null;
             }
 
             var match = regex.Match(input, offset, input.Length - offset);
@@ -203,7 +270,7 @@ namespace SQL.Formatter.Core
                 return new Token(type, match.Value);
             }
 
-            return default;
+            return null;
         }
     }
 }

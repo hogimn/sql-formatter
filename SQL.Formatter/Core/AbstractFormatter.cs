@@ -188,7 +188,7 @@ namespace SQL.Formatter.Core
         protected virtual void FormatOpeningParentheses(Token token, StringBuilder query)
         {
             if (string.IsNullOrEmpty(token.WhitespaceBefore)
-                && (TokenLookBehind() == default || !s_preserveWhitespaceFor.Contains(TokenLookBehind().Type)))
+                && (TokenLookBehind() == null || !s_preserveWhitespaceFor.Contains(TokenLookBehind().Type)))
             {
                 TrimEnd(query);
             }
@@ -269,7 +269,7 @@ namespace SQL.Formatter.Core
             TrimEnd(query);
             query.Append(Show(token));
 
-            var lines = _cfg.LinesBetweenQueries == default ? 1 : _cfg.LinesBetweenQueries;
+            var lines = _cfg.LinesBetweenQueries == 0 ? 1 : _cfg.LinesBetweenQueries;
             for (var i = 0; i < lines; i++)
             {
                 query.Append('\n');

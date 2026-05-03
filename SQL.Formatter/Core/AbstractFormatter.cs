@@ -17,7 +17,6 @@ namespace SQL.Formatter.Core
         private JSLikeList<Token> _tokens;
         private int _index;
 
-        // OPTIMIZATION: Compile the regex once statically to prevent recompilation overhead
         private static readonly Regex s_whitespaceRegex = new Regex(@"\s+", RegexOptions.Compiled);
 
         private static readonly HashSet<TokenTypes> s_preserveWhitespaceFor =
@@ -60,8 +59,6 @@ namespace SQL.Formatter.Core
 
         private string GetFormattedQueryFromTokens()
         {
-            // OPTIMIZATION: Use a StringBuilder initialized with an estimated capacity to prevent resizing.
-            // If you know average query sizes, set this capacity accordingly.
             var formattedQuery = new StringBuilder(1024);
 
             var index = -1;
@@ -185,7 +182,6 @@ namespace SQL.Formatter.Core
 
         protected static string EqualizeWhitespace(string str)
         {
-            // Uses the statically compiled regex
             return s_whitespaceRegex.Replace(str, " ");
         }
 
@@ -290,7 +286,6 @@ namespace SQL.Formatter.Core
                     || token.Type == TokenTypes.OPEN_PAREN
                     || token.Type == TokenTypes.CLOSE_PAREN))
             {
-                // Note: If memory is still tight, caching upper-case values at the token generation stage is even better.
                 return _cfg.Case == CaseTypes.UPPER ? token.Value.ToUpper() : token.Value.ToLower();
             }
 
@@ -300,7 +295,6 @@ namespace SQL.Formatter.Core
         protected virtual void AddNewline(StringBuilder query)
         {
             TrimEnd(query);
-            // Replaces expensive .EndsWith("\n") with a fast char index lookup
             if (query.Length == 0 || query[query.Length - 1] != '\n')
             {
                 query.Append('\n');
@@ -309,7 +303,6 @@ namespace SQL.Formatter.Core
             query.Append(_indentation.GetIndent());
         }
 
-        // OPTIMIZATION: Extremely fast inline trailing whitespace removal
         protected void TrimEnd(StringBuilder sb)
         {
             while (sb.Length > 0 && char.IsWhiteSpace(sb[sb.Length - 1]))

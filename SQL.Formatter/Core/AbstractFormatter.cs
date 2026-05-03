@@ -17,7 +17,7 @@ namespace SQL.Formatter.Core
         private JSLikeList<Token> _tokens;
         private int _index;
 
-        private static readonly Regex s_whitespaceRegex = new Regex(@"\s+", RegexOptions.Compiled);
+        private static readonly Regex s_whitespaceRegex = new Regex(@"\s+");
 
         private static readonly HashSet<TokenTypes> s_preserveWhitespaceFor =
             new HashSet<TokenTypes> {

@@ -10,11 +10,6 @@ namespace SQL.Formatter.Core.Util
             return list ?? new List<T>();
         }
 
-        public static string Repeat(string s, int n)
-        {
-            return string.Concat(Enumerable.Repeat(s, n));
-        }
-
         public static List<T> Concat<T>(List<T> l1, List<T> l2)
         {
             return l1.Concat(l2).ToList();

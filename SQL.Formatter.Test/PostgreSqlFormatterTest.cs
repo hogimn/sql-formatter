@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿
+using System.Collections.Generic;
 using SQL.Formatter.Language;
 using SQL.Formatter.Test.Behavior;
 using SQL.Formatter.Test.Feature;
@@ -89,7 +90,28 @@ namespace SQL.Formatter.Test
                 "!~*",
                 "!~",
                 "@@",
-                "@@@"
+                "@@@",
+                "||",
+                "<@",
+                "@>",
+                "#>",
+                "#>>",
+                "#-",
+                "?|",
+                "?&",
+                "@?",
+                "^@",
+                "&&",
+                "<<=",
+                ">>=",
+                "&<",
+                "&>",
+                "-|-",
+                "|>>",
+                "<<|",
+                "@-@",
+                "##",
+                "<->"
             });
         }
 

@@ -523,9 +523,13 @@ namespace SQL.Formatter.Language
                 .NamedPlaceholderTypes(new List<string> { ":" })
                 .LineCommentTypes(new List<string> { "--" })
                 .Operators(
-                    new List<string>{
+                    new List<string>
+                    {
                         "!=", "<<", ">>", "||/", "|/", "::", "->>", "->", "~~*", "~~", "!~~*", "!~~", "~*",
-                        "!~*", "!~", "!!", "@@", "@@@"})
+                        "!~*", "!~", "!!", "@@", "@@@",
+                        "||", "<@", "@>", "#>", "#>>", "#-", "?|", "?&", "@?", "^@",
+                        "&&", "<<=", ">>=", "&<", "&>", "-|-", "|>>", "<<|", "@-@", "##", "<->"
+                    })
                 .Build();
         }
 

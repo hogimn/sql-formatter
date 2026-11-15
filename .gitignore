@@ -396,3 +396,6 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# Universal Ctags symbol index generated for code navigation
+.tags

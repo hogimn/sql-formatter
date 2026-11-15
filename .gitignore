@@ -398,4 +398,4 @@ FodyWeavers.xsd
 *.sln.iml
 
 # Universal Ctags symbol index generated for code navigation
-.tags
+.tags*

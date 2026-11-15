@@ -4,9 +4,9 @@ namespace SQL.Formatter.Benchmarks
 {
     public class Program
     {
-        public static void Main()
+        public static void Main(string[] args)
         {
-            BenchmarkRunner.Run<SqlFormatterBenchmark>();
+            BenchmarkSwitcher.FromAssembly(typeof(Program).Assembly).Run(args);
         }
     }
 }

@@ -13,6 +13,8 @@ namespace SQL.Formatter.Core
         public readonly int WhitespaceStart;
         public readonly int WhitespaceLength;
 
+        public bool HasWhitespaceBefore => WhitespaceLength > 0;
+
         public string WhitespaceBefore =>
             (_input != null && WhitespaceLength > 0)
             ? _input.Substring(WhitespaceStart, WhitespaceLength)

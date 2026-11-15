@@ -54,12 +54,12 @@ namespace SQL.Formatter.Core
         public string Format(string query)
         {
             _tokens = Tokenizer().Tokenize(query);
-            return GetFormattedQueryFromTokens().Trim();
+            return GetFormattedQueryFromTokens(query.Length).Trim();
         }
 
-        private string GetFormattedQueryFromTokens()
+        private string GetFormattedQueryFromTokens(int inputLength)
         {
-            var formattedQuery = new StringBuilder(1024);
+            var formattedQuery = new StringBuilder(Math.Min(1024, Math.Max(16, inputLength)));
 
             var index = -1;
             foreach (Token t in _tokens)
@@ -187,7 +187,7 @@ namespace SQL.Formatter.Core
 
         protected virtual void FormatOpeningParentheses(Token token, StringBuilder query)
         {
-            if (string.IsNullOrEmpty(token.WhitespaceBefore)
+            if (!token.HasWhitespaceBefore
                 && (TokenLookBehind() == null || !s_preserveWhitespaceFor.Contains(TokenLookBehind().Type)))
             {
                 TrimEnd(query);
@@ -300,7 +300,7 @@ namespace SQL.Formatter.Core
                 query.Append('\n');
             }
 
-            query.Append(_indentation.GetIndent());
+            _indentation.AppendTo(query);
         }
 
         protected void TrimEnd(StringBuilder sb)

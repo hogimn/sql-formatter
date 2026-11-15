@@ -24,12 +24,15 @@ namespace SQL.Formatter.Benchmarks
         }
 
         [Benchmark]
-        public void RepeatFormatting()
+        public string RepeatFormatting()
         {
+            var formatted = string.Empty;
             for (var i = 0; i < _repeatCount; i++)
             {
-                SqlFormatter.Format(_complexSql);
+                formatted = SqlFormatter.Format(_complexSql);
             }
+
+            return formatted;
         }
     }
 }

@@ -24,9 +24,9 @@ The measurements below use BenchmarkDotNet 0.15.8 on .NET 10.0.15 and an AMD Ryz
 | Workload | Before | After |
 | --- | ---: | ---: |
 | Representative query, one call | 409.6 µs / 482.5 KB | 127.6 µs / 57.79 KB |
-| SQL near 64 characters | — | 53.93 µs / 39.74 KB |
-| SQL near 512 characters | — | 236.72 µs / 83.34 KB |
-| SQL near 4,096 characters | — | 1,627.62 µs / 436.56 KB |
-| SQL near 16,384 characters | — | 6,672.71 µs / 1,728.51 KB |
+| SQL near 64 characters | 324.8 µs / 458.81 KB | 53.93 µs / 39.74 KB |
+| SQL near 512 characters | 505.7 µs / 511.45 KB | 236.72 µs / 83.34 KB |
+| SQL near 4,096 characters | 1,805.4 µs / 935.13 KB | 1,627.62 µs / 436.56 KB |
+| SQL near 16,384 characters | 6,891.6 µs / 2,452.4 KB | 6,672.71 µs / 1,728.51 KB |
 
-On the representative query, the measured call was about 69% faster and allocated about 88% less memory. The size-specific cases establish the current scaling profile; no pre-change size sweep was available for those inputs.
+On the representative query, the measured call was about 69% faster and allocated about 88% less memory. The SQL size-sweep `Before` figures were remeasured with the formatter reverted to its pre-optimization state.

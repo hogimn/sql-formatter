@@ -1,0 +1,12 @@
+<Router AppAssembly="@typeof(App).Assembly">
+    <Found Context="routeData">
+        <RouteView RouteData="@routeData" />
+    </Found>
+    <NotFound>
+        <PageTitle>Not found · SQL Formatter</PageTitle>
+        <main class="not-found">
+            <h1>Page not found</h1>
+            <a href="./">Return to the formatter</a>
+        </main>
+    </NotFound>
+</Router>

@@ -1,0 +1,144 @@
+@page "/"
+@using SQL.Formatter
+@using SQL.Formatter.Language
+@using System.Globalization
+@using System
+
+<PageTitle>SQL Formatter · Try it online</PageTitle>
+
+<div class="page-shell">
+    <header class="topbar">
+        <a class="brand" href="./" aria-label="SQL Formatter home">
+            <span class="brand-mark">{ }</span>
+            <span>SQL Formatter</span>
+        </a>
+        <a class="source-link" href="https://github.com/hogimn/sql-formatter" target="_blank" rel="noreferrer">
+            View on GitHub <span aria-hidden="true">↗</span>
+        </a>
+    </header>
+
+    <main>
+        <section class="intro">
+            <p class="eyebrow"><span class="status-dot"></span> C# library · .NET Standard 2.0</p>
+            <h1>Make SQL easier<br />to <span>read.</span></h1>
+            <p class="intro-copy">Try the formatter in your browser. Choose a SQL dialect, adjust the style, and see the result instantly.</p>
+        </section>
+
+        <section class="playground" aria-label="SQL formatter playground">
+            <div class="toolbar">
+                <label class="field">
+                    <span>Dialect</span>
+                    <select @bind="_dialect">
+                        <option value="sql">Standard SQL</option>
+                        <option value="mariadb">MariaDB</option>
+                        <option value="mysql">MySQL</option>
+                        <option value="db2">IBM DB2</option>
+                        <option value="plsql">Oracle PL/SQL</option>
+                        <option value="n1ql">Couchbase N1QL</option>
+                        <option value="postgresql">PostgreSQL</option>
+                        <option value="redshift">Amazon Redshift</option>
+                        <option value="spark">Spark SQL</option>
+                        <option value="tsql">SQL Server</option>
+                    </select>
+                </label>
+                <label class="field">
+                    <span>Keywords</span>
+                    <select @bind="_case">
+                        <option value="NONE">Keep as typed</option>
+                        <option value="UPPER">UPPERCASE</option>
+                        <option value="LOWER">lowercase</option>
+                    </select>
+                </label>
+                <label class="field compact-field">
+                    <span>Indent</span>
+                    <select @bind="_indent">
+                        <option value="2">2 spaces</option>
+                        <option value="4">4 spaces</option>
+                        <option value="tab">Tab</option>
+                    </select>
+                </label>
+                <label class="field compact-field width-field">
+                    <span>Line width</span>
+                    <select @bind="_lineWidth">
+                        <option value="50">50</option>
+                        <option value="80">80</option>
+                        <option value="120">120</option>
+                    </select>
+                </label>
+                <button class="format-button" @onclick="FormatQuery" type="button">
+                    <span aria-hidden="true">✦</span> Format SQL
+                </button>
+            </div>
+
+            <div class="editor-grid">
+                <section class="editor-panel">
+                    <div class="panel-heading">
+                        <div><span class="panel-index">01</span><h2>Input</h2></div>
+                        <span class="panel-hint">Paste your SQL</span>
+                    </div>
+                    <textarea aria-label="SQL input" @bind="_query" @bind:event="oninput" spellcheck="false" autocapitalize="off" autocomplete="off"></textarea>
+                </section>
+
+                <section class="editor-panel output-panel">
+                    <div class="panel-heading">
+                        <div><span class="panel-index">02</span><h2>Formatted</h2></div>
+                        <span class="panel-hint">@(_error is null ? "Ready to use" : "Formatting error")</span>
+                    </div>
+                    @if (_error is not null)
+                    {
+                        <pre class="output error" role="alert">@_error</pre>
+                    }
+                    else
+                    {
+                        <pre class="output"><code>@_formatted</code></pre>
+                    }
+                </section>
+            </div>
+            <div class="playground-footer">
+                <span><span class="privacy-icon" aria-hidden="true">◈</span> Your SQL stays in this browser</span>
+                <span>Powered by <a href="https://www.nuget.org/packages/Hogimn.Sql.Formatter/" target="_blank" rel="noreferrer">Hogimn.Sql.Formatter</a></span>
+            </div>
+        </section>
+
+        <footer class="page-footer">
+            <span>Open source · MIT License</span>
+            <a href="https://github.com/hogimn/sql-formatter" target="_blank" rel="noreferrer">Explore the library <span aria-hidden="true">→</span></a>
+        </footer>
+    </main>
+</div>
+
+@code {
+    private string _query = "select id, name from users where active = 1 and created_at >= '2024-01-01' order by name;";
+    private string _formatted = string.Empty;
+    private string? _error;
+    private string _dialect = "sql";
+    private string _indent = "2";
+    private string _lineWidth = "80";
+    private CaseTypes _case = CaseTypes.NONE;
+
+    protected override void OnInitialized()
+    {
+        FormatQuery();
+    }
+
+    private void FormatQuery()
+    {
+        try
+        {
+            var indent = _indent == "tab" ? "\t" : new string(' ', int.Parse(_indent, CultureInfo.InvariantCulture));
+            var config = FormatConfig.Builder()
+                .Indent(indent)
+                .MaxColumnLength(int.Parse(_lineWidth, CultureInfo.InvariantCulture))
+                .Case(_case)
+                .Build();
+
+            _formatted = SqlFormatter.Of(_dialect).Format(_query, config);
+            _error = null;
+        }
+        catch (Exception exception)
+        {
+            _formatted = string.Empty;
+            _error = exception.Message;
+        }
+    }
+}

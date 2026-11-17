@@ -5,6 +5,8 @@
 [![](https://img.shields.io/nuget/v/Hogimn.Sql.Formatter.svg)](https://www.nuget.org/packages/Hogimn.Sql.Formatter/)
 [![](https://img.shields.io/nuget/dt/Hogimn.Sql.Formatter?style=flat-square)](https://nugettrends.com/packages?ids=Hogimn.Sql.Formatter)
 
+[**Try the SQL Formatter demo**](https://hogimn.github.io/sql-formatter/)
+
 This repository contains the C# port of the popular [Java SQL formatter](https://github.com/vertical-blank/sql-formatter)
 
 This does not support:
